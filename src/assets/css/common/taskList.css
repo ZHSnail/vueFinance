@@ -1,0 +1,9 @@
+.taskList {}
+
+.taskList .el-collapse {
+    border-top: 0;
+}
+
+.taskList .el-collapse-item__content {
+    padding-bottom: 10px;
+}

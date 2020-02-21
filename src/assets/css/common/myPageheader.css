@@ -1,0 +1,25 @@
+.myPageheader {}
+
+.myPageheader .spancontent {
+    text-align: right;
+    height: 100%;
+    margin-top: 1%;
+}
+
+.myPageheader .rightButton {
+    text-align: right;
+    vertical-align: middle;
+}
+
+.myPageheader .el-page-header__content {
+    width: 90%;
+}
+
+.myPageheader .back {
+    /* margin-top: 30%; */
+    margin-top: 20%;
+}
+
+.myPageheader .buttonBack {
+    margin-top: 30%;
+}

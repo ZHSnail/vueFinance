@@ -1,0 +1,57 @@
+.myCollapse {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.myCollapse .el-card {
+    border-radius: 15px
+}
+
+.myCollapse .el-card__body {
+    padding-top: 10px;
+    background-color: #F2F6FC;
+}
+
+.myCollapse .el-collapse {
+    border: 0;
+}
+
+.myCollapse .el-collapse-item__header {
+    background-color: #F2F6FC;
+    border: 0
+}
+
+.myCollapse .el-collapse-item__content {
+    background-color: #F2F6FC;
+}
+
+.myCollapse .el-collapse-item__wrap {
+    border: 0
+}
+
+.myCollapse .title {
+    font-size: large;
+    text-align: left;
+}
+
+.myCollapse .total {
+    text-align: right;
+    font-size: large;
+}
+
+.myCollapse .el-row {
+    width: 100%;
+}
+
+.myCollapse .el-collapse-item__content {
+    padding-bottom: 0;
+}
+
+.myCollapse .totalArea {
+    font-weight: bold;
+    font-size: large;
+}
+
+.myCollapse .money {
+    margin-left: 5px;
+}

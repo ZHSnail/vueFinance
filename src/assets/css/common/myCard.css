@@ -1,0 +1,12 @@
+.myCard {
+    text-decoration: none;
+}
+
+.myCard .card {
+    margin-bottom: 20px;
+    line-height: 200%
+}
+
+.myCard .page {
+    text-align: center;
+}

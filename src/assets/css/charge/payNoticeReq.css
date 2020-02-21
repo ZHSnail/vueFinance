@@ -1,0 +1,9 @@
+.payNoticeReq {}
+
+.payNoticeReq .el-tag.el-tag--info {
+    color: #409EFF;
+}
+
+.payNoticeReq .length {
+    width: 250px;
+}

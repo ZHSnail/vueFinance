@@ -1,0 +1,56 @@
+html,
+body,
+#app,
+.el-container {
+    /*设置内部填充为0，几个布局元素之间没有间距*/
+    padding: 0px;
+    /*外部间距也是如此设置*/
+    margin: 0px;
+    /*统一设置高度为100%*/
+    height: 100%;
+}
+
+.leftAlign {
+    text-align: left;
+}
+
+.rightAlign {
+    text-align: right;
+}
+
+.centerAlign {
+    text-align: center;
+}
+
+.inline {
+    display: inline;
+}
+
+.el-table__body-wrapper::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.el-table__body-wrapper::-webkit-scrollbar-thumb {
+    background-color: rgba(144, 147, 153, .3);
+    border-radius: 4px;
+}
+
+.el-table thead {
+    color: #303133;
+    font-weight: bold;
+    font-size: large;
+}
+
+.el-table {
+    color: #303133;
+}
+
+.titleContent {
+    font-size: large;
+    font-weight: bold
+}
+
+.xlarge {
+    font-size: x-large
+}

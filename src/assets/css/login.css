@@ -1,0 +1,16 @@
+.login-box {
+    color: #000000;
+    font-size: large;
+}
+
+.dialog-box {
+    height: 300px;
+}
+
+.button-box {
+    width: 100%;
+}
+
+.register-box {
+    text-align: right;
+}

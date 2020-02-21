@@ -1,0 +1,20 @@
+.home {
+    height: 100vh;
+    background: url("../images/jhk-1580051058614.jpg");
+    background-size: cover;
+    background-position: center
+}
+
+.header {
+    position: relative;
+    font-size: xx-large;
+    color: #ffffff;
+    right: 5%;
+    top: 5%;
+}
+
+.home .main {
+    font-size: xx-large;
+    color: #ffffff;
+    height: 100px;
+}

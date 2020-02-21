@@ -1,0 +1,9 @@
+.feeKind {}
+
+.feeKind .el-dialog__body {
+    padding-bottom: 10px;
+}
+
+.feeKind .length {
+    width: 250px;
+}

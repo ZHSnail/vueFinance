@@ -1,0 +1,54 @@
+.finance {
+    /*设置内部填充为0，几个布局元素之间没有间距*/
+    padding: 0px;
+    /*外部间距也是如此设置*/
+    margin: 0px;
+    /*统一设置高度为100%*/
+    height: 100%;
+    background: url("../images/main.jpg");
+    background-size: cover;
+    background-position: center;
+    overflow-y: hidden
+}
+
+.finance .mainArea {
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 100%;
+}
+
+.finance .default-scrollbar {
+    width: 100%;
+    height: 100%;
+}
+
+.finance .flex-scrollbar {
+    width: auto;
+    height: auto;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+
+.finance .el-scrollbar__wrap.default-scrollbar__wrap {
+    overflow-x: auto;
+}
+
+.finance .el-scrollbar__view.default-scrollbar__view {}
+
+.finance .el-scrollbar__view.p20-scrollbar__view {
+    padding: 0px;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+}
+
+.finance .mainRouter {
+    height: 100%;
+}
+
+.finance .el-card__body {
+    padding-top: 10px;
+}
