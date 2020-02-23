@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div class="header">
+    <!-- <div class="header">
       <el-row type="flex" justify="end">
         <el-col :offset="21">
           <el-button @click="show = !show" type="primary" icon="el-icon-user" round>登录</el-button>
@@ -20,29 +20,62 @@
       </el-row>
     </div>
     <div class="main">
-        <h1>改变，因我而来</h1>
+        <h1 class="title">改变，因我而来</h1>
         <login :is-show.sync="show"></login>
     </div>
-    <div class="footer"></div>
+    <div class="footer"></div>-->
+    <div class="header">
+      <el-row>
+        <br/>
+        <br/>
+      </el-row>
+      <el-row>
+        <el-col :span="24">
+          <div class="headerButton">
+            <el-button @click="show = !show" type="primary" icon="el-icon-user" round>登录</el-button>
+          </div>
+          <div class="headerDropdown">
+            <el-dropdown>
+              <el-button type="primary" icon="el-icon-arrow-down el-icon-menu" round></el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item icon="el-icon-school">
+                  <el-link :underline="false" href="https://www.zhku.edu.cn/">学校官网</el-link>
+                </el-dropdown-item>
+                <el-dropdown-item icon="el-icon-phone">联系我们</el-dropdown-item>
+                <el-dropdown-item icon="el-icon-s-promotion">反馈</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+    <div class="main">
+      <el-row>
+        <el-col>
+          <h1 class="centerAlign">改变，因我而来</h1>
+          <login :is-show.sync="show"></login>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
 <script>
 import login from "@/components/login.vue";
-import '@/assets/css/home.css'
+import "@/assets/css/home.css";
 // @ is an alias to /src
 export default {
   name: "home",
   components: {
-    login
+    login,
   },
   data() {
     return {
-      show:false
+      show: false
     };
   },
-  methods:{
-    onChangeDialog(type){
+  methods: {
+    onChangeDialog(type) {
       this.show = type;
     }
   }

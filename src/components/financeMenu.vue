@@ -29,7 +29,7 @@
               </template>
             </el-menu-item>
           </router-link>
-          <router-link to="/finance/charge/payList" tag="div">
+          <router-link to="/finance/charge/payNoticeList" tag="div">
             <el-menu-item index="1-2">
               <template slot="title">
                 <i class="el-icon-search"></i>

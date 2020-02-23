@@ -12,7 +12,11 @@
 }
 
 .myPageheader .el-page-header__content {
-    width: 90%;
+    width: 100%;
+}
+
+.myPageheader .el-page-header__left {
+    width: 6%;
 }
 
 .myPageheader .back {

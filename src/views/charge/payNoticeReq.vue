@@ -52,7 +52,12 @@
                     :key="item.id"
                     :label="item.name"
                     :value="item.id"
-                  ></el-option>
+                  >
+                  <el-row>
+                    <el-col :span="12">{{ item.name }}</el-col>
+                    <el-col :span="12" class="rightAlign">共34人</el-col>
+                  </el-row>
+                  </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -121,7 +126,7 @@ export default {
         if (value.length!=0) {
           callback();
         } else {
-          callback(new Error('请选择缴费角色'));
+          callback(new Error('请填写'+this.feeForm.feeKind.timeMold));
         }
     };
     return {

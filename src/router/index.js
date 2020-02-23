@@ -3,12 +3,12 @@ import VueRouter from 'vue-router'
 import Home from '../views/home.vue'
 import Finance from '../views/finance.vue'
 import PayOnline from '../views/charge/payOnline.vue'
-import PayList from '../views/charge/payList.vue'
+import PayNoticeList from '../views/charge/payNoticeList.vue'
 import PayDetail from '../views/charge/payDetail.vue'
 import FeeKind from '../views/charge/feeKind.vue'
 import PayNoticeReq from '../views/charge/payNoticeReq.vue'
 import PayNoticeDetail from '../views/charge/payNoticeDetail.vue'
-
+import PayList from '../views/charge/payList.vue'
 
 
 
@@ -21,9 +21,9 @@ const charge = [{
         component: PayOnline
     },
     {
-        path: 'charge/payList',
-        name: 'payList',
-        component: PayList
+        path: 'charge/payNoticeList',
+        name: 'payNoticeList',
+        component: PayNoticeList
     },
     {
         path: 'charge/detail/:id',
@@ -44,6 +44,11 @@ const charge = [{
         path: 'charge/payNoticeDetail/:id',
         name: 'payNoticeDetail',
         component: PayNoticeDetail
+    },
+    {
+        path: 'charge/payList/:id',
+        name: 'payList',
+        component: PayList
     }
 ];
 const routes = [{

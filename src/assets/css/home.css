@@ -5,16 +5,21 @@
     background-position: center
 }
 
-.header {
-    position: relative;
-    font-size: xx-large;
-    color: #ffffff;
-    right: 5%;
-    top: 5%;
+.home .header {
+    text-align: right;
+}
+
+.home .headerButton {
+    display: inline;
+    margin-right: 10px;
+}
+
+.home .headerDropdown {
+    display: inline;
+    margin-right: 50px;
 }
 
 .home .main {
-    font-size: xx-large;
     color: #ffffff;
-    height: 100px;
+    font-size: xx-large;
 }

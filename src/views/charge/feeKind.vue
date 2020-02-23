@@ -11,14 +11,14 @@
         style="width: 100%"
         max-height="450"
       >
-        <el-table-column align="center" prop="name" label="费用名称" width="180"></el-table-column>
-        <el-table-column align="center" prop="timeMold" label="费用时间单位" width="180"></el-table-column>
-        <el-table-column align="center" label="缴费角色" width="180">
+        <el-table-column align="center" prop="name" label="费用名称"></el-table-column>
+        <el-table-column align="center" prop="timeMold" label="费用时间单位"></el-table-column>
+        <el-table-column align="center" label="缴费角色">
           <template slot-scope="scope">
             <span v-for="item in scope.row.role" :key="item.id">{{item.name}}&nbsp;&nbsp;</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="amount" label="收费标准" width="180">
+        <el-table-column align="center" prop="amount" label="收费标准">
           <template slot-scope="scope">￥{{scope.row.amount}}</template>
         </el-table-column>
         <el-table-column label="操作">
