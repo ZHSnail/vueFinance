@@ -27,3 +27,6 @@
 .myPageheader .buttonBack {
     margin-top: 30%;
 }
+.myPageheader .el-page-header__left::after{
+    content: none;
+}
