@@ -12,15 +12,10 @@
         max-height="450"
       >
         <el-table-column align="center" prop="name" label="费用名称"></el-table-column>
-        <el-table-column align="center" prop="timeMold" label="费用时间单位"></el-table-column>
-        <el-table-column align="center" label="缴费角色">
-          <template slot-scope="scope">
-            <span v-for="item in scope.row.role" :key="item.id">{{item.name}}&nbsp;&nbsp;</span>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" prop="amount" label="收费标准">
-          <template slot-scope="scope">￥{{scope.row.amount}}</template>
-        </el-table-column>
+        <el-table-column align="center" prop="timeMold" label="时间单位"></el-table-column>
+        <el-table-column align="center" prop="feeMethod" label="收费方式"></el-table-column>
+        <el-table-column align="center" prop="accountName" label="会计科目"></el-table-column>
+        <el-table-column align="center" prop="state" label="状态"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-tooltip effect="light" content="编辑" placement="bottom">
@@ -64,21 +59,34 @@
           <el-form-item label="费用名称" prop="name">
             <el-input v-model="feeForm.name" class="length"></el-input>
           </el-form-item>
-          <el-form-item label="应收金额" prop="amount">
+          <!-- <el-form-item label="应收金额" prop="amount">
             <el-input v-model.number="feeForm.amount" class="length"></el-input>
-          </el-form-item>
-          <el-form-item label="费用时间单位" prop="timeMold">
+          </el-form-item>-->
+          <el-form-item label="时间单位" prop="timeMold">
             <el-input v-model="feeForm.timeMold" class="length"></el-input>
           </el-form-item>
-          <el-form-item label="缴费角色" prop="role">
-            <el-select class="length" multiple v-model="feeForm.role" placeholder="请选择缴费的角色">
+          <el-form-item label="收费方式" prop="feeMethod">
+            <el-select class="length" v-model="feeForm.feeMethod" clearable  placeholder="请选择收费方式">
+              <el-option label="面向宿舍" value="DORM"></el-option>
+              <el-option label="面向专业" value="MAJOR"></el-option>
+              <el-option label="面向角色" value="ROLE"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="会计科目" prop="account">
+            <el-select class="length" multiple v-model="feeForm.account" placeholder="请选择会计科目">
               <el-option
-                v-for="item in roleList"
+                v-for="item in accountList"
                 :key="item.id"
                 :label="item.name"
                 :value="item.id"
               ></el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item label="状态">
+            <el-radio-group v-model="feeForm.state">
+              <el-radio label="启用"></el-radio>
+              <el-radio label="停用"></el-radio>
+            </el-radio-group>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -102,47 +110,72 @@ export default {
       tableData: [
         {
           timeMold: "学年",
-          name: "理科类学费",
-          amount: "7562.00",
-          role: [{ id: "1", name: "理科类学生" }]
+          name: "学费",
+          // role: [{ id: "1", name: "理科类学生" }],//按角色收费
+          // major:[{id:"1",name:""}],//按专业收费
+          // dorm:[{id:"1", buildingNo:"",roomNo:""}],//按宿舍收费
+          // account:[{id:"1",name:""}],//可选的会计科目
+          accountName: "4001 行政收入",
+          state: "启用", //状态
+          feeMethod: "宿舍" //MAJOR 专业。DORM 宿舍。ROLE 角色。
         },
         {
           timeMold: "学年",
-          name: "文科类学费",
-          amount: "7562.00",
-          role: [{ id: "2", name: "文科类学生" }]
+          name: "学费",
+          // role: [{ id: "2", name: "文科类学生" }],//按角色收费
+          // major:[{id:"1",name:""}],//按专业收费
+          // dorm:[{id:"1", buildingNo:"",roomNo:""}],//按宿舍收费
+          // account:[{id:"1",name:"行政收入"}],//可选的会计科目
+          accountName: "4001 行政收入",
+          feeMethod: "宿舍", //MAJOR 专业。DORM 宿舍。ROLE 角色。
+          state: "启用" //状态
         },
         {
           timeMold: "月份",
           name: "电费",
-          amount: "7562.00",
-          role: [
-            { id: "1", name: "理科类学生" },
-            { id: "2", name: "文科类学生" },
-            { id: "3", name: "艺术类学生" },
-            { id: "4", name: "老师" },
-            { id: "5", name: "职工" }
-          ]
+          // role: [
+          //   { id: "1", name: "理科类学生" },
+          //   { id: "2", name: "文科类学生" },
+          //   { id: "3", name: "艺术类学生" },
+          //   { id: "4", name: "老师" },
+          //   { id: "5", name: "职工" }
+          // ],//按角色收费
+          // major:[{id:"1",name:""}],//按专业收费
+          // dorm:[{id:"1", buildingNo:"",roomNo:""}],//按宿舍收费
+          // account:[{id:"1",name:""}],//可选的会计科目
+          accountName: "4001 行政收入",
+          feeMethod: "宿舍", //MAJOR 专业。DORM 宿舍。ROLE 角色。
+          state: "启用" //状态
         },
         {
           timeMold: "年份",
           name: "宿舍费",
-          amount: "7562.00",
-          role: [
-            { id: "1", name: "理科类学生" },
-            { id: "2", name: "文科类学生" },
-            { id: "3", name: "艺术类学生" }
-          ]
+          // role: [
+          //   { id: "1", name: "理科类学生" },
+          //   { id: "2", name: "文科类学生" },
+          //   { id: "3", name: "艺术类学生" }
+          // ],//按角色收费
+          // major:[{id:"1",name:""}],//按专业收费
+          // dorm:[{id:"1", buildingNo:"",roomNo:""}],//按宿舍收费
+          // account:[{id:"1",name:""}],//可选的会计科目
+          accountName: "4001 行政收入", //这里应该是一个数组
+          feeMethod: "宿舍", //MAJOR 专业。DORM 宿舍。ROLE 角色。
+          state: "启用" //状态
         },
         {
           timeMold: "季度",
           name: "水费",
-          amount: "7562.00",
-          role: [
-            { id: "1", name: "理科类学生" },
-            { id: "2", name: "文科类学生" },
-            { id: "3", name: "艺术类学生" }
-          ]
+          // role: [
+          //   { id: "1", name: "理科类学生" },
+          //   { id: "2", name: "文科类学生" },
+          //   { id: "3", name: "艺术类学生" }
+          // ],//按角色收费
+          // major:[{id:"1",name:""}],//按专业收费
+          // dorm:[{id:"1", buildingNo:"",roomNo:""}],//按宿舍收费
+          // account:[{id:"1",name:""}],//可选的会计科目
+          accountName: "4001 行政收入", //对象数组
+          feeMethod: "宿舍", //MAJOR 专业。DORM 宿舍。ROLE 角色。
+          state: "启用" //状态
         }
       ],
       dialogFormVisible: false,
@@ -150,7 +183,10 @@ export default {
         name: "",
         timeMold: "",
         amount: "",
-        role: [] //缴费角色
+        role: [], //缴费角色
+        feeMethod: "",
+        state: "",
+        account: []
       },
       rules: {
         name: [{ required: true, message: "请输入费用名称", trigger: "blur" }],
@@ -166,6 +202,13 @@ export default {
         ]
       },
       roleList: [
+        { id: "1", name: "理科类学生" },
+        { id: "2", name: "文科类学生" },
+        { id: "3", name: "艺术类学生" },
+        { id: "4", name: "老师" },
+        { id: "5", name: "职工" }
+      ],
+      accountList: [
         { id: "1", name: "理科类学生" },
         { id: "2", name: "文科类学生" },
         { id: "3", name: "艺术类学生" },
@@ -206,4 +249,16 @@ export default {
 };
 </script>
 <style scoped>
+.demo-table-expand {
+  font-size: 0;
+}
+.demo-table-expand label {
+  width: 90px;
+  color: #99a9bf;
+}
+.demo-table-expand .el-form-item {
+  margin-right: 0;
+  margin-bottom: 0;
+  width: 50%;
+}
 </style>
