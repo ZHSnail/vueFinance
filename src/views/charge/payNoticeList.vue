@@ -21,19 +21,19 @@
           </router-link>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="createUser" label="发起人" width="120"></el-table-column>
-      <el-table-column align="center" label="收费机构" prop="org" width="140"></el-table-column>
-      <el-table-column align="center" prop="feeKind" label="费用类别" width="120"></el-table-column>
-      <el-table-column align="center" label="收费情况" width="120">
+      <el-table-column align="center" prop="createUser" label="发起人"></el-table-column>
+      <el-table-column align="center" label="收费机构" prop="org"></el-table-column>
+      <el-table-column align="center" prop="feeKind" label="费用类别"></el-table-column>
+      <el-table-column align="center" label="收费情况">
         <template slot-scope="scope">
           <router-link :to="'payList/'+scope.row.id" tag="div">
             <el-link type="primary" :underline="false">详情</el-link>
           </router-link>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="应收金额" prop="total" width="120"></el-table-column>
-      <el-table-column align="center" label="状态" prop="state" width="120"></el-table-column>
-      <el-table-column align="center" label="摘要" prop="memo" width="150"></el-table-column>
+      <el-table-column align="center" label="应收金额" prop="total"></el-table-column>
+      <el-table-column align="center" label="状态" prop="state"></el-table-column>
+      <el-table-column align="center" label="摘要" prop="memo"></el-table-column>
     </el-table>
     <el-row>
         <el-col :span="24">
