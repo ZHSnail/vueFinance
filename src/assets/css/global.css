@@ -53,3 +53,7 @@ body,
 .xlarge {
     font-size: x-large
 }
+
+.el-tag.el-tag--info {
+    color: #409EFF;
+}

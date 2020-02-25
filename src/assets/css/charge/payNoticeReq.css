@@ -1,9 +1,10 @@
 .payNoticeReq {}
 
-.payNoticeReq .el-tag.el-tag--info {
-    color: #409EFF;
-}
-
 .payNoticeReq .length {
     width: 250px;
+}
+
+.payNoticeReq .totalUser {
+    font-weight: bold;
+    font-size: large;
 }

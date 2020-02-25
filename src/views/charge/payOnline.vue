@@ -111,7 +111,7 @@ export default {
           code: "XF2002120003",
           name: "学费",
           createTime: this.Utils.getNowFormatDate(),
-          amount: this.Utils.changeToChinese(1000),
+          amount: this.Utils.convertCurrency(1000),
           org: "仲恺农业工程学院",
           payTime: "2019-2020",
           timeMold: "学年"

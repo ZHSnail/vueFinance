@@ -1,9 +1,18 @@
 .feeKind {}
 
-.feeKind .el-dialog__body {
-    padding-bottom: 10px;
+.feeKind .el-dialog--center .el-dialog__body {
+    padding-bottom: 0px;
 }
 
 .feeKind .length {
     width: 250px;
+}
+
+.feeKind .el-form-item {
+    display: flex;
+    justify-content: center;
+}
+
+.feeKind .el-table .cell {
+    white-space: pre-line;
 }

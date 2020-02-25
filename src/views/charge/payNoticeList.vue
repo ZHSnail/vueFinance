@@ -16,7 +16,7 @@
       <el-table-column type="index" align="center" label="序号" width="50"></el-table-column>
       <el-table-column align="center" prop="code" label="单号" width="120">
         <template slot-scope="scope">
-          <router-link :to="'detail/'+scope.row.id" tag="div">
+          <router-link :to="'payNoticeDetail/'+scope.row.id" tag="div">
             <el-link type="primary" :underline="false">{{scope.row.code}}</el-link>
           </router-link>
         </template>

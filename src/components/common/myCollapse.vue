@@ -54,13 +54,13 @@ export default {
       this.activeNames = [];
     }
     if (this.total) {
-      this.chineseTotal = this.Utils.changeToChinese(this.total);
+      this.chineseTotal = this.Utils.convertCurrency(this.total);
     }
   },
   mounted() {
     this.$watch("total", function(newVal, oldVal) {
       if (newVal) {
-        this.chineseTotal = this.Utils.changeToChinese(newVal);
+        this.chineseTotal = this.Utils.convertCurrency(newVal);
       }
     });
   }

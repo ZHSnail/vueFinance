@@ -26,152 +26,6 @@ function getzf(num) {
 }
 
 /**
- * 将数字转换为大写金额
- * @param Num 数值
- * */
-function changeToChinese(Num) {
-    //判断如果传递进来的不是字符的话转换为字符
-    if (typeof Num === "number") Num = new String(Num);
-    Num = Num.replace(/,/g, "") //替换tomoney()中的“,”
-    Num = Num.replace(/ /g, "") //替换tomoney()中的空格
-    Num = Num.replace(/￥/g, "") //替换掉可能出现的￥字符
-    if (isNaN(Num)) return "";
-    //字符处理完毕后开始转换，采用前后两部分分别转换
-    var part = String(Num).split(".");
-    var newchar = "";
-    //小数点前进行转化
-    for (var i = part[0].length - 1; i >= 0; i--) {
-        if (part[0].length > 10) return "";
-        var tmpnewchar = ""
-        var perchar = part[0].charAt(i);
-        switch (perchar) {
-            case "0":
-                tmpnewchar = "零" + tmpnewchar;
-                break;
-            case "1":
-                tmpnewchar = "壹" + tmpnewchar;
-                break;
-            case "2":
-                tmpnewchar = "贰" + tmpnewchar;
-                break;
-            case "3":
-                tmpnewchar = "叁" + tmpnewchar;
-                break;
-            case "4":
-                tmpnewchar = "肆" + tmpnewchar;
-                break;
-            case "5":
-                tmpnewchar = "伍" + tmpnewchar;
-                break;
-            case "6":
-                tmpnewchar = "陆" + tmpnewchar;
-                break;
-            case "7":
-                tmpnewchar = "柒" + tmpnewchar;
-                break;
-            case "8":
-                tmpnewchar = "捌" + tmpnewchar;
-                break;
-            case "9":
-                tmpnewchar = "玖" + tmpnewchar;
-                break;
-        }
-        switch (part[0].length - i - 1) {
-            case 0:
-                tmpnewchar = tmpnewchar + "元";
-                break;
-            case 1:
-                if (perchar != 0) tmpnewchar = tmpnewchar + "拾";
-                break;
-            case 2:
-                if (perchar != 0) tmpnewchar = tmpnewchar + "佰";
-                break;
-            case 3:
-                if (perchar != 0) tmpnewchar = tmpnewchar + "仟";
-                break;
-            case 4:
-                tmpnewchar = tmpnewchar + "万";
-                break;
-            case 5:
-                if (perchar != 0) tmpnewchar = tmpnewchar + "拾";
-                break;
-            case 6:
-                if (perchar != 0) tmpnewchar = tmpnewchar + "佰";
-                break;
-            case 7:
-                if (perchar != 0) tmpnewchar = tmpnewchar + "仟";
-                break;
-            case 8:
-                tmpnewchar = tmpnewchar + "亿";
-                break;
-            case 9:
-                tmpnewchar = tmpnewchar + "拾";
-                break;
-        }
-        newchar = tmpnewchar + newchar;
-    }
-    //小数点之后进行转化
-    if (Num.indexOf(".") != -1) {
-        if (part[1].length > 2) {
-            // alert("小数点之后只能保留两位,系统将自动截断");
-            part[1] = part[1].substr(0, 2)
-        }
-        for (i = 0; i < part[1].length; i++) {
-            tmpnewchar = ""
-            perchar = part[1].charAt(i)
-            switch (perchar) {
-                case "0":
-                    tmpnewchar = "零" + tmpnewchar;
-                    break;
-                case "1":
-                    tmpnewchar = "壹" + tmpnewchar;
-                    break;
-                case "2":
-                    tmpnewchar = "贰" + tmpnewchar;
-                    break;
-                case "3":
-                    tmpnewchar = "叁" + tmpnewchar;
-                    break;
-                case "4":
-                    tmpnewchar = "肆" + tmpnewchar;
-                    break;
-                case "5":
-                    tmpnewchar = "伍" + tmpnewchar;
-                    break;
-                case "6":
-                    tmpnewchar = "陆" + tmpnewchar;
-                    break;
-                case "7":
-                    tmpnewchar = "柒" + tmpnewchar;
-                    break;
-                case "8":
-                    tmpnewchar = "捌" + tmpnewchar;
-                    break;
-                case "9":
-                    tmpnewchar = "玖" + tmpnewchar;
-                    break;
-            }
-            if (i == 0) tmpnewchar = tmpnewchar + "角";
-            if (i == 1) tmpnewchar = tmpnewchar + "分";
-            newchar = newchar + tmpnewchar;
-        }
-    }
-    //替换所有无用汉字
-    while (newchar.search("零零") != -1)
-        newchar = newchar.replace("零零", "零");
-    newchar = newchar.replace("零亿", "亿");
-    newchar = newchar.replace("亿万", "亿");
-    newchar = newchar.replace("零万", "万");
-    newchar = newchar.replace("零元", "元");
-    newchar = newchar.replace("零角", "");
-    newchar = newchar.replace("零分", "");
-    if (newchar.charAt(newchar.length - 1) == "元") {
-        newchar = newchar + "整"
-    }
-    return newchar;
-}
-
-/**
  * 获取当前时间 格式为yyyy-MM-dd 
  */
 function getNowFormatDate() {
@@ -191,8 +45,102 @@ function getNowFormatDate() {
         seperator2 + date.getSeconds();
     return currentdate;
 }
+/**
+ * 判断对象是否为空对象
+ * @param {*} obj 
+ */
+function isEmptyObj(obj) {
+    var arr = Object.keys(obj);
+    return arr.length == 0;
+}
+
+function convertCurrency(money) {
+    //汉字的数字
+    var cnNums = new Array(
+        "零",
+        "壹",
+        "贰",
+        "叁",
+        "肆",
+        "伍",
+        "陆",
+        "柒",
+        "捌",
+        "玖"
+    ); //基本单位
+    var cnIntRadice = new Array("", "拾", "佰", "仟"); //对应整数部分扩展单位
+    var cnIntUnits = new Array("", "万", "亿", "兆"); //对应小数部分单位
+    var cnDecUnits = new Array("角", "分", "毫", "厘"); //整数金额时后面跟的字符
+    var cnInteger = "整"; //整型完以后的单位
+    var cnIntLast = "元"; //最大处理的数字
+    var maxNum = 999999999999999.9999; //金额整数部分
+    var integerNum; //金额小数部分
+    var decimalNum; //输出的中文金额字符串
+    var chineseStr = ""; //分离金额后用的数组，预定义
+    var parts;
+    if (money == "") {
+        return "";
+    }
+    money = parseFloat(money);
+    if (money >= maxNum) {
+        //超出最大处理数字
+        return "";
+    }
+    if (money == 0) {
+        chineseStr = cnNums[0] + cnIntLast + cnInteger;
+        return chineseStr;
+    } //转换为字符串
+    money = money.toString();
+    if (money.indexOf(".") == -1) {
+        integerNum = money;
+        decimalNum = "";
+    } else {
+        parts = money.split(".");
+        integerNum = parts[0];
+        decimalNum = parts[1].substr(0, 4);
+    } //获取整型部分转换
+    if (parseInt(integerNum, 10) > 0) {
+        var zeroCount = 0;
+        var IntLen = integerNum.length;
+        for (var i = 0; i < IntLen; i++) {
+            var n = integerNum.substr(i, 1);
+            var p = IntLen - i - 1;
+            var q = p / 4;
+            var m = p % 4;
+            if (n == "0") {
+                zeroCount++;
+            } else {
+                if (zeroCount > 0) {
+                    chineseStr += cnNums[0];
+                } //归零
+                zeroCount = 0;
+                chineseStr += cnNums[parseInt(n)] + cnIntRadice[m];
+            }
+            if (m == 0 && zeroCount < 4) {
+                chineseStr += cnIntUnits[q];
+            }
+        }
+        chineseStr += cnIntLast;
+    } //小数部分
+    if (decimalNum != "") {
+        var decLen = decimalNum.length;
+        for (var j = 0; j < decLen; j++) {
+            var a = decimalNum.substr(j, 1);
+            if (a != "0") {
+                chineseStr += cnNums[Number(a)] + cnDecUnits[j];
+            }
+        }
+    }
+    if (chineseStr == "") {
+        chineseStr += cnNums[0] + cnIntLast + cnInteger;
+    } else if (decimalNum == "") {
+        chineseStr += cnInteger;
+    }
+    return chineseStr;
+}
 export default {
     timestampToDate,
-    changeToChinese,
-    getNowFormatDate
+    getNowFormatDate,
+    isEmptyObj,
+    convertCurrency,
 }
