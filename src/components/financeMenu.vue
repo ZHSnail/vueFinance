@@ -86,7 +86,7 @@
           <el-menu-item index="3-1">
             <template slot="title">
               <i class="el-icon-document-add"></i>
-              <span slot="title">资产增加</span>
+              <span slot="title">资产登记</span>
             </template>
           </el-menu-item>
           <el-menu-item index="3-2">
@@ -98,7 +98,7 @@
           <el-menu-item index="3-3">
             <template slot="title">
               <i class="el-icon-sold-out"></i>
-              <span slot="title">资产折旧</span>
+              <span slot="title">计提折旧</span>
             </template>
           </el-menu-item>
         </el-menu-item-group>
