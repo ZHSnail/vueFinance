@@ -1,6 +1,6 @@
 <template>
   <div class="financeMenu">
-    <el-menu :collapse="isCollapse" :unique-opened="false" class="centerAlign">
+    <el-menu :collapse="isCollapse" :unique-opened="false">
       <el-row>
         <el-col :span="24" class="centerAlign">
           <el-tooltip effect="light" :content="foldMsg" placement="right">
@@ -80,7 +80,7 @@
       <el-submenu index="3">
         <template slot="title">
           <i class="el-icon-office-building"></i>
-          <span slot="title">资产管理</span>
+          <span slot="title">固定资产管理</span>
         </template>
         <el-menu-item-group>
           <el-menu-item index="3-1">
@@ -124,7 +124,13 @@
           <el-menu-item index="4-3">
             <template slot="title">
               <i class="el-icon-tickets"></i>
-              <span slot="title">科目管理</span>
+              <span slot="title">凭证录入</span>
+            </template>
+          </el-menu-item>
+           <el-menu-item index="4-4">
+            <template slot="title">
+              <i class="el-icon-tickets"></i>
+              <span slot="title">凭证审核</span>
             </template>
           </el-menu-item>
         </el-menu-item-group>
