@@ -36,18 +36,18 @@
       <el-table-column align="center" label="摘要" prop="memo"></el-table-column>
     </el-table>
     <el-row>
-        <el-col :span="24">
-          <el-pagination
-            background
-            @current-change="handleCurrentChange"
-            :page-size="pageSize"
-            layout="prev, pager, next, jumper"
-            :total="total"
-            class="centerAlign"
-            :hide-on-single-page="true"
-          ></el-pagination>
-        </el-col>
-      </el-row>
+      <el-col :span="24">
+        <el-pagination
+          background
+          @current-change="handleCurrentChange"
+          :page-size="pageSize"
+          layout="prev, pager, next, jumper"
+          :total="total"
+          class="centerAlign"
+          :hide-on-single-page="true"
+        ></el-pagination>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -86,7 +86,7 @@ export default {
             { label: "文科类学费", value: "2" },
             { label: "电费", value: "3" },
             { label: "宿舍费", value: "4" },
-            { label: "水费", value: "5" },
+            { label: "水费", value: "5" }
           ]
         }
       ],
@@ -192,8 +192,8 @@ export default {
           memo: "2018-2019应收学费"
         }
       ],
-      total:200,
-      pageSize:10
+      total: 200,
+      pageSize: 10
     };
   },
   watch: {},

@@ -4,17 +4,17 @@
       <el-row>
         <el-col :span="24" class="centerAlign">
           <el-tooltip effect="light" :content="foldMsg" placement="right">
-          <el-button
-            style="margin-top: 10px"
-            @click="changeCollapse"
-            :icon="foldIcon"
-            circle
-            type="info"
-          ></el-button>
-        </el-tooltip>
+            <el-button
+              style="margin-top: 10px"
+              @click="changeCollapse"
+              :icon="foldIcon"
+              circle
+              type="info"
+            ></el-button>
+          </el-tooltip>
         </el-col>
       </el-row>
-        
+
       <el-submenu index="1">
         <template slot="title">
           <i class="el-icon-postcard"></i>
@@ -68,13 +68,15 @@
               <span slot="title">参数设置</span>
             </template>
           </el-menu-item>
-          <el-menu-item index="2-3">
-            <template slot="title">
-              <i class="el-icon-user-solid"></i>
-              <!-- 税率也写到工资设置里面 -->
-              <span slot="title">职工管理</span>
-            </template>
-          </el-menu-item>
+          <router-link to="/finance/salary/staffInfo" tag="div">
+            <el-menu-item index="2-3">
+              <template slot="title">
+                <i class="el-icon-user-solid"></i>
+                <!-- 税率也写到工资设置里面 -->
+                <span slot="title">职工管理</span>
+              </template>
+            </el-menu-item>
+          </router-link>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="3">
@@ -127,7 +129,7 @@
               <span slot="title">凭证录入</span>
             </template>
           </el-menu-item>
-           <el-menu-item index="4-4">
+          <el-menu-item index="4-4">
             <template slot="title">
               <i class="el-icon-tickets"></i>
               <span slot="title">凭证审核</span>

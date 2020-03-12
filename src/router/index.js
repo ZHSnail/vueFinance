@@ -9,6 +9,8 @@ import FeeKind from '../views/charge/feeKind.vue'
 import PayNoticeReq from '../views/charge/payNoticeReq.vue'
 import PayNoticeDetail from '../views/charge/payNoticeDetail.vue'
 import PayList from '../views/charge/payList.vue'
+import StaffInfo from '../views/salary/staffInfo.vue'
+
 
 
 
@@ -19,6 +21,42 @@ const charge = [{
         path: 'charge/payOnline',
         name: 'chargepayOnline',
         component: PayOnline
+    },
+    {
+        path: 'charge/payNoticeList',
+        name: 'payNoticeList',
+        component: PayNoticeList
+    },
+    {
+        path: 'charge/detail/:id',
+        name: 'payDetail',
+        component: PayDetail
+    },
+    {
+        path: 'charge/feeKind',
+        name: 'feeKind',
+        component: FeeKind
+    },
+    {
+        path: 'charge/payNoticeReq/:id?',
+        name: 'payNoticeReq',
+        component: PayNoticeReq
+    },
+    {
+        path: 'charge/payNoticeDetail/:id',
+        name: 'payNoticeDetail',
+        component: PayNoticeDetail
+    },
+    {
+        path: 'charge/payList/:id',
+        name: 'payList',
+        component: PayList
+    }
+];
+const salary = [{
+        path: 'salary/staffInfo',
+        name: 'staffInfo',
+        component: StaffInfo
     },
     {
         path: 'charge/payNoticeList',
@@ -69,11 +107,13 @@ const routes = [{
         path: '/finance',
         name: 'finance',
         component: Finance,
-        children: charge,
+        children: [],
     },
-
 ];
 
+routes[2].children = routes[2].children.concat(charge);
+routes[2].children = routes[2].children.concat(salary);
+console.log(routes[2].children)
 const router = new VueRouter({
     routes
 })
