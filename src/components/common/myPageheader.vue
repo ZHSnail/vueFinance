@@ -7,8 +7,9 @@
       <template slot="content">
         <el-row>
           <el-col :span="12" class="spancontent">{{titleContent}}</el-col>
-          <el-col :span="12" class="rightButton" v-if="buttonContent">
-            <el-button type="primary" @click="handClick">{{buttonContent}}</el-button>
+          <el-col :span="12" class="rightButton" v-if="needButton">
+            <!-- <el-button type="primary" @click="handClick">{{buttonContent}}</el-button> -->
+            <slot><el-button type="primary" @click="handClick">{{buttonContent}}</el-button></slot>
           </el-col>
         </el-row>
       </template>

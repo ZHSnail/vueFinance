@@ -10,6 +10,7 @@ import PayNoticeReq from '../views/charge/payNoticeReq.vue'
 import PayNoticeDetail from '../views/charge/payNoticeDetail.vue'
 import PayList from '../views/charge/payList.vue'
 import StaffInfo from '../views/salary/staffInfo.vue'
+import StaffAdd from '../views/salary/staffAdd.vue'
 
 
 
@@ -59,9 +60,9 @@ const salary = [{
         component: StaffInfo
     },
     {
-        path: 'charge/payNoticeList',
-        name: 'payNoticeList',
-        component: PayNoticeList
+        path: 'salary/staffAdd/:id?',
+        name: 'staffAdd',
+        component: StaffAdd
     },
     {
         path: 'charge/detail/:id',

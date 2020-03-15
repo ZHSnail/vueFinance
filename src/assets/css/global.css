@@ -28,7 +28,7 @@ body,
 
 .el-table__body-wrapper::-webkit-scrollbar {
     width: 6px;
-    height: 6px;
+    height: 10px;
 }
 
 .el-table__body-wrapper::-webkit-scrollbar-thumb {

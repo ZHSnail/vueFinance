@@ -10,7 +10,6 @@ import myPageheader from "@/components/common/myPageheader.vue";
 import myCollapse from "@/components/common/myCollapse.vue";
 import task from "@/components/common/taskList.vue";
 import row from "@/components/common/row.vue";
-import search from "@/components/common/searchBar.vue";
 import searchForm from "@/components/common/searchForm.vue";
 
 
@@ -20,7 +19,6 @@ Vue.component('myPageheader', myPageheader)
 Vue.component('myCollapse', myCollapse)
 Vue.component('task', task)
 Vue.component('row', row)
-Vue.component('search', search)
 Vue.component('searchForm', searchForm)
 
 

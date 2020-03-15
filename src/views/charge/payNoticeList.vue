@@ -198,7 +198,11 @@ export default {
   },
   watch: {},
   computed: {},
-  methods: {},
+  methods: {
+    handleCurrentChange(){
+
+    }
+  },
   created() {},
   mounted() {}
 };
