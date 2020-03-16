@@ -29,7 +29,7 @@
       <el-table-column align="center" label="学历" prop="degree" width="50"></el-table-column>
       <el-table-column align="center" prop="cardNumber" label="证件号码" width="250"></el-table-column>
       <el-table-column align="center" prop="entryDate" label="入职日期" width="100"></el-table-column>
-      <el-table-column align="center" prop="bankName" label="银行账户" width="120">
+      <el-table-column align="center" label="银行账户" width="120">
         <template slot-scope="scope">
           <el-popover placement="top" width="500" trigger="click">
             <el-table :data="scope.row.bankList">
