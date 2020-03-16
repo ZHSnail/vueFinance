@@ -59,7 +59,12 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="职工分类" prop="degree">
-              <el-select class="length" clearable placeholder="请选择职工分类" v-model="staffForm.staffType">
+              <el-select
+                class="length"
+                clearable
+                placeholder="请选择职工分类"
+                v-model="staffForm.staffType"
+              >
                 <el-option
                   v-for="item in staffkind"
                   :key="item.id"
@@ -111,8 +116,64 @@
       </el-form>
     </my-collapse>
     <my-collapse title="银行信息" class="leftAlign">
-
-
+      <el-row>
+        <el-col :span="24" class="rightAlign">
+            <el-button type="primary" @click="addBank" size="small">新增</el-button>
+        </el-col>
+      </el-row>
+      <el-form
+        ref="staffForm"
+        :rules="rules"
+        :model="staffForm"
+        label-width="80px"
+        :status-icon="true"
+        size="small"
+      >
+        <div v-for="bank in staffForm.bankList" :key="bank.id">
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="账户类型" prop="accountType">
+                <el-select
+                  class="length"
+                  clearable
+                  placeholder="请选择账户类型"
+                  v-model="bank.accountType"
+                >
+                  <el-option
+                    v-for="item in staffkind"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="开户银行" prop="bankName">
+                <el-input class="length" v-model="bank.bankName"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="分行名" prop="subbranch">
+                <el-input class="length" v-model="bank.subbranch"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="户名" prop="accountName">
+                <el-input class="length" v-model="bank.accountName"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="银行账号" prop="accountNumber">
+                <el-input class="length" v-model="bank.accountNumber"></el-input>
+              </el-form-item>
+            </el-col>           
+          </el-row>
+          <el-divider></el-divider>
+        </div>
+      </el-form>
     </my-collapse>
     <div class="rightAlign">
       <el-button type="primary" @click="save('staffForm')">暂存</el-button>
@@ -235,7 +296,17 @@ export default {
         }
       });
     },
-    commit(formName) {}
+    commit(formName) {},
+    addBank(){
+      var bank = {
+            bankName: "",
+            accountNumber: "",
+            subbranch: "",
+            accountName: "",
+            accountType: ""
+          };
+      this.staffForm.bankList.push(bank);
+    }
   },
   created() {},
   mounted() {}
