@@ -118,7 +118,7 @@
     <my-collapse title="银行信息" class="leftAlign">
       <el-row>
         <el-col :span="24" class="rightAlign">
-            <el-button type="primary" @click="addBank" size="small">新增</el-button>
+            <el-button type="primary" @click="addBank" class="addButton" size="small">新增</el-button>
         </el-col>
       </el-row>
       <el-form
@@ -129,7 +129,7 @@
         :status-icon="true"
         size="small"
       >
-        <div v-for="bank in staffForm.bankList" :key="bank.id">
+        <div v-for="(bank,index) in staffForm.bankList" :key="bank.id">
           <el-row>
             <el-col :span="8">
               <el-form-item label="账户类型" prop="accountType">
@@ -171,9 +171,13 @@
               </el-form-item>
             </el-col>           
           </el-row>
-          <el-divider></el-divider>
+          <div class="rightAlign">
+          <el-button type="danger" @click="deleteBank(index)"  size="small">删除</el-button>
+          </div>
+          <!-- <el-divider></el-divider> -->
         </div>
       </el-form>
+
     </my-collapse>
     <div class="rightAlign">
       <el-button type="primary" @click="save('staffForm')">暂存</el-button>
@@ -279,16 +283,22 @@ export default {
           ]
         }
       ],
-      pickerOptions: tools.pickerOptionsDay
+      pickerOptions: tools.pickerOptionsDay,
+      rules: {
+        name: [{ required: true, message: "请输入职工姓名", trigger: "blur" }],
+        staffNumber: [
+          { required: true, message: "请输入职工号", trigger: "blur" }
+        ]
+      },
     };
   },
   watch: {},
   computed: {},
   methods: {
     save(formName) {
+      console.log(formName)
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log(this.staffForm);
           alert("submit!");
         } else {
           console.log("error submit!!");
@@ -306,6 +316,10 @@ export default {
             accountType: ""
           };
       this.staffForm.bankList.push(bank);
+    },
+    deleteBank(index){
+      console.log(index);
+      this.staffForm.bankList.splice(index,1);
     }
   },
   created() {},
@@ -315,5 +329,8 @@ export default {
 <style scoped>
 .length {
   width: 250px;
+}
+.addButton{
+  margin-bottom: 10px;
 }
 </style>
