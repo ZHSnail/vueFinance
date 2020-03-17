@@ -138,9 +138,33 @@ function convertCurrency(money) {
     }
     return chineseStr;
 }
+
+/**
+ * 检查验证是否通过
+ * @param {Array} formArr el-form的ref数组，
+ */
+function checkForm(formArr) {
+    return Promise.all(formArr.map(getFormPromise)).then(res => {
+        const validateResult = res.every(item => !!item);
+        if (validateResult) {
+            return true;
+        } else {
+            return false;
+        }
+    });
+}
+
+function getFormPromise(form) {
+    return new Promise(resolve => {
+        form.validate(res => {
+            resolve(res);
+        })
+    })
+}
 export default {
     timestampToDate,
     getNowFormatDate,
     isEmptyObj,
     convertCurrency,
+    checkForm
 }

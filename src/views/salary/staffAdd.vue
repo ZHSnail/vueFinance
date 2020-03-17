@@ -58,7 +58,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="职工分类" prop="degree">
+            <el-form-item label="职工分类" prop="staffType">
               <el-select
                 class="length"
                 clearable
@@ -75,7 +75,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="所属岗位" prop="mail">
+            <el-form-item label="所属岗位" prop="station">
               <el-cascader
                 placeholder="请选择所属岗位"
                 :options="station"
@@ -122,8 +122,7 @@
         </el-col>
       </el-row>
       <el-form
-        ref="staffForm"
-        :rules="rules"
+        ref="bank"
         :model="staffForm"
         label-width="80px"
         :status-icon="true"
@@ -132,7 +131,7 @@
         <div v-for="(bank,index) in staffForm.bankList" :key="bank.id">
           <el-row>
             <el-col :span="8">
-              <el-form-item label="账户类型" prop="accountType">
+              <el-form-item label="账户类型"  :prop="'bankList.' + index + '.accountType'" :rules="bankRules.accountType">
                 <el-select
                   class="length"
                   clearable
@@ -149,24 +148,24 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="开户银行" prop="bankName">
+              <el-form-item label="开户银行" :prop="'bankList.' + index + '.bankName'" :rules="bankRules.bankName">
                 <el-input class="length" v-model="bank.bankName"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="分行名" prop="subbranch">
+              <el-form-item label="分行名" :prop="'bankList.' + index + '.subbranch'" :rules="bankRules.subbranch">
                 <el-input class="length" v-model="bank.subbranch"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="户名" prop="accountName">
+              <el-form-item label="户名" :prop="'bankList.' + index + '.accountName'" :rules="bankRules.accountName">
                 <el-input class="length" v-model="bank.accountName"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="银行账号" prop="accountNumber">
+              <el-form-item label="银行账号" :prop="'bankList.' + index + '.accountNumber'" :rules="bankRules.accountNumber">
                 <el-input class="length" v-model="bank.accountNumber"></el-input>
               </el-form-item>
             </el-col>           
@@ -174,13 +173,13 @@
           <div class="rightAlign">
           <el-button type="danger" @click="deleteBank(index)"  size="small">删除</el-button>
           </div>
-          <!-- <el-divider></el-divider> -->
+          <el-divider></el-divider>
         </div>
       </el-form>
 
     </my-collapse>
     <div class="rightAlign">
-      <el-button type="primary" @click="save('staffForm')">暂存</el-button>
+      <el-button type="primary" @click="save()">暂存</el-button>
       <el-button type="primary" @click="commit('staffForm')">提交</el-button>
     </div>
   </div>
@@ -285,26 +284,50 @@ export default {
       ],
       pickerOptions: tools.pickerOptionsDay,
       rules: {
-        name: [{ required: true, message: "请输入职工姓名", trigger: "blur" }],
+        name: [{ required: true, message: "请输入职工姓名", trigger: "change" }],
         staffNumber: [
-          { required: true, message: "请输入职工号", trigger: "blur" }
+          { required: true, message: "请输入职工号", trigger: "change" }
+        ],
+        mobile:[
+          { required: true, message: "请输入手机号", trigger: "change" }
+        ],
+        mail:[
+          { required: true, message: "请输入电子邮箱", trigger: "change" }
+        ],
+        org:[
+          { required: true, message: "请选择所属部门", trigger: "change" }
+        ],
+        staffType:[
+          { required: true, message: "请选择职工分类", trigger: "change" }
+        ],
+        station:[
+          { required: true, message: "请选择所属岗位", trigger: "change" }
+        ],
+        entryDate:[
+          { required: true, message: "请选择入职日期", trigger: "change" }
         ]
       },
+      bankRules:{
+        accountType:[{ required: true, message: "请选择账户类型", trigger: "change" }],
+        bankName:[{ required: true, message: "请输入开户银行", trigger: "change" }],
+        subbranch:[{ required: true, message: "请输入分行名", trigger: "change" }],
+        accountName:[{ required: true, message: "请输入户名", trigger: "change" }],
+        accountNumber:[{ required: true, message: "请输入银行账号", trigger: "change" }],
+      }
     };
   },
   watch: {},
   computed: {},
   methods: {
     save(formName) {
-      console.log(formName)
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          alert("submit!");
-        } else {
-          console.log("error submit!!");
-          return false;
+      var formRefs = [this.$refs['staffForm'], this.$refs['bank']];
+      this.Utils.checkForm(formRefs).then(res=>{
+        if(res){
+          alert("submit")
+        }else{
+          alert("error")
         }
-      });
+      })
     },
     commit(formName) {},
     addBank(){
@@ -314,12 +337,18 @@ export default {
             subbranch: "",
             accountName: "",
             accountType: ""
-          };
+      };
       this.staffForm.bankList.push(bank);
     },
     deleteBank(index){
-      console.log(index);
-      this.staffForm.bankList.splice(index,1);
+      this.staffForm.bankList.splice(index,1);    
+    },
+    getFormPromise(form) {
+      return new Promise(resolve => {
+        form.validate(res => {
+          resolve(res);
+        })
+      })
     }
   },
   created() {},
