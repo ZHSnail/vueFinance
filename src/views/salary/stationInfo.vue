@@ -1,9 +1,9 @@
 <template>
-  <div class="feeKind">
+  <div class="stationInfo">
     <div>
-      <my-pageheader titleContent="费用类别设置" :needButton="true" buttonContent="添加" @handleClick="add"></my-pageheader>
+      <my-pageheader titleContent="岗位设置" :needButton="true" buttonContent="添加" @handleClick="add"></my-pageheader>
     </div>
-    <div class="content">
+    <!-- <div>
       <el-table
         cell-class-name="centerAlign"
         :data="tableData"
@@ -38,7 +38,7 @@
           </template>
         </el-table-column>
       </el-table>
-    </div>
+    </div> -->
     <div>
       <!-- 添加费用类别的弹窗 -->
       <el-dialog
@@ -49,7 +49,7 @@
         :close-on-click-modal="false"
         center
       >
-        <el-form ref="feeForm" :rules="rules" :model="feeForm" :status-icon="true">
+        <!-- <el-form ref="feeForm" :rules="rules" :model="feeForm" :status-icon="true">
           <el-form-item label="费用名称" prop="name">
             <el-input v-model="feeForm.name" class="length"></el-input>
           </el-form-item>
@@ -88,17 +88,16 @@
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
           <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-        </div>
+        </div> -->
       </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
-import "@/assets/css/charge/feeKind.css";
 
 export default {
-  name: "feeKind",
+  name: "stationInfo",
   components: {},
   props: {},
   data() {

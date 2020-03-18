@@ -15,7 +15,7 @@
       </my-pageheader>
     </div>
     <div>
-      <searchForm  class="test" :formOptions="formOptions" btnItems="search,export"></searchForm>
+      <searchForm class="test" :formOptions="formOptions" btnItems="search,export"></searchForm>
     </div>
     <el-table
       cell-class-name="centerAlign"
@@ -24,7 +24,13 @@
       style="width: 100%"
       max-height="380"
     >
-      <el-table-column align="center" fixed prop="name" label="名称"></el-table-column>
+      <el-table-column align="center" fixed label="名称">
+        <template slot-scope="scope">
+          <router-link :to="'staffDetail/'+scope.row.id" tag="div">
+            <el-link type="primary" :underline="false">{{scope.row.name}}</el-link>
+          </router-link>
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="sex" label="性别" width="50"></el-table-column>
       <el-table-column align="center" label="学历" prop="degree" width="50"></el-table-column>
       <el-table-column align="center" prop="cardNumber" label="证件号码" width="250"></el-table-column>
@@ -47,7 +53,19 @@
       <el-table-column align="center" label="职工分类" prop="staffType" width="120"></el-table-column>
       <el-table-column align="center" label="岗位" prop="station" width="100"></el-table-column>
       <el-table-column align="center" label="职称" prop="postTitle" width="120"></el-table-column>
-      <el-table-column align="center" label="状态" prop="state"></el-table-column>
+      <el-table-column align="center" label="操作" prop="state">
+        <template slot-scope="scope">
+          <el-tooltip effect="light" content="编辑" placement="bottom">
+            <el-button
+              size="mini"
+              type="primary"
+              icon="el-icon-edit"
+              circle
+              @click="handleEdit(scope.row.id)"
+            ></el-button>
+          </el-tooltip>
+        </template>
+      </el-table-column>
     </el-table>
     <el-row>
       <el-col :span="24">
@@ -107,7 +125,7 @@ export default {
           staffType: "教师类",
           station: "教授",
           postTitle: "助教",
-          org:"人事处",
+          org: "人事处"
         },
         {
           id: "2",
@@ -178,7 +196,7 @@ export default {
           staffType: "职能管理类",
           station: "人事处处长",
           postTitle: "",
-          org:"人事处",
+          org: "人事处"
         },
         {
           id: "4",
@@ -214,7 +232,7 @@ export default {
           staffType: "其他类",
           station: "校车司机",
           postTitle: "",
-          org:"人事处",
+          org: "人事处"
         },
         {
           id: "5",
@@ -250,7 +268,7 @@ export default {
           staffType: "教师类",
           station: "教授",
           postTitle: "助教",
-          org:"人事处",
+          org: "人事处"
         },
         {
           id: "6",
@@ -286,7 +304,7 @@ export default {
           staffType: "教师类",
           station: "教授",
           postTitle: "助教",
-          org:"人事处",
+          org: "人事处"
         },
         {
           id: "7",
@@ -322,7 +340,7 @@ export default {
           staffType: "教师类",
           station: "教授",
           postTitle: "助教",
-          org:"人事处",
+          org: "人事处"
         },
         {
           id: "8",
@@ -358,7 +376,7 @@ export default {
           staffType: "教师类",
           station: "教授",
           postTitle: "助教",
-          org:"人事处",
+          org: "人事处"
         },
         {
           id: "9",
@@ -394,7 +412,7 @@ export default {
           staffType: "教师类",
           station: "教授",
           postTitle: "助教",
-          org:"人事处",
+          org: "人事处"
         },
         {
           id: "10",
@@ -430,7 +448,7 @@ export default {
           staffType: "教师类",
           station: "教授",
           postTitle: "助教",
-          org:"人事处",
+          org: "人事处"
         }
       ],
       formOptions: [
@@ -449,8 +467,7 @@ export default {
             { label: "人事部", value: "1" },
             { label: "校长办公室", value: "2" }
           ]
-        }
-        ,
+        },
         {
           label: "职工分类", // label文字
           prop: "staffType", // 字段名
@@ -462,10 +479,10 @@ export default {
           ]
         },
         {
-          element:"el-date-picker",
-          label:"入职日期",
-          type:"daterange",
-          prop: "entryDate", // 字段名
+          element: "el-date-picker",
+          label: "入职日期",
+          type: "daterange",
+          prop: "entryDate" // 字段名
         }
       ],
       total: 200,
@@ -476,15 +493,16 @@ export default {
   computed: {},
   methods: {
     handleCommand(command) {
-        if(command == "addStaff"){
-          this.$router.push({ path: "staffAdd" });
-        }
-        if(command == "importStaff"){
-           this.$message('click on item ' + command);
-        }
+      if (command == "addStaff") {
+        this.$router.push({ path: "staffAdd" });
+      }
+      if (command == "importStaff") {
+        this.$message("click on item " + command);
+      }
     },
-    handleCurrentChange(){
-      
+    handleCurrentChange() {},
+    handleEdit(id) {
+      this.$router.push({ path: "staffAdd/" + id });
     }
   },
   created() {},
@@ -492,5 +510,4 @@ export default {
 };
 </script>
 <style scoped>
-
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="staffAdd">
-    <my-pageheader titleContent="添加职工"></my-pageheader>
+    <my-pageheader :titleContent="title"></my-pageheader>
     <my-collapse title="人员信息" class="leftAlign">
       <el-form
         ref="staffForm"
@@ -194,6 +194,7 @@ export default {
   props: {},
   data() {
     return {
+      title:'',
       staffForm: {
         staffNumber: "",
         name: "", //姓名
@@ -351,7 +352,16 @@ export default {
       })
     }
   },
-  created() {},
+  created() {
+    if(this.$route.params.id != undefined){
+      this.title = '编辑职工'
+      console.log(this.title);
+    }else{
+      this.title = '添加职工'
+            console.log(this.title);
+
+    }
+  },
   mounted() {}
 };
 </script>

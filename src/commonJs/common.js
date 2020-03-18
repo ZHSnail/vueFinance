@@ -146,11 +146,7 @@ function convertCurrency(money) {
 function checkForm(formArr) {
     return Promise.all(formArr.map(getFormPromise)).then(res => {
         const validateResult = res.every(item => !!item);
-        if (validateResult) {
-            return true;
-        } else {
-            return false;
-        }
+        return validateResult;
     });
 }
 

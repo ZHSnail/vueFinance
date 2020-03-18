@@ -1,7 +1,7 @@
 <template>
   <div class="finance">
-    <el-container style="height:100%">
-      <el-header style="height:15%;padding:0px">
+    <el-container :style="contentStyleObj">
+      <el-header style="height:100px;padding:0px">
         <financeHeader></financeHeader>
       </el-header>
       <el-container>
@@ -43,13 +43,42 @@ export default {
   },
   props: {},
   data() {
-    return {};
+    return {
+      contentStyleObj:{
+            height:document.documentElement.clientHeight-100+'px',
+      },
+      screenHeight:document.documentElement.clientHeight
+    };
   },
-  watch: {},
+  watch: {
+    screenHeight(val){
+        // 为了避免频繁触发resize函数导致页面卡顿，使用定时器
+        if(!this.timer){
+            // 一旦监听到的screenWidth值改变，就将其重新赋给data里的screenWidth
+            this.screenHeight = val
+            this.contentStyleObj.height = this.screenHeight-100+'px'
+            this.timer = true
+            let that = this
+            setTimeout(function(){
+                // 打印screenWidth变化的值
+                console.log(that.screenHeight)
+                that.timer = false
+            },400)
+        }
+    }
+  },
   computed: {},
   methods: {},
   created() {},
-  mounted() {}
+  mounted() {
+    const that = this
+    window.onresize = () => {
+        return (() => {
+            window.screenHeight = document.body.clientHeight
+            that.screenHeight = window.screenHeight
+    })()
+    }
+  }
 };
 </script>
 <style scoped>

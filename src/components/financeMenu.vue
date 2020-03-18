@@ -77,6 +77,15 @@
               </template>
             </el-menu-item>
           </router-link>
+          <router-link to="/finance/salary/stationInfo" tag="div">
+            <el-menu-item index="2-4">
+              <template slot="title">
+                <i class="el-icon-user-solid"></i>
+                <!-- 税率也写到工资设置里面 -->
+                <span slot="title">岗位设置</span>
+              </template>
+            </el-menu-item>
+          </router-link>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="3">
