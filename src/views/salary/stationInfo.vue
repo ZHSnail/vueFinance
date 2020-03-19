@@ -3,6 +3,30 @@
     <div>
       <my-pageheader titleContent="岗位设置" :needButton="true" buttonContent="添加" @handleClick="add"></my-pageheader>
     </div>
+    <el-table
+        cell-class-name="centerAlign"
+        :data="tableData"
+        stripe
+        style="width: 100%"
+        max-height="450"
+    >
+    <el-table-column align="center" prop="name" label="岗位名称"></el-table-column>
+    <el-table-column align="center" prop="name" label="岗位类型"></el-table-column>
+    <el-table-column align="center" prop="name" label="标准工资"></el-table-column>
+    <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-tooltip effect="light" content="编辑" placement="bottom">
+              <el-button
+                size="mini"
+                type="primary"
+                icon="el-icon-edit"
+                circle
+                @click="handleEdit(scope.$index, scope.row)"
+              ></el-button>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+    </el-table>
     <!-- <div>
       <el-table
         cell-class-name="centerAlign"

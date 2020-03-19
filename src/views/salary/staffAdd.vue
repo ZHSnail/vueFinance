@@ -12,41 +12,41 @@
       >
         <el-row>
           <el-col :span="8">
-            <el-form-item label="职工号" prop="staffNumber">
+            <el-form-item label="职工号" label-width="90px" prop="staffNumber">
               <el-input class="length" v-model="staffForm.staffNumber"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="职工姓名" prop="name">
+            <el-form-item label="职工姓名" label-width="90px" prop="name">
               <el-input class="length" v-model="staffForm.name"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="证件号码" prop="cardNumber">
+            <el-form-item label="证件号码" label-width="90px" prop="cardNumber">
               <el-input class="length" v-model="staffForm.cardNumber"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="学历" prop="degree">
+            <el-form-item label="学历" label-width="90px" prop="degree">
               <el-input class="length" v-model="staffForm.degree"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="手机号码" prop="mobile">
+            <el-form-item label="手机号码" label-width="90px" prop="mobile">
               <el-input class="length" v-model="staffForm.mobile"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="电子邮箱" prop="mail">
+            <el-form-item label="电子邮箱" label-width="90px" prop="mail">
               <el-input class="length" v-model="staffForm.mail"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="所属部门" prop="org">
+            <el-form-item label="所属部门" label-width="90px" prop="org">
               <el-select class="length" clearable v-model="staffForm.org" placeholder="请选择所属部门">
                 <el-option
                   v-for="item in orgList"
@@ -58,7 +58,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="职工分类" prop="staffType">
+            <!-- <el-form-item label="职工分类" prop="staffType">
               <el-select
                 class="length"
                 clearable
@@ -72,10 +72,8 @@
                   :value="item.id"
                 ></el-option>
               </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="所属岗位" prop="station">
+            </el-form-item>-->
+            <el-form-item label="所属岗位" label-width="90px" prop="station">
               <el-cascader
                 placeholder="请选择所属岗位"
                 :options="station"
@@ -86,10 +84,8 @@
               ></el-cascader>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="8">
-            <el-form-item label="职称" prop="postTitle">
+            <el-form-item label="职称" label-width="90px" prop="postTitle">
               <el-cascader
                 placeholder="请选择职称"
                 :options="station"
@@ -100,8 +96,10 @@
               ></el-cascader>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="8">
-            <el-form-item label="入职日期" prop="entryDate">
+            <el-form-item label="入职日期" label-width="90px" prop="entryDate">
               <el-date-picker
                 v-model="staffForm.entryDate"
                 align="right"
@@ -112,26 +110,35 @@
               ></el-date-picker>
             </el-form-item>
           </el-col>
+          <el-col :span="8">
+            <el-form-item prop="userName" label-width="90px">
+              <span slot="label">
+                <el-tooltip content="不填写则系统自动分配账号，账号为职工姓名的拼音字母" placement="bottom" effect="light">
+                  <i class="el-icon-warning-outline" style="color:#F00"></i>
+                </el-tooltip>
+                <span>系统账号</span>
+              </span>
+              <el-input class="length" v-model="staffForm.userName"></el-input>
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
     </my-collapse>
     <my-collapse title="银行信息" class="leftAlign">
       <el-row>
         <el-col :span="24" class="rightAlign">
-            <el-button type="primary" @click="addBank" class="addButton" size="small">新增</el-button>
+          <el-button type="primary" @click="addBank" class="addButton" size="small">新增</el-button>
         </el-col>
       </el-row>
-      <el-form
-        ref="bank"
-        :model="staffForm"
-        label-width="80px"
-        :status-icon="true"
-        size="small"
-      >
+      <el-form ref="bank" :model="staffForm" label-width="80px" :status-icon="true" size="small">
         <div v-for="(bank,index) in staffForm.bankList" :key="bank.id">
           <el-row>
             <el-col :span="8">
-              <el-form-item label="账户类型"  :prop="'bankList.' + index + '.accountType'" :rules="bankRules.accountType">
+              <el-form-item
+                label="账户类型"
+                :prop="'bankList.' + index + '.accountType'"
+                :rules="bankRules.accountType"
+              >
                 <el-select
                   class="length"
                   clearable
@@ -148,35 +155,50 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="开户银行" :prop="'bankList.' + index + '.bankName'" :rules="bankRules.bankName">
+              <el-form-item
+                label="开户银行"
+                :prop="'bankList.' + index + '.bankName'"
+                :rules="bankRules.bankName"
+              >
                 <el-input class="length" v-model="bank.bankName"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="分行名" :prop="'bankList.' + index + '.subbranch'" :rules="bankRules.subbranch">
+              <el-form-item
+                label="分行名"
+                :prop="'bankList.' + index + '.subbranch'"
+                :rules="bankRules.subbranch"
+              >
                 <el-input class="length" v-model="bank.subbranch"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="户名" :prop="'bankList.' + index + '.accountName'" :rules="bankRules.accountName">
+              <el-form-item
+                label="户名"
+                :prop="'bankList.' + index + '.accountName'"
+                :rules="bankRules.accountName"
+              >
                 <el-input class="length" v-model="bank.accountName"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="银行账号" :prop="'bankList.' + index + '.accountNumber'" :rules="bankRules.accountNumber">
+              <el-form-item
+                label="银行账号"
+                :prop="'bankList.' + index + '.accountNumber'"
+                :rules="bankRules.accountNumber"
+              >
                 <el-input class="length" v-model="bank.accountNumber"></el-input>
               </el-form-item>
-            </el-col>           
+            </el-col>
           </el-row>
           <div class="rightAlign">
-          <el-button type="danger" @click="deleteBank(index)"  size="small">删除</el-button>
+            <el-button type="danger" @click="deleteBank(index)" size="small">删除</el-button>
           </div>
           <el-divider></el-divider>
         </div>
       </el-form>
-
     </my-collapse>
     <div class="rightAlign">
       <el-button type="primary" @click="save()">暂存</el-button>
@@ -194,7 +216,7 @@ export default {
   props: {},
   data() {
     return {
-      title:'',
+      title: "",
       staffForm: {
         staffNumber: "",
         name: "", //姓名
@@ -216,7 +238,8 @@ export default {
         station: "", //岗位
         postTitle: "", //职称
         mobile: "",
-        mail: ""
+        mail: "",
+        userName: "" //用户名
       },
       //职工分类
       staffkind: [
@@ -285,35 +308,45 @@ export default {
       ],
       pickerOptions: tools.pickerOptionsDay,
       rules: {
-        name: [{ required: true, message: "请输入职工姓名", trigger: "change" }],
+        name: [
+          { required: true, message: "请输入职工姓名", trigger: "change" }
+        ],
         staffNumber: [
           { required: true, message: "请输入职工号", trigger: "change" }
         ],
-        mobile:[
+        mobile: [
           { required: true, message: "请输入手机号", trigger: "change" }
         ],
-        mail:[
+        mail: [
           { required: true, message: "请输入电子邮箱", trigger: "change" }
         ],
-        org:[
-          { required: true, message: "请选择所属部门", trigger: "change" }
-        ],
-        staffType:[
+        org: [{ required: true, message: "请选择所属部门", trigger: "change" }],
+        staffType: [
           { required: true, message: "请选择职工分类", trigger: "change" }
         ],
-        station:[
+        station: [
           { required: true, message: "请选择所属岗位", trigger: "change" }
         ],
-        entryDate:[
+        entryDate: [
           { required: true, message: "请选择入职日期", trigger: "change" }
         ]
       },
-      bankRules:{
-        accountType:[{ required: true, message: "请选择账户类型", trigger: "change" }],
-        bankName:[{ required: true, message: "请输入开户银行", trigger: "change" }],
-        subbranch:[{ required: true, message: "请输入分行名", trigger: "change" }],
-        accountName:[{ required: true, message: "请输入户名", trigger: "change" }],
-        accountNumber:[{ required: true, message: "请输入银行账号", trigger: "change" }],
+      bankRules: {
+        accountType: [
+          { required: true, message: "请选择账户类型", trigger: "change" }
+        ],
+        bankName: [
+          { required: true, message: "请输入开户银行", trigger: "change" }
+        ],
+        subbranch: [
+          { required: true, message: "请输入分行名", trigger: "change" }
+        ],
+        accountName: [
+          { required: true, message: "请输入户名", trigger: "change" }
+        ],
+        accountNumber: [
+          { required: true, message: "请输入银行账号", trigger: "change" }
+        ]
       }
     };
   },
@@ -321,45 +354,44 @@ export default {
   computed: {},
   methods: {
     save(formName) {
-      var formRefs = [this.$refs['staffForm'], this.$refs['bank']];
-      this.Utils.checkForm(formRefs).then(res=>{
-        if(res){
-          alert("submit")
-        }else{
-          alert("error")
+      var formRefs = [this.$refs["staffForm"], this.$refs["bank"]];
+      this.Utils.checkForm(formRefs).then(res => {
+        if (res) {
+          alert("submit");
+        } else {
+          alert("error");
         }
-      })
+      });
     },
     commit(formName) {},
-    addBank(){
+    addBank() {
       var bank = {
-            bankName: "",
-            accountNumber: "",
-            subbranch: "",
-            accountName: "",
-            accountType: ""
+        bankName: "",
+        accountNumber: "",
+        subbranch: "",
+        accountName: "",
+        accountType: ""
       };
       this.staffForm.bankList.push(bank);
     },
-    deleteBank(index){
-      this.staffForm.bankList.splice(index,1);    
+    deleteBank(index) {
+      this.staffForm.bankList.splice(index, 1);
     },
     getFormPromise(form) {
       return new Promise(resolve => {
         form.validate(res => {
           resolve(res);
-        })
-      })
+        });
+      });
     }
   },
   created() {
-    if(this.$route.params.id != undefined){
-      this.title = '编辑职工'
+    if (this.$route.params.id != undefined) {
+      this.title = "编辑职工";
       console.log(this.title);
-    }else{
-      this.title = '添加职工'
-            console.log(this.title);
-
+    } else {
+      this.title = "添加职工";
+      console.log(this.title);
     }
   },
   mounted() {}
@@ -369,7 +401,8 @@ export default {
 .length {
   width: 250px;
 }
-.addButton{
+
+.addButton {
   margin-bottom: 10px;
 }
 </style>
