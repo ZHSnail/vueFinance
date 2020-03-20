@@ -398,10 +398,6 @@ export default {
 };
 </script>
 <style scoped>
-.length {
-  width: 250px;
-}
-
 .addButton {
   margin-bottom: 10px;
 }

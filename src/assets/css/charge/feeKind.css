@@ -4,10 +4,6 @@
     padding-bottom: 0px;
 }
 
-.feeKind .length {
-    width: 250px;
-}
-
 .feeKind .el-form-item {
     display: flex;
     justify-content: center;

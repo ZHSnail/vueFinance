@@ -57,3 +57,7 @@ body,
 .el-tag.el-tag--info {
     color: #409EFF;
 }
+
+.length {
+    width: 250px;
+}
