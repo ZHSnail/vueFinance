@@ -15,14 +15,13 @@
       </my-pageheader>
     </div>
     <div>
-      <searchForm class="test" :formOptions="formOptions" btnItems="search,export"></searchForm>
+      <searchForm :formOptions="formOptions" btnItems="search,export"></searchForm>
     </div>
     <el-table
       cell-class-name="centerAlign"
       :data="tableData"
       stripe
       style="width: 100%"
-      max-height="380"
     >
       <el-table-column align="center" fixed label="名称">
         <template slot-scope="scope">

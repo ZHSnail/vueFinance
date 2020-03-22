@@ -9,7 +9,6 @@
         :data="tableData"
         stripe
         style="width: 100%"
-        max-height="450"
       >
         <el-table-column align="center" prop="name" label="费用名称"></el-table-column>
         <el-table-column align="center" prop="timeMold" label="时间单位"></el-table-column>

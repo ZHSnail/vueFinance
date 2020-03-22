@@ -1,46 +1,27 @@
 <template>
-  <div class="stationInfo">
-    <div>
-      <my-pageheader titleContent="岗位设置" :needButton="true">
-        <el-dropdown trigger="click" @command="handleCommand">
-          <el-button type="primary">
-            更多
-            <i class="el-icon-arrow-down el-icon--right"></i>
-          </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="addStation">新增岗位</el-dropdown-item>
-            <el-dropdown-item command="importStation">导入岗位</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </my-pageheader>
-    </div>
+  <div class="floatWageView">
     <searchForm :formOptions="formOptions" btnItems="search,export"></searchForm>
-    <el-table
-        cell-class-name="centerAlign"
-        :data="tableData"
-        stripe
-        style="width: 100%"
-    >
-    <el-table-column align="center" prop="name" label="岗位名称"></el-table-column>
-    <el-table-column align="center" prop="type" label="岗位类型"></el-table-column>
-    <el-table-column align="center" label="状态">
-      <template slot-scope="scope">
-            <span>{{scope.row.status == "TRUE" ? "启用":"停用"}}</span>
-          </template>
-    </el-table-column>
-    <el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-tooltip effect="light" content="编辑" placement="bottom">
-              <el-button
-                size="mini"
-                type="primary"
-                icon="el-icon-edit"
-                circle
-                @click="handleEdit(scope.$index, scope.row)"
-              ></el-button>
-            </el-tooltip>
-          </template>
-        </el-table-column>
+    <el-table cell-class-name="centerAlign" :data="tableData" stripe style="width: 100%">
+      <el-table-column align="center" prop="name" label="岗位名称"></el-table-column>
+      <el-table-column align="center" prop="type" label="岗位类型"></el-table-column>
+      <el-table-column align="center" label="状态">
+        <template slot-scope="scope">
+          <span>{{scope.row.status == "TRUE" ? "启用":"停用"}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-tooltip effect="light" content="编辑" placement="bottom">
+            <el-button
+              size="mini"
+              type="primary"
+              icon="el-icon-edit"
+              circle
+              @click="handleEdit(scope.$index, scope.row)"
+            ></el-button>
+          </el-tooltip>
+        </template>
+      </el-table-column>
     </el-table>
     <el-row>
       <el-col :span="24">
@@ -95,46 +76,44 @@
 <script>
 
 export default {
-  name: "stationInfo",
+  name: "floatWageView",
   components: {},
   props: {},
   data() {
     return {
       tableData: [
         {
-          name:"校长",
-          type:"高级管理类",
-          status:"TRUE"
+          name: "校长",
+          type: "高级管理类",
+          status: "TRUE"
         },
         {
-          name:"专业老师",
-          type:"教师类",
-          status:"TRUE"
+          name: "专业老师",
+          type: "教师类",
+          status: "TRUE"
         },
         {
-          name:"财务人员",
-          type:"职能管理类",
-          status:"TRUE"
+          name: "财务人员",
+          type: "职能管理类",
+          status: "TRUE"
         },
         {
-          name:"财务人员",
-          type:"其他类",
-          status:"TRUE"
-        },       
+          name: "财务人员",
+          type: "其他类",
+          status: "TRUE"
+        }
       ],
       dialogFormVisible: false,
       stationForm: {
         name: "",
         type: "",
-        status: "TRUE",      
+        status: "TRUE"
       },
       rules: {
         name: [{ required: true, message: "请输入岗位名称", trigger: "blur" }],
-        type: [
-          { required: true, message: "请选择岗位类别", trigger: "change" }
-        ],
+        type: [{ required: true, message: "请选择岗位类别", trigger: "change" }]
       },
-       formOptions: [
+      formOptions: [
         {
           label: "岗位名称", // label文字
           prop: "name", // 字段名
@@ -150,9 +129,9 @@ export default {
             { label: "教师类", value: "TCH" },
             { label: "高级管理类", value: "SEN" },
             { label: "职能管理类", value: "FUNC" },
-            { label: "其他类", value: "OTH" },
+            { label: "其他类", value: "OTH" }
           ]
-        },
+        }
       ],
       total: 200,
       pageSize: 10
@@ -165,15 +144,7 @@ export default {
       this.stationForm.name = row.name;
       this.stationForm.type = row.type;
       this.stationForm.status = row.status;
-      this.dialogFormVisible = true;    
-    },
-    handleCommand(command) {
-      if (command == "addStation") {
-        this.dialogFormVisible = true;
-      }
-      if (command == "importStation") {
-        this.$message("click on item " + command);
-      }
+      this.dialogFormVisible = true;
     },
     handleClose(formName) {
       //关闭之后清除表单的内容，
@@ -188,8 +159,4 @@ export default {
 };
 </script>
 <style scoped>
-.el-form-item {
-    display: flex;
-    justify-content: center;
-}
 </style>

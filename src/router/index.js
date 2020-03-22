@@ -13,7 +13,7 @@ import StaffInfo from '../views/salary/staffInfo.vue'
 import StaffAdd from '../views/salary/staffAdd.vue'
 import StaffDetail from '../views/salary/staffDetail.vue'
 import StationInfo from '../views/salary/stationInfo.vue'
-
+import SalaryInfo from '../views/salary/salaryInfo.vue'
 
 
 Vue.use(VueRouter)
@@ -76,20 +76,10 @@ const salary = [{
         component: StationInfo
     },
     {
-        path: 'charge/payNoticeReq/:id?',
-        name: 'payNoticeReq',
-        component: PayNoticeReq
+        path: 'salary/salaryInfo',
+        name: 'salaryInfo',
+        component: SalaryInfo
     },
-    {
-        path: 'charge/payNoticeDetail/:id',
-        name: 'payNoticeDetail',
-        component: PayNoticeDetail
-    },
-    {
-        path: 'charge/payList/:id',
-        name: 'payList',
-        component: PayList
-    }
 ];
 const routes = [{
         path: '/',

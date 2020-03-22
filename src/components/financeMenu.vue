@@ -82,7 +82,16 @@
               <template slot="title">
                 <i class="el-icon-user-solid"></i>
                 <!-- 税率也写到工资设置里面 -->
-                <span slot="title">岗位设置</span>
+                <span slot="title">岗位管理</span>
+              </template>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/finance/salary/salaryInfo" tag="div">
+            <el-menu-item index="2-5">
+              <template slot="title">
+                <i class="el-icon-user-solid"></i>
+                <!-- 税率也写到工资设置里面 -->
+                <span slot="title">工资项管理</span>
               </template>
             </el-menu-item>
           </router-link>
