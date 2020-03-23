@@ -45,7 +45,7 @@ export default {
   data() {
     return {
       contentStyleObj:{
-            height:document.documentElement.clientHeight-100+'px',
+            height:document.documentElement.clientHeight+'px',
       },
       screenHeight:document.documentElement.clientHeight
     };
@@ -56,7 +56,7 @@ export default {
         if(!this.timer){
             // 一旦监听到的screenWidth值改变，就将其重新赋给data里的screenWidth
             this.screenHeight = val
-            this.contentStyleObj.height = this.screenHeight-100+'px'
+            this.contentStyleObj.height = this.screenHeight+'px'
             this.timer = true
             let that = this
             setTimeout(function(){

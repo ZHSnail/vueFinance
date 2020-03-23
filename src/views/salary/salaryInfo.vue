@@ -12,38 +12,34 @@
         </el-dropdown-menu>
       </el-dropdown>
     </my-pageheader>
-    <my-pageheader titleContent="岗位工资管理" :needButton="true" v-else>
-      <el-dropdown trigger="click" @command="handleCommand">
-        <el-button type="primary">
-          更多
-          <i class="el-icon-arrow-down el-icon--right"></i>
-        </el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="addPostWage">新增岗位工资</el-dropdown-item>
-          <el-dropdown-item command="importPostWage">导入岗位工资</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+    <my-pageheader titleContent="岗位工资管理" v-else>
     </my-pageheader>
     <el-tabs value="floatWage" @tab-click="handleClick">
       <el-tab-pane label="浮动工资管理" name="floatWage">
-        <floatWage></floatWage>
+        <floatWage :is-show.sync="show"></floatWage>
       </el-tab-pane>
-      <el-tab-pane label="岗位工资管理" name="postWage"></el-tab-pane>
+      <el-tab-pane label="岗位工资管理" name="postWage">
+        <postWage :is-show.sync="dialogFormVisible"></postWage>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script>
 import floatWage from "@/views/salary/floatWageView.vue";
+import postWage from "@/views/salary/postWageView.vue";
 
 export default {
   name: "salaryInfo",
   components: {
     floatWage,
+    postWage
   },
   props: {},
   data() {
     return {
       active: true,
+      show:false,
+      dialogFormVisible:false
     };
   },
   watch: {},
@@ -58,7 +54,7 @@ export default {
     },
     handleCommand(command) {
       if (command == "addFloatWage") {
-        this.dialogFormVisible = true;
+        this.show = !this.show;
       }
       if (command == "importFloatWage") {
         this.$message("click on item " + command);
@@ -70,8 +66,4 @@ export default {
 };
 </script>
 <style scoped>
-.el-form-item {
-    display: flex;
-    justify-content: center;
-}
 </style>
