@@ -14,7 +14,7 @@ import StaffAdd from '../views/salary/staffAdd.vue'
 import StaffDetail from '../views/salary/staffDetail.vue'
 import StationInfo from '../views/salary/stationInfo.vue'
 import SalaryInfo from '../views/salary/salaryInfo.vue'
-
+import PostWageAdd from '../views/salary/postWageAdd.vue'
 
 Vue.use(VueRouter)
 
@@ -80,6 +80,11 @@ const salary = [{
         name: 'salaryInfo',
         component: SalaryInfo
     },
+    {
+        path: 'salary/postWageAdd/:id',
+        name: 'postWageAdd',
+        component: PostWageAdd
+    },
 ];
 const routes = [{
         path: '/',
@@ -105,7 +110,6 @@ const routes = [{
 
 routes[2].children = routes[2].children.concat(charge);
 routes[2].children = routes[2].children.concat(salary);
-console.log(routes[2].children)
 const router = new VueRouter({
     routes
 })

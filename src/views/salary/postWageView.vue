@@ -107,6 +107,7 @@ export default {
     return {
       tableData: [
         {
+          id: "1",
           type: "教师类",
           stationAmount: 1000, //岗位工资标准
           stationStage: 10, //岗位工资级数
@@ -117,6 +118,7 @@ export default {
           status: "TRUE"
         },
         {
+          id: "2",
           type: "高级管理类",
           stationAmount: 1000, //岗位工资标准
           stationStage: 10, //岗位工资级数
@@ -127,6 +129,7 @@ export default {
           status: "TRUE"
         },
         {
+          id: "3",
           type: "职能管理类",
           stationAmount: 1000, //岗位工资标准
           stationStage: 10, //岗位工资级数
@@ -137,6 +140,7 @@ export default {
           status: "TRUE"
         },
         {
+          id: "4",
           type: "其他类",
           stationAmount: 1000, //岗位工资标准
           stationStage: 10, //岗位工资级数
@@ -172,15 +176,7 @@ export default {
   computed: {},
   methods: {
     handleEdit(index, row) {
-      this.stationForm.type = row.type;
-      this.stationForm.stationAmount = row.stationAmount;
-      this.stationForm.stationStage = row.stationStage;
-      this.stationForm.stationGrad = row.stationGrad;
-      this.stationForm.scaleAmount = row.scaleAmount;
-      this.stationForm.scaleStage = row.scaleStage;
-      this.stationForm.scaleGrad = row.scaleGrad;
-      this.stationForm.status = row.status;
-      this.dialogFormVisible = true;
+      this.$router.push({ name: "postWageAdd",params:{title:row.type,id:row.id} });
     },
     handleClose(formName) {
       //关闭之后清除表单的内容，
