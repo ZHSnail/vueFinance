@@ -376,13 +376,6 @@ export default {
     },
     deleteBank(index) {
       this.staffForm.bankList.splice(index, 1);
-    },
-    getFormPromise(form) {
-      return new Promise(resolve => {
-        form.validate(res => {
-          resolve(res);
-        });
-      });
     }
   },
   created() {
