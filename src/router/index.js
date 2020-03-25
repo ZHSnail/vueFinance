@@ -15,7 +15,8 @@ import StaffDetail from '../views/salary/staffDetail.vue'
 import StationInfo from '../views/salary/stationInfo.vue'
 import SalaryInfo from '../views/salary/salaryInfo.vue'
 import PostWageAdd from '../views/salary/postWageAdd.vue'
-
+import PayStubInfo from '../views/salary/payStubInfo.vue'
+import PayStubAdd from '../views/salary/payStubAdd.vue'
 Vue.use(VueRouter)
 
 //收费管理的路由
@@ -84,6 +85,16 @@ const salary = [{
         path: 'salary/postWageAdd/:id',
         name: 'postWageAdd',
         component: PostWageAdd
+    },
+    {
+        path: 'salary/payStubInfo',
+        name: 'payStubInfo',
+        component: PayStubInfo
+    },
+    {
+        path: 'salary/payStubAdd/:id?',
+        name: 'payStubAdd',
+        component: PayStubAdd
     },
 ];
 const routes = [{

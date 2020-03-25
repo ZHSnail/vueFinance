@@ -68,8 +68,17 @@
               <span slot="title">参数设置</span>
             </template>
           </el-menu-item>
-          <router-link to="/finance/salary/staffInfo" tag="div">
+          <router-link to="/finance/salary/payStubInfo" tag="div">
             <el-menu-item index="2-3">
+              <template slot="title">
+                <i class="el-icon-user-solid"></i>
+                <!-- 税率也写到工资设置里面 -->
+                <span slot="title">工资单管理</span>
+              </template>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/finance/salary/staffInfo" tag="div">
+            <el-menu-item index="2-4">
               <template slot="title">
                 <i class="el-icon-user-solid"></i>
                 <!-- 税率也写到工资设置里面 -->
@@ -78,7 +87,7 @@
             </el-menu-item>
           </router-link>
           <router-link to="/finance/salary/stationInfo" tag="div">
-            <el-menu-item index="2-4">
+            <el-menu-item index="2-5">
               <template slot="title">
                 <i class="el-icon-user-solid"></i>
                 <!-- 税率也写到工资设置里面 -->
@@ -87,7 +96,7 @@
             </el-menu-item>
           </router-link>
           <router-link to="/finance/salary/salaryInfo" tag="div">
-            <el-menu-item index="2-5">
+            <el-menu-item index="2-6">
               <template slot="title">
                 <i class="el-icon-user-solid"></i>
                 <!-- 税率也写到工资设置里面 -->

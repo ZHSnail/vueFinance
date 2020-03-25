@@ -73,6 +73,15 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+          background
+          @current-change="handleScaleChange"
+          :page-size="pageSize"
+          layout="prev, pager, next, jumper"
+          :total="postWageForm.scaleStage"
+          class="centerAlign"
+          :hide-on-single-page="true"
+        ></el-pagination>
     </my-collapse>
     <div class="rightAlign">
       <el-button type="primary" @click="save()">预览工资标准表</el-button>
@@ -174,8 +183,17 @@ export default {
       });
     },
     handleStationChange(page){
-      console.log(page)
-    }
+      var pageSize = this.pageSize;
+      var start = (page-1)*pageSize;
+      var end = start+pageSize;
+      this.stationSalaryData = this.totalStationSalary.slice(start,end);
+    },
+    handleScaleChange(page){
+      var pageSize = this.pageSize;
+      var start = (page-1)*pageSize;
+      var end = start+pageSize;
+      this.scaleSalaryData = this.totalScaleSalary.slice(start,end);
+    },
   },
   created() {
     this.titleContent = this.$route.params.obj.type + "岗位工资管理";
