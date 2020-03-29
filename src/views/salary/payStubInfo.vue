@@ -4,7 +4,8 @@
     <el-table cell-class-name="centerAlign" :data="tableData" stripe style="width: 100%">
       <el-table-column align="center" prop="name" label="名称"></el-table-column>
       <el-table-column align="center" prop="scope" label="适用范围"></el-table-column>
-      <el-table-column align="center" prop="formula" label="计算公式"></el-table-column>
+      <el-table-column align="center" prop="formula" label="基础工资计算公式"></el-table-column>
+      <el-table-column align="center" prop="formula" label="浮动工资计算公式"></el-table-column>
       <el-table-column align="center" label="总金额">
         <template slot-scope="scope">
           <span>{{scope.row.amount+"元"}}</span>

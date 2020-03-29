@@ -157,10 +157,19 @@ function getFormPromise(form) {
         })
     })
 }
+
+/**
+ * 拷贝对象的值
+ * @param {*} obj 
+ */
+function copyObj(obj) {
+    return JSON.parse(JSON.stringify(obj));
+}
 export default {
     timestampToDate,
     getNowFormatDate,
     isEmptyObj,
     convertCurrency,
-    checkForm
+    checkForm,
+    copyObj
 }
