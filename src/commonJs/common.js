@@ -165,11 +165,36 @@ function getFormPromise(form) {
 function copyObj(obj) {
     return JSON.parse(JSON.stringify(obj));
 }
+
+/**
+ * 初始化对象
+ * @param {Object} obj 对象
+ */
+function clearObj(obj) {
+    Object.keys(obj).forEach(key => {
+        if (typeof obj[key] == Array) {
+            obj[key] = []
+        } else if (typeof obj[key] == String) {
+            if (obj[key] == "TRUE") {
+                obj[key] = "TRUE"
+            } else if (obj[key] == "FALSE") {
+                obj[key] = "TRUE"
+            } else {
+                obj[key] = ""
+            }
+        } else if (typeof obj[key] == Number) {
+            obj[key] = 0
+        } else if (typeof obj[key] == Boolean) {
+            obj[key] = true;
+        }
+    })
+}
 export default {
     timestampToDate,
     getNowFormatDate,
     isEmptyObj,
     convertCurrency,
     checkForm,
-    copyObj
+    copyObj,
+    clearObj
 }
