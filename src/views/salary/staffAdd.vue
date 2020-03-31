@@ -133,10 +133,16 @@
         :status-icon="true"
         size="small"
       >
-      <el-row>
-        <el-col :span="8">
-          <el-form-item label="工资单" label-width="90px" prop="payStubId">
-              <el-select class="length" clearable v-model="payStubForm.payStubId" @change="checkedPayStub" placeholder="请选择工资单">
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="工资单" label-width="90px" prop="payStubId">
+              <el-select
+                class="length"
+                clearable
+                v-model="payStubForm.payStubId"
+                @change="checkedPayStub"
+                placeholder="请选择工资单"
+              >
                 <el-option
                   v-for="item in payStubList"
                   :key="item.id"
@@ -144,8 +150,8 @@
                   :value="item.id"
                 ></el-option>
               </el-select>
-          </el-form-item>
-        </el-col>
+            </el-form-item>
+          </el-col>
           <el-col :span="8">
             <el-form-item label="基础工资计算公式" label-width="90px" prop="postWageFormula">
               <el-input class="length" readonly v-model="payStubForm.postWageFormula"></el-input>
@@ -156,52 +162,65 @@
               <el-input class="length" readonly v-model="payStubForm.postWageFormula"></el-input>
             </el-form-item>
           </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="8">
-          <el-form-item label="岗位等级" label-width="90px" prop="stationLv">
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="岗位等级" label-width="90px" prop="stationLv">
               <el-select
-                  class="length"
-                  placeholder="请选择岗位等级"
-                  v-model="payStubForm.stationLv"
-                  value-key="id"
+                class="length"
+                placeholder="请选择岗位等级"
+                v-model="payStubForm.stationLv"
+                clearable
+                @change="checkedStationLv"
+              >
+                <el-option
+                  v-for="item in stationWageOptions"
+                  :label="item.name"
+                  :key="item.level"
+                  :value="item.level"
                 >
-                  <el-option
-                    v-for="item in stationWageOptions"
-                    :key="item.level"
-                    :value="item.level"
-                  >
-                    <el-row>
-                      <el-col :span="12">{{ item.level }}级</el-col>
-                      <el-col :span="12" class="rightAlign">金额：{{ item.amount+" " }}元</el-col>
-                    </el-row>
-                  </el-option>
-                </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="薪级等级" label-width="90px" prop="scaleLv">
+                  <el-row>
+                    <el-col :span="12">{{ item.name }}</el-col>
+                    <el-col :span="12" class="rightAlign">金额：{{ item.amount+" " }}元</el-col>
+                  </el-row>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="薪级等级" label-width="90px" prop="scaleLv">
               <el-select
-                  class="length"
-                  placeholder="请选择薪级等级"
-                  v-model="payStubForm.scaleLv"
-                  value-key="id"
+                class="length"
+                placeholder="请选择薪级等级"
+                v-model="payStubForm.scaleLv"
+                clearable
+                @change="checkedScaleLv"
+              >
+                <el-option
+                  v-for="item in scaleWageOptions"
+                  :label="item.name"
+                  :key="item.level"
+                  :value="item.level"
                 >
-                  <el-option
-                    v-for="item in scaleWageOptions"
-                    :key="item.level"
-                    :value="item.level"
-                  >
-                    <el-row>
-                      <el-col :span="12">{{ item.level }}级</el-col>
-                      <el-col :span="12" class="rightAlign">金额：{{ item.amount+" " }}元</el-col>
-                    </el-row>
-                  </el-option>
-                </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8"></el-col>
-      </el-row>
+                  <el-row>
+                    <el-col :span="12">{{ item.name }}</el-col>
+                    <el-col :span="12" class="rightAlign">金额：{{ item.amount+" " }}元</el-col>
+                  </el-row>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="基础工资速算" label-width="90px" prop="postWageAmount">
+              <el-input class="length" readonly v-model="payStubForm.postWageAmount"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            
+          </el-col>
+        </el-row>
       </el-form>
     </my-collapse>
     <my-collapse title="银行信息" class="leftAlign">
@@ -428,20 +447,21 @@ export default {
           { required: true, message: "请输入银行账号", trigger: "change" }
         ]
       },
-      payStubForm:{
-        payStubId:"",
-        postWageFormula:"",
-        floatWageFormula:"",
-        stationLv:"",
-        scaleLv:"",
+      payStubForm: {
+        payStubId: "",
+        postWageFormula: "",
+        floatWageFormula: "",
+        stationLv: "",
+        scaleLv: "",
+        postWageAmount: ""
       },
-      payStubList:[
+      payStubList: [
         {
           id: 1,
           scope: "教师类", //适用范围
           name: "教师类工资单",
           postWageFormula: "住房补贴+餐费补贴",
-          floatWageFormula:"住房补贴+餐费补贴",
+          floatWageFormula: "住房补贴+餐费补贴",
           amount: 220
         },
         {
@@ -469,7 +489,7 @@ export default {
           amount: 220
         }
       ],
-      postWageList:[
+      postWageList: [
         {
           id: "1",
           type: "教师类",
@@ -478,7 +498,7 @@ export default {
           stationGrad: 200, //岗位工资级差
           scaleAmount: 220, //薪级工资标准
           scaleStage: 10, //薪级工资级数
-          scaleGrad: 200, //薪级工资级差
+          scaleGrad: 200 //薪级工资级差
         },
         {
           id: "2",
@@ -488,7 +508,7 @@ export default {
           stationGrad: 200, //岗位工资级差
           scaleAmount: 220, //薪级工资标准
           scaleStage: 10, //薪级工资级数
-          scaleGrad: 200, //薪级工资级差
+          scaleGrad: 200 //薪级工资级差
         },
         {
           id: "3",
@@ -498,7 +518,7 @@ export default {
           stationGrad: 200, //岗位工资级差
           scaleAmount: 220, //薪级工资标准
           scaleStage: 10, //薪级工资级数
-          scaleGrad: 200, //薪级工资级差
+          scaleGrad: 200 //薪级工资级差
         },
         {
           id: "4",
@@ -508,11 +528,13 @@ export default {
           stationGrad: 200, //岗位工资级差
           scaleAmount: 220, //薪级工资标准
           scaleStage: 10, //薪级工资级数
-          scaleGrad: 200, //薪级工资级差
+          scaleGrad: 200 //薪级工资级差
         }
       ],
-      stationWageOptions:[],
-      scaleWageOptions:[],
+      stationWageOptions: [],
+      scaleWageOptions: [],
+      scaleAmount: 0,
+      stationAmount: 0
     };
   },
   watch: {},
@@ -542,44 +564,76 @@ export default {
     deleteBank(index) {
       this.staffForm.bankList.splice(index, 1);
     },
-    arrangeVal(stage,grad,amount){
+    arrangeVal(stage, grad, amount) {
       var options = [];
-      for(var i = 0;i<stage;i++){
+      for (var i = 0; i < stage; i++) {
         var obj = {};
-        obj.level = i+1;
-        obj.amount = amount+i*grad;
+        obj.level = i + 1;
+        obj.amount = amount + i * grad;
+        obj.name = i + 1 + "级";
         options.push(obj);
       }
       return options;
     },
-    checkedPayStub(val){
-      if(!val){
-        this.payStubForm.postWageFormula = "";
-        this.payStubForm.floatWageFormula = "";
-        this.stationWageOptions=[];
-        this.scaleWageOptions=[];
+    checkedPayStub(val) {
+      if (!val) {
+        this.Utils.clearObj(this.payStubForm);
+        this.stationWageOptions = [];
+        this.scaleWageOptions = [];
+      } else {
+        var payStub = this.Utils.findObj(this.payStubList, "id", val);
+        this.payStubForm.postWageFormula = payStub.postWageFormula;
+        this.payStubForm.floatWageFormula = payStub.floatWageFormula;
+        var postWage = this.Utils.findObj(
+          this.postWageList,
+          "type",
+          payStub.scope
+        );
+        this.stationWageOptions = this.arrangeVal(
+          postWage.stationStage,
+          postWage.stationGrad,
+          postWage.stationAmount
+        );
+        this.scaleWageOptions = this.arrangeVal(
+          postWage.scaleStage,
+          postWage.scaleGrad,
+          postWage.scaleAmount
+        );
       }
-      this.payStubList.forEach(payStub=>{
-        if(val == payStub.id){
-          this.payStubForm.postWageFormula = payStub.postWageFormula;
-          this.payStubForm.floatWageFormula = payStub.floatWageFormula;
-          this.postWageList.forEach(item=>{
-            if(payStub.scope == item.type){
-              this.stationWageOptions = this.arrangeVal(item.stationStage,item.stationGrad,item.stationAmount);
-              this.scaleWageOptions = this.arrangeVal(item.scaleStage,item.scaleGrad,item.scaleAmount);
-            }
-          })
+    },
+    checkedScaleLv(val){
+      if(this.payStubForm.postWageAmount != 0 || !val){
+        this.payStubForm.postWageAmount -= this.scaleAmount;
+        if(!val){
+          this.scaleAmount = 0;
         }
-      })
+      }
+      if(val){
+      var scaleWage = this.Utils.findObj(this.scaleWageOptions,'level',val);
+      this.scaleAmount = scaleWage.amount;
+      this.payStubForm.postWageAmount += scaleWage.amount;
+      }
+    },
+    checkedStationLv(val){
+      if(this.payStubForm.postWageAmount != 0 || !val){
+        this.payStubForm.postWageAmount -= this.stationAmount;
+        if(!val){
+          this.stationAmount = 0;
+        }
+      }
+      if(val){
+      var stationWage = this.Utils.findObj(this.stationWageOptions,'level',val);
+      this.stationAmount = stationWage.amount;
+      this.payStubForm.postWageAmount += stationWage.amount;
+      }
+     
     }
   },
   created() {
     if (this.$route.params.id != undefined) {
       this.title = "编辑职工";
-      console.log(this.title);
     } else {
       this.title = "添加职工";
-      console.log(this.title);
     }
   },
   mounted() {}

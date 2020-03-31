@@ -6,7 +6,7 @@
       <el-table-column align="center" prop="scope" label="适用范围"></el-table-column>
       <el-table-column align="center" prop="formula" label="基础工资计算公式"></el-table-column>
       <el-table-column align="center" prop="formula" label="浮动工资计算公式"></el-table-column>
-      <el-table-column align="center" label="总金额">
+      <el-table-column align="center" label="浮动工资总额">
         <template slot-scope="scope">
           <span>{{scope.row.amount+"元"}}</span>
         </template>

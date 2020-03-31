@@ -172,9 +172,13 @@ function copyObj(obj) {
  */
 function clearObj(obj) {
     Object.keys(obj).forEach(key => {
-        if (typeof obj[key] == Array) {
-            obj[key] = []
-        } else if (typeof obj[key] == String) {
+        if (typeof obj[key] == "object") {
+            if (obj[key] instanceof Array) {
+                obj[key] = []
+            } else if (obj[key] instanceof Object) {
+                clearObj(obj[key]);
+            }
+        } else if (typeof obj[key] == "string") {
             if (obj[key] == "TRUE") {
                 obj[key] = "TRUE"
             } else if (obj[key] == "FALSE") {
@@ -182,12 +186,25 @@ function clearObj(obj) {
             } else {
                 obj[key] = ""
             }
-        } else if (typeof obj[key] == Number) {
+        } else if (typeof obj[key] == "number") {
             obj[key] = 0
-        } else if (typeof obj[key] == Boolean) {
+        } else if (typeof obj[key] == "boolean") {
             obj[key] = true;
         }
     })
+}
+/**
+ * 从数组中找含有某个值的对象
+ * @param {Object} obj 对象
+ * @param {Object} key 值
+ * @param {Object} val 键
+ */
+function findObj(array, key, val) {
+    for (var i = 0; i < array.length; i++) {
+        if (array[i][key] === val) {
+            return array[i];
+        }
+    }
 }
 export default {
     timestampToDate,
@@ -196,5 +213,6 @@ export default {
     convertCurrency,
     checkForm,
     copyObj,
-    clearObj
+    clearObj,
+    findObj
 }
