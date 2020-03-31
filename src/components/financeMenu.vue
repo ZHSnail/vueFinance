@@ -61,12 +61,12 @@
               </template>
             </el-menu-item>
           </router-link>
-          <router-link to="/finance/salary/payStubInfo" tag="div">
+          <router-link to="/finance/salary/taxInfo" tag="div">
             <el-menu-item index="2-2">
               <template slot="title">
                 <i class="el-icon-set-up"></i>
                 <!-- 税率也写到工资设置里面 -->
-                <span slot="title">工资设置</span>
+                <span slot="title">税金表查看</span>
               </template>
             </el-menu-item>
           </router-link>
