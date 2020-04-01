@@ -179,15 +179,13 @@ function clearObj(obj) {
                 clearObj(obj[key]);
             }
         } else if (typeof obj[key] == "string") {
-            if (obj[key] == "TRUE") {
-                obj[key] = "TRUE"
-            } else if (obj[key] == "FALSE") {
+            if (obj[key] == "TRUE" || obj[key] == "FALSE") {
                 obj[key] = "TRUE"
             } else {
                 obj[key] = ""
             }
         } else if (typeof obj[key] == "number") {
-            obj[key] = 0
+            obj[key] = ""
         } else if (typeof obj[key] == "boolean") {
             obj[key] = true;
         }

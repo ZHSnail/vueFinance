@@ -11,7 +11,7 @@ import myCollapse from "@/components/common/myCollapse.vue";
 import task from "@/components/common/taskList.vue";
 import row from "@/components/common/row.vue";
 import searchForm from "@/components/common/searchForm.vue";
-
+import selectPayStub from "@/components/common/selectPayStub.vue";
 
 
 Vue.component('myCard', myCard)
@@ -20,6 +20,7 @@ Vue.component('myCollapse', myCollapse)
 Vue.component('task', task)
 Vue.component('row', row)
 Vue.component('searchForm', searchForm)
+Vue.component('selectPayStub', selectPayStub)
 
 
 Vue.config.productionTip = false
