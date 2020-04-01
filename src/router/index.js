@@ -17,7 +17,9 @@ import SalaryInfo from '../views/salary/salaryInfo.vue'
 import PostWageAdd from '../views/salary/postWageAdd.vue'
 import PayStubInfo from '../views/salary/payStubInfo.vue'
 import TaxInfo from '../views/salary/taxInfo.vue'
-import PayRollSet from '../views/salary/payRollSet.vue'
+import PayRollSetInfo from '../views/salary/payRollSetInfo.vue'
+import SettleWageInfo from '../views/salary/settleWageInfo.vue'
+import SalaryRunInfo from '../views/salary/salaryRunInfo.vue'
 Vue.use(VueRouter)
 
 //收费管理的路由
@@ -98,9 +100,19 @@ const salary = [{
         component: TaxInfo
     },
     {
-        path: 'salary/payRollSet',
-        name: 'payRollSet',
-        component: PayRollSet
+        path: 'salary/payRollSetInfo',
+        name: 'payRollSetInfo',
+        component: PayRollSetInfo
+    },
+    {
+        path: 'salary/settleWageInfo',
+        name: 'settleWageInfo',
+        component: SettleWageInfo
+    },
+    {
+        path: 'salary/salaryRunInfo/:id',
+        name: 'salaryRunInfo',
+        component: SalaryRunInfo
     },
 ];
 const routes = [{

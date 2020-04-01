@@ -12,7 +12,7 @@ import task from "@/components/common/taskList.vue";
 import row from "@/components/common/row.vue";
 import searchForm from "@/components/common/searchForm.vue";
 import selectPayStub from "@/components/common/selectPayStub.vue";
-
+import selectPostWage from "@/components/common/selectPostWage.vue";
 
 Vue.component('myCard', myCard)
 Vue.component('myPageheader', myPageheader)
@@ -21,6 +21,7 @@ Vue.component('task', task)
 Vue.component('row', row)
 Vue.component('searchForm', searchForm)
 Vue.component('selectPayStub', selectPayStub)
+Vue.component('selectPostWage', selectPostWage)
 
 
 Vue.config.productionTip = false

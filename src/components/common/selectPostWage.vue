@@ -1,7 +1,7 @@
 <template>
-  <div class="selectPayStub">
+  <div class="selectPostWage">
     <el-dialog
-      title="选择工资单"
+      :title="title"
       @open="query"
       :visible.sync="show"
       center
@@ -19,10 +19,12 @@
         style="width: 100%"
       >
         <el-table-column type="index" width="50"></el-table-column>
-        <el-table-column align="center" prop="name" label="名称"></el-table-column>
-        <el-table-column align="center" prop="deduct" label="扣减项"></el-table-column>
-        <el-table-column align="center" prop="shouldPaid" label="应发项"></el-table-column>
-        <el-table-column align="center" prop="unitPay" label="单位缴纳"></el-table-column>
+        <el-table-column align="center" label="等级">
+                  <template slot-scope="scope">{{scope.row.level}}级</template>
+        </el-table-column>
+        <el-table-column align="center" prop="amount" label="工资标准">
+          <template slot-scope="scope">{{scope.row.amount}}元</template>
+        </el-table-column>
       </el-table>
       <el-row>
       <el-col :span="24">
@@ -43,11 +45,13 @@
 
 <script>
 export default {
-  name: "selectPayStub",
+  name: "selectPostWage",
   components: {},
   props: {
     isShow: Boolean,
-    staffId: String
+    staffId: String,
+    title:String,
+    type:String,
   },
   data() {
     return {
@@ -55,31 +59,24 @@ export default {
       tableData: [
         {
           id: 1,
-          name: "教师类工资单",
-          deduct: ["餐费补贴"],
-          shouldPaid: ["住房补贴"],
-          unitPay: ["交通补贴", "交通补贴"]
+          level: "1",
+          amount: 220,
+          
         },
         {
           id: 2,
-          deduct: ["餐费补贴"],
-          shouldPaid: ["住房补贴"],
-          unitPay: ["交通补贴", "交通补贴"],
-          name: "高级管理类工资单"
+          level: "2",
+          amount: 220,
         },
         {
           id: 3,
-          deduct: ["餐费补贴"],
-          shouldPaid: ["住房补贴"],
-          unitPay: ["交通补贴", "交通补贴"],
-          name: "职能管理类工资单"
+          level: "3",
+          amount: 220,
         },
         {
           id: 4,
-          deduct: ["餐费补贴"],
-          shouldPaid: ["住房补贴"],
-          unitPay: ["交通补贴", "交通补贴"],
-          name: "其他类工资单"
+          level: "4",
+          amount: 220,
         }
       ],
       formOptions: [

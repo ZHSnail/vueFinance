@@ -52,7 +52,7 @@
           <span slot="title">工资管理</span>
         </template>
         <el-menu-item-group>
-          <router-link to="/finance/salary/feeKind" tag="div">
+          <router-link to="/finance/salary/settleWageInfo" tag="div">
             <el-menu-item index="2-1">
               <template slot="title">
                 <i class="el-icon-wallet"></i>
@@ -105,7 +105,7 @@
               </template>
             </el-menu-item>
           </router-link>
-          <router-link to="/finance/salary/payRollSet" tag="div">
+          <router-link to="/finance/salary/payRollSetInfo" tag="div">
             <el-menu-item index="2-7">
               <template slot="title">
                 <i class="el-icon-user-solid"></i>

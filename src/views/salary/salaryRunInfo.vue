@@ -1,10 +1,13 @@
 <template>
-  <div class="settleWage"></div>
+  <div class="salaryRunInfo">
+    <my-pageheader titleContent="工资运行"></my-pageheader>
+    
+  </div>
 </template>
 
 <script>
 export default {
-  name:'settleWage',
+  name:'salaryRunInfo',
   components:{},
   props:{},
   data(){
