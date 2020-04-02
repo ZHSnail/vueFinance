@@ -5,6 +5,7 @@ import App from './App.vue'
 import router from './router'
 import './plugins/element.js'
 import "@/assets/css/global.css"
+import "@/assets/iconfont/iconfont.css"
 import myCard from "@/components/common/myCard.vue";
 import myPageheader from "@/components/common/myPageheader.vue";
 import myCollapse from "@/components/common/myCollapse.vue";

@@ -108,7 +108,7 @@
           <router-link to="/finance/salary/payRollSetInfo" tag="div">
             <el-menu-item index="2-7">
               <template slot="title">
-                <i class="el-icon-user-solid"></i>
+                <i class="el-icon-fin-office-supplies-fill"></i>
                 <!-- 税率也写到工资设置里面 -->
                 <span slot="title">职工工资配置</span>
               </template>
@@ -122,12 +122,14 @@
           <span slot="title">固定资产管理</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item index="3-1">
-            <template slot="title">
-              <i class="el-icon-document-add"></i>
-              <span slot="title">资产登记</span>
-            </template>
-          </el-menu-item>
+          <router-link to="/finance/assets/assetsInfo" tag="div">
+            <el-menu-item index="3-1">
+              <template slot="title">
+                <i class="el-icon-document-add"></i>
+                <span slot="title">资产登记</span>
+              </template>
+            </el-menu-item>
+          </router-link>
           <el-menu-item index="3-2">
             <template slot="title">
               <i class="el-icon-document-copy"></i>

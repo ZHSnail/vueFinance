@@ -1,6 +1,9 @@
 <template>
   <div class="payRollSetInfo">
     <my-pageheader titleContent="职工工资配置"></my-pageheader>
+    <div>
+      <searchForm :formOptions="formOptions" btnItems="search,export"></searchForm>
+    </div>
     <el-table cell-class-name="centerAlign" :data="tableData" stripe style="width: 100%">
       <el-table-column align="center" prop="name" label="姓名"></el-table-column>
       <el-table-column align="center" prop="staffType" label="员工类别"></el-table-column>
@@ -158,7 +161,41 @@ export default {
         }
       ],
       total: 200,
-      pageSize: 10
+      pageSize: 10,
+      formOptions: [
+        {
+          label: "名称", // label文字
+          prop: "name", // 字段名
+          element: "el-input", // 指定elementui组件
+          placeholder: "请输入名称" // elementui组件属性
+        },
+        {
+          label: "部门", // label文字
+          prop: "org", // 字段名
+          element: "el-select", // 指定elementui组件
+          placeholder: "请选择部门", // elementui组件属性
+          options: [
+            { label: "人事部", value: "1" },
+            { label: "校长办公室", value: "2" }
+          ]
+        },
+        {
+          label: "职工分类", // label文字
+          prop: "staffType", // 字段名
+          element: "el-select", // 指定elementui组件
+          placeholder: "请选择职工分类", // elementui组件属性
+          options: [
+            { label: "教师类", value: "1" },
+            { label: "高级管理类", value: "2" }
+          ]
+        },
+        {
+          element: "el-date-picker",
+          label: "入职日期",
+          type: "daterange",
+          prop: "entryDate" // 字段名
+        }
+      ]
     };
   },
   watch: {},

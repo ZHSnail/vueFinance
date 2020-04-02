@@ -5,7 +5,10 @@
       <my-card :objList="payStubList" url="salaryRunInfo" :total="100" :page-size="7" @getCurrentPage="getCurrentPage">
         <template v-slot:item="{ item }">
           <row>
-            <template slot="left">工资单：{{item.name}}</template>
+            <template slot="left"><span class="xlarge">{{item.name}}</span></template>
+          </row>
+          <row>
+            <template slot="left">当前关联人数：{{item.lastExePeriod}}</template>
             <template slot="right">最新执行期间：{{item.lastExePeriod}}</template>
           </row>
         </template>

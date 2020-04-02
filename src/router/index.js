@@ -20,6 +20,8 @@ import TaxInfo from '../views/salary/taxInfo.vue'
 import PayRollSetInfo from '../views/salary/payRollSetInfo.vue'
 import SettleWageInfo from '../views/salary/settleWageInfo.vue'
 import SalaryRunInfo from '../views/salary/salaryRunInfo.vue'
+import SalaryDetail from '../views/salary/salaryDetail.vue'
+import AssetsInfo from '../views/assets/assetsInfo.vue'
 Vue.use(VueRouter)
 
 //收费管理的路由
@@ -114,7 +116,19 @@ const salary = [{
         name: 'salaryRunInfo',
         component: SalaryRunInfo
     },
+    {
+        path: 'salary/salaryDetail/:id',
+        name: 'salaryDetail',
+        component: SalaryDetail
+    },
 ];
+const assets = [{
+        path: 'assets/assetsInfo',
+        name: 'assetsInfo',
+        component: AssetsInfo
+    },
+
+]
 const routes = [{
         path: '/',
         name: 'home',
@@ -139,6 +153,7 @@ const routes = [{
 
 routes[2].children = routes[2].children.concat(charge);
 routes[2].children = routes[2].children.concat(salary);
+routes[2].children = routes[2].children.concat(assets);
 const router = new VueRouter({
     routes
 })
