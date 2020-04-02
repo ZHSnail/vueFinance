@@ -142,6 +142,14 @@
               <span slot="title">计提折旧</span>
             </template>
           </el-menu-item>
+          <router-link to="/finance/assets/assetsKind" tag="div">
+            <el-menu-item index="3-4">
+              <template slot="title">
+                <i class="el-icon-document-add"></i>
+                <span slot="title">资产类别</span>
+              </template>
+            </el-menu-item>
+          </router-link>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="4">

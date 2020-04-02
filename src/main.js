@@ -14,6 +14,7 @@ import row from "@/components/common/row.vue";
 import searchForm from "@/components/common/searchForm.vue";
 import selectPayStub from "@/components/common/selectPayStub.vue";
 import selectPostWage from "@/components/common/selectPostWage.vue";
+import selectAccount from "@/components/common/selectAccount.vue";
 
 Vue.component('myCard', myCard)
 Vue.component('myPageheader', myPageheader)
@@ -23,6 +24,8 @@ Vue.component('row', row)
 Vue.component('searchForm', searchForm)
 Vue.component('selectPayStub', selectPayStub)
 Vue.component('selectPostWage', selectPostWage)
+Vue.component('selectAccount', selectAccount)
+
 
 
 Vue.config.productionTip = false

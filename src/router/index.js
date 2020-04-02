@@ -22,6 +22,7 @@ import SettleWageInfo from '../views/salary/settleWageInfo.vue'
 import SalaryRunInfo from '../views/salary/salaryRunInfo.vue'
 import SalaryDetail from '../views/salary/salaryDetail.vue'
 import AssetsInfo from '../views/assets/assetsInfo.vue'
+import AssetsKind from '../views/assets/assetsKind.vue'
 Vue.use(VueRouter)
 
 //收费管理的路由
@@ -126,6 +127,11 @@ const assets = [{
         path: 'assets/assetsInfo',
         name: 'assetsInfo',
         component: AssetsInfo
+    },
+    {
+        path: 'assets/assetsKind',
+        name: 'assetsKind',
+        component: AssetsKind
     },
 
 ]
