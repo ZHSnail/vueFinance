@@ -4,7 +4,6 @@
     <el-table cell-class-name="centerAlign" :data="tableData" stripe style="width: 100%">
       <el-table-column align="center" prop="code" label="编码"></el-table-column>
       <el-table-column align="center" prop="name" label="资产名称"></el-table-column>
-      <el-table-column align="center" prop="calUnit" label="计量单位"></el-table-column>
       <el-table-column align="center" prop="fixAccount" label="固定资产科目">
         <template slot-scope="scope">
           <span v-for="(item) in scope.row.account" :key="item.id">{{item.code+" " + item.name}}</span>
@@ -43,9 +42,23 @@
       center
     >
       <el-form ref="assetsForm" :rules="rules" :model="assetsForm" :status-icon="true">
-          <el-form-item label="收费方式" prop="feeMethod">
-              <select-account v-model="assetsForm.feeMethod"></select-account>
-          </el-form-item>
+        <el-form-item label="资产名称" prop="name">
+          <el-input v-model="assetsForm.name" class="length"></el-input>
+        </el-form-item>
+        <el-form-item label="固定资产科目" prop="fixAccount">
+          <select-account v-model="assetsForm.fixAccount" placeholder="请选择固定资产科目" width="250px"></select-account>
+        </el-form-item>
+        <el-form-item label="累计折旧科目" prop="depreAccount">
+          <select-account v-model="assetsForm.depreAccount" placeholder="请选择累计折旧科目" width="250px"></select-account>
+        </el-form-item>
+        <el-form-item label="预设折旧方法" prop="preMeth">
+          <el-select class="length" v-model="assetsForm.preMeth" clearable placeholder="请选择预设折旧方法">
+            <el-option label="年限平均法(直线法)" value="STRLINE"></el-option>
+            <el-option label="工作量法" value="WORKLOAD"></el-option>
+            <el-option label="双倍余额递减法" value="DOUDECBAL"></el-option>
+            <el-option label="年数总和法" value="SUMYEAR"></el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -65,12 +78,27 @@ export default {
       dialogFormVisible: false,
       tableData: [],
       assetsForm: {
-        feeMethod: {}
+        name: "",
+        calUnit: "",
+        fixAccount: "",
+        depreAccount: "",
+        preMeth: ""
       },
-       rules: {
-        feeMethod: [{ required: true, message: "请输入费用名称", trigger: "change" }],
-        
-        }
+      rules: {
+        name: [{ required: true, message: "请输入资产名称", trigger: "blur" }],
+        calUnit: [
+          { required: true, message: "请选择计量单位", trigger: "change" }
+        ],
+        fixAccount: [
+          { required: true, message: "请选择固定资产科目", trigger: "change" }
+        ],
+        depreAccount: [
+          { required: true, message: "请选择累计折旧科目", trigger: "change" }
+        ],
+        preMeth: [
+          { required: true, message: "请选择预设折旧方法", trigger: "change" }
+        ]
+      },
     };
   },
   watch: {},
@@ -80,8 +108,16 @@ export default {
       this.dialogFormVisible = !this.dialogFormVisible;
     },
     handleClose() {},
-    save(){
-        console.log(this.assetsForm.feeMethod)
+    save() {
+      var formRefs = [this.$refs["assetsForm"]];
+      this.Utils.checkForm(formRefs).then(res => {
+        if (res) {
+          alert("submit");
+        } else {
+          alert("error");
+        }
+      });
+      console.log(this.assetsForm.feeMethod);
     }
   },
   created() {},
@@ -92,5 +128,8 @@ export default {
 .el-form-item {
   display: flex;
   justify-content: center;
+}
+.assetsKind >>> .el-form-item__label {
+  width: 110px;
 }
 </style>

@@ -122,7 +122,7 @@
           <span slot="title">固定资产管理</span>
         </template>
         <el-menu-item-group>
-          <router-link to="/finance/assets/assetsInfo" tag="div">
+          <router-link to="/finance/assets/assetsRegList" tag="div">
             <el-menu-item index="3-1">
               <template slot="title">
                 <i class="el-icon-document-add"></i>
@@ -130,12 +130,14 @@
               </template>
             </el-menu-item>
           </router-link>
-          <el-menu-item index="3-2">
-            <template slot="title">
-              <i class="el-icon-document-copy"></i>
-              <span slot="title">资产变动</span>
-            </template>
-          </el-menu-item>
+          <router-link to="/finance/assets/assetsChgReq" tag="div">
+            <el-menu-item index="3-2">
+              <template slot="title">
+                <i class="el-icon-document-copy"></i>
+                <span slot="title">资产变动</span>
+              </template>
+            </el-menu-item>
+          </router-link>
           <el-menu-item index="3-3">
             <template slot="title">
               <i class="el-icon-sold-out"></i>
@@ -147,6 +149,22 @@
               <template slot="title">
                 <i class="el-icon-document-add"></i>
                 <span slot="title">资产类别</span>
+              </template>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/finance/assets/assetsRegQuery" tag="div">
+            <el-menu-item index="3-5">
+              <template slot="title">
+                <i class="el-icon-document-add"></i>
+                <span slot="title">资产登记综合查询</span>
+              </template>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/finance/assets/assetsPurchaseList" tag="div">
+            <el-menu-item index="3-6">
+              <template slot="title">
+                <i class="el-icon-document-add"></i>
+                <span slot="title">资产采购</span>
               </template>
             </el-menu-item>
           </router-link>

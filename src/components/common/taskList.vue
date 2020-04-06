@@ -37,7 +37,7 @@
           </my-card>
         </div>
       </el-collapse-item>
-      <el-collapse-item name="4">
+      <el-collapse-item name="4" v-if="needFinsh">
         <template slot="title">
           <span class="titleContent">已完成</span>
         </template>
@@ -63,6 +63,7 @@ export default {
       needExe:Boolean,
       draftUrl:String,
       detailUrl:String,
+      needFinsh:Boolean,
   },
   data() {
     return {

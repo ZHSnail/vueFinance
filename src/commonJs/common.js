@@ -174,7 +174,12 @@ function clearObj(obj) {
     Object.keys(obj).forEach(key => {
         if (typeof obj[key] == "object") {
             if (obj[key] instanceof Array) {
-                obj[key] = []
+                if (obj[key][0] instanceof Object) {
+                    obj[key].splice(0, obj[key].length - 1);
+                    clearObj(obj[key][0])
+                } else {
+                    obj[key] = []
+                }
             } else if (obj[key] instanceof Object) {
                 clearObj(obj[key]);
             }

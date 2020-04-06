@@ -21,8 +21,16 @@ import PayRollSetInfo from '../views/salary/payRollSetInfo.vue'
 import SettleWageInfo from '../views/salary/settleWageInfo.vue'
 import SalaryRunInfo from '../views/salary/salaryRunInfo.vue'
 import SalaryDetail from '../views/salary/salaryDetail.vue'
-import AssetsInfo from '../views/assets/assetsInfo.vue'
+import AssetsRegList from '../views/assets/assetsRegList.vue'
 import AssetsKind from '../views/assets/assetsKind.vue'
+import AssetsRegReq from '../views/assets/assetsRegReq.vue'
+import AssetsRegDetail from '../views/assets/assetsRegDetail.vue'
+import AssetsRegQuery from '../views/assets/assetsRegQuery.vue'
+import AssetsChgReq from '../views/assets/assetsChgReq.vue'
+import AssetsPurchaseList from '../views/assets/assetsPurchaseList.vue'
+import AssetsPurchaseDetail from '../views/assets/assetsPurchaseDetail.vue'
+import AssetsPurchaseReq from '../views/assets/assetsPurchaseReq.vue'
+import AssetsPurchaseQuery from '../views/assets/assetsPurchaseQuery.vue'
 Vue.use(VueRouter)
 
 //收费管理的路由
@@ -124,16 +132,55 @@ const salary = [{
     },
 ];
 const assets = [{
-        path: 'assets/assetsInfo',
-        name: 'assetsInfo',
-        component: AssetsInfo
+        path: 'assets/assetsRegList',
+        name: 'assetsRegList',
+        component: AssetsRegList
     },
     {
         path: 'assets/assetsKind',
         name: 'assetsKind',
         component: AssetsKind
     },
-
+    {
+        path: 'assets/assetsRegReq/:id?',
+        name: 'assetsRegReq',
+        component: AssetsRegReq
+    },
+    {
+        path: 'assets/assetsRegDetail/:id',
+        name: 'assetsRegDetail',
+        component: AssetsRegDetail
+    },
+    {
+        path: 'assets/assetsRegQuery',
+        name: 'assetsRegQuery',
+        component: AssetsRegQuery
+    },
+    {
+        path: 'assets/assetsChgReq',
+        name: 'assetsChgReq',
+        component: AssetsChgReq
+    },
+    {
+        path: 'assets/assetsPurchaseList',
+        name: 'assetsPurchaseList',
+        component: AssetsPurchaseList
+    },
+    {
+        path: 'assets/assetsPurchaseDetail/:id',
+        name: 'assetsPurchaseDetail',
+        component: AssetsPurchaseDetail
+    },
+    {
+        path: 'assets/assetsPurchaseReq/:id?',
+        name: 'assetsPurchaseReq',
+        component: AssetsPurchaseReq
+    },
+    {
+        path: 'assets/assetsPurchaseQuery',
+        name: 'assetsPurchaseQuery',
+        component: AssetsPurchaseQuery
+    },
 ]
 const routes = [{
         path: '/',
