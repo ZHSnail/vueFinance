@@ -231,8 +231,6 @@ export default {
           { type: "number", message: "预计金额（元）必须为数字值" }
         ]
       },
-      total: 0,
-      tempAmount: []
     };
   },
   watch: {
@@ -241,7 +239,15 @@ export default {
       console.log(oldVal);
     }
   },
-  computed: {},
+  computed: {
+    total:function(){
+      var temp = 0;
+      this.assetsPurchaseForm.assetsList.forEach(item=>{
+        temp +=item.totalAmount
+      })
+      return temp;
+    }
+  },
   methods: {
     addAssets() {
       var assets = {
@@ -269,27 +275,8 @@ export default {
         this.assetsPurchaseForm.assetsList[index][arg] = 0;
         this.assetsPurchaseForm.assetsList[index].totalAmount = 0;
       }
-      this.tempAmount[index] = this.assetsPurchaseForm.assetsList[index].totalAmount;
-      this.$watch(
-        "tempAmount",
-        function(newVal, oldVal) {
-          console.log(newVal);
-          console.log(oldVal);
-        }
-      );
     },
-    changeTotal(index) {
-      this.$watch(
-        "tempAmount",
-        function(newVal, oldVal) {
-          console.log(newVal);
-          console.log(oldVal);
-        },
-        {
-          deep: true
-        }
-      );
-    }
+   
   },
   created() {},
   mounted() {}
