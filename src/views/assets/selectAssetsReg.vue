@@ -16,7 +16,24 @@
       <div>
         <searchForm :formOptions="formOptions" btnItems="search"></searchForm>
       </div>
-      <el-checkbox-group v-model="checkList">
+      <el-checkbox-group v-if="!isSimple" v-model="checkList">
+        <el-checkbox class="checkbox" v-for="item in assetsRegList" v-bind:key="item.id" :label="item">
+          <el-card shadow="hover" style="width:750px">
+            <row>
+              <template slot="left"><span style="font-size: medium;font-weight: bold;">{{item.name}}</span></template>
+            </row>
+            <row>
+              <template slot="left">资产编号：{{item.assetsCode}}</template>
+              <template slot="right">资产类别：{{item.kindId}}</template>
+            </row>
+            <row>
+              <template slot="left">原价值：{{item.orival}}</template>
+              <template slot="right">备注：{{item.memo}}</template>
+            </row>
+          </el-card>
+        </el-checkbox>
+      </el-checkbox-group>
+      <el-checkbox-group v-if="isSimple" :max="1" v-model="checkList">
         <el-checkbox class="checkbox" v-for="item in assetsRegList" v-bind:key="item.id" :label="item">
           <el-card shadow="hover" style="width:750px">
             <row>
@@ -59,7 +76,8 @@ export default {
   name: "selectAssetsReg",
   components: {},
   props: {
-    ignoreIds: Array
+    ignoreIds: Array,
+    isSimple:Boolean,
   },
   data() {
     return {

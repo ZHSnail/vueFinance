@@ -138,12 +138,14 @@
               </template>
             </el-menu-item>
           </router-link>
-          <el-menu-item index="3-3">
-            <template slot="title">
-              <i class="el-icon-sold-out"></i>
-              <span slot="title">计提折旧</span>
-            </template>
-          </el-menu-item>
+          <router-link to="/finance/assets/depreciatedList" tag="div">
+            <el-menu-item index="3-3">
+              <template slot="title">
+                <i class="el-icon-sold-out"></i>
+                <span slot="title">计提折旧</span>
+              </template>
+            </el-menu-item>
+          </router-link>
           <router-link to="/finance/assets/assetsKind" tag="div">
             <el-menu-item index="3-4">
               <template slot="title">
@@ -168,6 +170,14 @@
               </template>
             </el-menu-item>
           </router-link>
+          <router-link to="/finance/assets/assetsPurchaseQuery" tag="div">
+            <el-menu-item index="3-7">
+              <template slot="title">
+                <i class="el-icon-document-add"></i>
+                <span slot="title">资产采购综合查询</span>
+              </template>
+            </el-menu-item>
+          </router-link>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="4">
@@ -188,12 +198,14 @@
               <span slot="title">凭证过账</span>
             </template>
           </el-menu-item>
-          <el-menu-item index="4-3">
-            <template slot="title">
-              <i class="el-icon-tickets"></i>
-              <span slot="title">凭证录入</span>
-            </template>
-          </el-menu-item>
+          <router-link to="/finance/voucher/voucherList" tag="div">
+            <el-menu-item index="4-3">
+              <template slot="title">
+                <i class="el-icon-tickets"></i>
+                <span slot="title">凭证录入</span>
+              </template>
+            </el-menu-item>
+          </router-link>
           <el-menu-item index="4-4">
             <template slot="title">
               <i class="el-icon-tickets"></i>

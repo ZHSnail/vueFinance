@@ -1,12 +1,12 @@
 <template>
-  <div class="assetsPurchaseList">
-    <my-pageheader titleContent="固定资产采购信息" :needButton="true" buttonContent="申请" @handleClick="req"></my-pageheader>
+  <div class="depreciatedList">
+    <my-pageheader titleContent="固定资产折旧信息" :needButton="true" buttonContent="申请" @handleClick="req"></my-pageheader>
     <el-tabs value="reqList">
       <el-tab-pane label="申请列表" name="reqList">
         <task
-          :taskObj="assetsPurchaseReqList"
-          draftUrl="assetsPurchaseReq"
-          detailUrl="assetsPurchaseDetail"
+          :taskObj="depreciatedReqList"
+          draftUrl="depreciatedReq"
+          detailUrl="depreciatedDetail"
         >
           <template v-slot:draftItem="{ draftItem }">
             <row>
@@ -41,11 +41,11 @@
           <searchForm :formOptions="formOptions" btnItems="search"></searchForm>
         </div>
         <my-card
-          :objList="assetsPurchaseList"
+          :objList="depreciatedList"
           :total="100"
           :page-size="7"
           @getCurrentPage="getCurrentPage"
-          url="assetsPurchaseDetail"
+          url="depreciatedDetail"
         >
           <template v-slot:item="{ item }">
             <row>
@@ -70,16 +70,16 @@
 
 <script>
 export default {
-  name: "assetsPurchaseList",
+  name: "depreciatedList",
   components: {},
   props: {},
   data() {
     return {
-      assetsPurchaseReqList: {
+        depreciatedReqList: {
         draftList: [
           {
             id: "1",
-            code: "AP2002160001",
+            code: "AD2002160001",
             memo: "固定资产登记",
             name: "小车",
             status: "草稿",
@@ -89,7 +89,7 @@ export default {
         cmtList: [
           {
             id: "2",
-            code: "AP2002160001",
+            code: "AD2002160001",
             memo: "2019-2020学年学费",
             name: "电脑",
             status: "审核中",
@@ -97,10 +97,10 @@ export default {
           }
         ] //审核中的列表
       },
-      assetsPurchaseList: [
+      depreciatedList: [
         {
           id: "1",
-          code: "AP2002160001",
+          code: "AD2002160001",
           memo: "固定资产登记",
           name: "小车",
           status: "草稿",
@@ -108,7 +108,7 @@ export default {
         },
         {
           id: "2",
-          code: "AP2002160001",
+          code: "AD2002160001",
           memo: "2019-2020学年学费",
           name: "电脑",
           status: "审核中",
@@ -140,9 +140,8 @@ export default {
   computed: {},
   methods: {
     req() {
-      this.$router.push({ path: "assetsPurchaseReq" });
+      this.$router.push({ path: "depreciatedReq" });
     },
-    getCurrentPage(val) {}
   },
   created() {},
   mounted() {}

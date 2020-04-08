@@ -31,6 +31,15 @@ import AssetsPurchaseList from '../views/assets/assetsPurchaseList.vue'
 import AssetsPurchaseDetail from '../views/assets/assetsPurchaseDetail.vue'
 import AssetsPurchaseReq from '../views/assets/assetsPurchaseReq.vue'
 import AssetsPurchaseQuery from '../views/assets/assetsPurchaseQuery.vue'
+import DepreciatedList from '../views/assets/depreciatedList.vue'
+import DepreciatedDetail from '../views/assets/depreciatedDetail.vue'
+import DepreciatedReq from '../views/assets/depreciatedReq.vue'
+import VoucherList from '../views/voucher/voucherList.vue'
+import VoucherDetail from '../views/voucher/voucherDetail.vue'
+import VoucherQuery from '../views/voucher/voucherQuery.vue'
+import VoucherReq from '../views/voucher/voucherReq.vue'
+
+
 Vue.use(VueRouter)
 
 //收费管理的路由
@@ -181,7 +190,43 @@ const assets = [{
         name: 'assetsPurchaseQuery',
         component: AssetsPurchaseQuery
     },
+    {
+        path: 'assets/depreciatedList',
+        name: 'depreciatedList',
+        component: DepreciatedList
+    },
+    {
+        path: 'assets/depreciatedDetail/:id',
+        name: 'depreciatedDetail',
+        component: DepreciatedDetail
+    },
+    {
+        path: 'assets/depreciatedReq/:id?',
+        name: 'depreciatedReq',
+        component: DepreciatedReq
+    },
 ]
+const voucher = [{
+        path: 'voucher/voucherList',
+        name: 'voucherList',
+        component: VoucherList
+    },
+    {
+        path: 'voucher/voucherDetail/:id',
+        name: 'voucherDetail',
+        component: VoucherDetail
+    },
+    {
+        path: 'voucher/voucherQuery',
+        name: 'voucherQuery',
+        component: VoucherQuery
+    },
+    {
+        path: 'voucher/voucherReq/:id?',
+        name: 'voucherReq',
+        component: VoucherReq
+    },
+];
 const routes = [{
         path: '/',
         name: 'home',
@@ -207,6 +252,8 @@ const routes = [{
 routes[2].children = routes[2].children.concat(charge);
 routes[2].children = routes[2].children.concat(salary);
 routes[2].children = routes[2].children.concat(assets);
+routes[2].children = routes[2].children.concat(voucher);
+
 const router = new VueRouter({
     routes
 })

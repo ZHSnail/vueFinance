@@ -17,7 +17,7 @@
                 v-model="assetsPurchaseForm.reqDate"
                 align="right"
                 type="date"
-                style="width:250px"
+                style="width:220px"
                 placeholder="选择日期"
                 :picker-options="pickerOptions"
               ></el-date-picker>
@@ -233,12 +233,7 @@ export default {
       },
     };
   },
-  watch: {
-    tempAmount: function(newVal, oldVal) {
-      console.log(newVal);
-      console.log(oldVal);
-    }
-  },
+  watch: {},
   computed: {
     total:function(){
       var temp = 0;
@@ -292,5 +287,8 @@ export default {
 }
 .money {
   margin-left: 5px;
+}
+.length{
+  width: 220px
 }
 </style>
