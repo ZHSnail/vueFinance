@@ -3,11 +3,7 @@
     <my-pageheader titleContent="固定资产折旧信息" :needButton="true" buttonContent="申请" @handleClick="req"></my-pageheader>
     <el-tabs value="reqList">
       <el-tab-pane label="申请列表" name="reqList">
-        <task
-          :taskObj="depreciatedReqList"
-          draftUrl="depreciatedReq"
-          detailUrl="depreciatedDetail"
-        >
+        <task :taskObj="depreciatedReqList" draftUrl="depreciatedReq" detailUrl="depreciatedDetail">
           <template v-slot:draftItem="{ draftItem }">
             <row>
               <template slot="left">单号：{{draftItem.code}}</template>
@@ -75,7 +71,7 @@ export default {
   props: {},
   data() {
     return {
-        depreciatedReqList: {
+      depreciatedReqList: {
         draftList: [
           {
             id: "1",
@@ -141,7 +137,7 @@ export default {
   methods: {
     req() {
       this.$router.push({ path: "depreciatedReq" });
-    },
+    }
   },
   created() {},
   mounted() {}

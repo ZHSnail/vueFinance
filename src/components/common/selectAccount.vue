@@ -83,7 +83,8 @@ export default {
       type: [Array, String]
     },
     width:String,
-    placeholder:String
+    placeholder:String,
+    height:String,
   },
   data() {
     return {
@@ -99,7 +100,7 @@ export default {
       total: 200,
       pageSize: 10,
       style: {
-        height: "40px",
+        height:(this.height ? this.height : 40)+'px' ,
         width:this.width
       },
       formOptions: [
@@ -117,10 +118,14 @@ export default {
       //说明是添加
       if (newVal.length % 2 == 0) {
         if (newVal.length == 2 || newVal.length == 1) {
-          this.style.height = 40 + "px";
+          this.style.height = (this.height ? this.height : 40) + "px";
         }
         if (newVal.length / 2 != 1) {
-          this.style.height = (newVal.length / 2) * 22 + 40 + "px";
+          if((newVal.length / 2) * 22 == 0){
+            this.style.height =  (this.height ? this.height : 40) + "px";
+          }else{
+            this.style.height = (newVal.length / 2) * 22 + (this.height ? this.height : 40) + "px";
+          }
         }
       }
     }

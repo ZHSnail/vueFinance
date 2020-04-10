@@ -38,6 +38,8 @@ import VoucherList from '../views/voucher/voucherList.vue'
 import VoucherDetail from '../views/voucher/voucherDetail.vue'
 import VoucherQuery from '../views/voucher/voucherQuery.vue'
 import VoucherReq from '../views/voucher/voucherReq.vue'
+import VoucherPosting from '../views/voucher/voucherPosting.vue'
+import DailyHandle from '../views/cashier/dailyHandle.vue'
 
 
 Vue.use(VueRouter)
@@ -226,7 +228,17 @@ const voucher = [{
         name: 'voucherReq',
         component: VoucherReq
     },
+    {
+        path: 'voucher/voucherPosting',
+        name: 'voucherPosting',
+        component: VoucherPosting
+    },
 ];
+const cashier = [{
+    path: 'cashier/dailyHandle',
+    name: 'dailyHandle',
+    component: DailyHandle
+}];
 const routes = [{
         path: '/',
         name: 'home',

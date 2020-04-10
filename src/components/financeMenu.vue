@@ -186,18 +186,22 @@
           <span slot="title">凭证管理</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item index="4-1">
-            <template slot="title">
-              <i class="el-icon-collection"></i>
-              <span slot="title">凭证查询</span>
-            </template>
-          </el-menu-item>
-          <el-menu-item index="4-2">
-            <template slot="title">
-              <i class="el-icon-tickets"></i>
-              <span slot="title">凭证过账</span>
-            </template>
-          </el-menu-item>
+          <router-link to="/finance/voucher/voucherQuery" tag="div">
+            <el-menu-item index="4-1">
+              <template slot="title">
+                <i class="el-icon-collection"></i>
+                <span slot="title">凭证查询</span>
+              </template>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/finance/voucher/voucherPosting" tag="div">
+            <el-menu-item index="4-2">
+              <template slot="title">
+                <i class="el-icon-tickets"></i>
+                <span slot="title">凭证过账</span>
+              </template>
+            </el-menu-item>
+          </router-link>
           <router-link to="/finance/voucher/voucherList" tag="div">
             <el-menu-item index="4-3">
               <template slot="title">
@@ -220,12 +224,14 @@
           <span slot="title">出纳管理</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item index="5-1">
-            <template slot="title">
-              <i class="el-icon-view"></i>
-              <span slot="title">日常处理</span>
-            </template>
-          </el-menu-item>
+          <router-link to="/finance/cashier/dailyHandle" tag="div">
+            <el-menu-item index="5-1">
+              <template slot="title">
+                <i class="el-icon-view"></i>
+                <span slot="title">日常处理</span>
+              </template>
+            </el-menu-item>
+          </router-link>
           <el-menu-item index="5-2">
             <template slot="title">
               <i class="el-icon-edit-outline"></i>

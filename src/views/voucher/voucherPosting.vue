@@ -1,10 +1,20 @@
 <template>
-  <div class="voucherQuery">
-    <my-pageheader titleContent="凭证查询"></my-pageheader>
-     <el-table cell-class-name="centerAlign" :data="tableData" stripe style="width: 100%">
+  <div class="voucherPosting">
+    <my-pageheader titleContent="凭证过账"></my-pageheader>
+    <div>
+      <searchForm style="width:500px" :formOptions="formOptions" btnItems="search"></searchForm>
+    </div>
+    <el-button type="danger" @click="posting()" size="medium">过账</el-button>
+    <el-table
+      cell-class-name="centerAlign"
+      @selection-change="handleSelectionChange"
+      :data="tableData"
+      stripe
+      style="width: 100%"
+    >
+      <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column align="center" prop="code" label="凭证号"></el-table-column>
       <el-table-column align="center" prop="name" label="会计期间"></el-table-column>
-      <el-table-column align="center" prop="name" label="记账日期"></el-table-column>
       <el-table-column align="center" prop="name" label="摘要"></el-table-column>
       <el-table-column align="center" prop="preMeth" label="业务类型">
         <template slot-scope="scope">
@@ -17,7 +27,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="name" label="制单人"></el-table-column>
-      <el-table-column align="center" prop="name" label="状态"></el-table-column>
+      <el-table-column align="center" prop="name" label="审核人"></el-table-column>
     </el-table>
     <el-row>
       <el-col :span="24">
@@ -37,20 +47,33 @@
 
 <script>
 export default {
-  name: "voucherQuery",
+  name: "voucherPosting",
   components: {},
   props: {},
   data() {
     return {
       tableData: [],
       total: 200,
-      pageSize: 10
+      pageSize: 10,
+      formOptions: [
+        {
+          label: "名称或编码", // label文字
+          prop: "name", // 字段名
+          element: "el-input", // 指定elementui组件
+          placeholder: "请输入会计科目名称或者会计科目编码" // elementui组件属性
+        }
+      ],
+      multipleSelection: []
     };
   },
   watch: {},
   computed: {},
   methods: {
-    handleCurrentChange(val) {}
+    handleCurrentChange(val) {},
+    posting() {},
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    }
   },
   created() {},
   mounted() {}
