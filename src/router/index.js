@@ -40,6 +40,10 @@ import VoucherQuery from '../views/voucher/voucherQuery.vue'
 import VoucherReq from '../views/voucher/voucherReq.vue'
 import VoucherPosting from '../views/voucher/voucherPosting.vue'
 import DailyHandle from '../views/cashier/dailyHandle.vue'
+import VoucherTick from '../views/cashier/voucherTick.vue'
+import SettleAccount from '../views/cashier/settleAccount.vue'
+import Test from '../views/system/test.vue'
+import AccountInfo from '../views/lender/accountInfo.vue'
 
 
 Vue.use(VueRouter)
@@ -235,9 +239,30 @@ const voucher = [{
     },
 ];
 const cashier = [{
-    path: 'cashier/dailyHandle',
-    name: 'dailyHandle',
-    component: DailyHandle
+        path: 'cashier/dailyHandle',
+        name: 'dailyHandle',
+        component: DailyHandle
+    },
+    {
+        path: 'cashier/voucherTick',
+        name: 'voucherTick',
+        component: VoucherTick
+    },
+    {
+        path: 'cashier/settleAccount',
+        name: 'settleAccount',
+        component: SettleAccount
+    },
+];
+const system = [{
+    path: 'system/test',
+    name: 'test',
+    component: Test
+}];
+const lender = [{
+    path: 'lender/accountInfo',
+    name: 'accountInfo',
+    component: AccountInfo
 }];
 const routes = [{
         path: '/',
@@ -258,6 +283,7 @@ const routes = [{
         name: 'finance',
         component: Finance,
         children: [],
+        meta: { requireAuth: true }
     },
 ];
 
@@ -265,6 +291,10 @@ routes[2].children = routes[2].children.concat(charge);
 routes[2].children = routes[2].children.concat(salary);
 routes[2].children = routes[2].children.concat(assets);
 routes[2].children = routes[2].children.concat(voucher);
+routes[2].children = routes[2].children.concat(cashier);
+routes[2].children = routes[2].children.concat(system);
+routes[2].children = routes[2].children.concat(lender);
+
 
 const router = new VueRouter({
     routes

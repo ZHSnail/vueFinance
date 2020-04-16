@@ -26,7 +26,26 @@ Vue.component('selectPayStub', selectPayStub)
 Vue.component('selectPostWage', selectPostWage)
 Vue.component('selectAccount', selectAccount)
 
-
+router.beforeEach((to, from, next) => {
+    to.matched.some(item => {
+        console.log(item.meta.requireAuth)
+    })
+    if (to.matched.some(record => record.meta.requireAuth)) { // 判断该路由是否需要登录权限
+        if (sessionStorage.token != undefined && sessionStorage.token != '' && sessionStorage.token != null) { // 判断缓存里面是否有 userName  //在登录的时候设置它的值
+            console.log(sessionStorage.token)
+            next();
+        } else {
+            next({
+                path: '/',
+                query: {
+                    redirect: to.fullPath
+                } // 将跳转的路由path作为参数，登录成功后跳转到该路由
+            })
+        }
+    } else {
+        next();
+    }
+});
 
 Vue.config.productionTip = false
 Vue.prototype.Utils = commonUtil

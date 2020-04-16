@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import '@/assets/css/login.css'
+import "@/assets/css/login.css";
 export default {
   name: "login",
   components: {},
@@ -70,18 +70,22 @@ export default {
     login(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          var i = 0;
-          if (i == 0) {
-            //后面会结合vuex进行token的认证与存放，并且token中会有用户的id
-            console.log("denglu");
-            this.$router.push({path:'/finance'});
-          } else {
-            this.$message({
-              message: "用户不存在或密码错误",
-              showClose: true,
-              type: "error"
-            });
-          }
+          var data = {
+            userName: this.user.name,
+            psw: this.user.password
+          };
+          this.axios.post("/system/login", data).then(res => {
+            if (res.success) {
+              sessionStorage.setItem("token", res.obj.token);
+              this.$router.push({path:'/finance'});
+            } else {
+              this.$message({
+                type:"error",
+                message: res.msg,
+                center: true
+              });
+            }
+          });
         } else {
           return false;
         }

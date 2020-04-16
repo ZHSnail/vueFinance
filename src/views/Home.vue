@@ -26,8 +26,8 @@
     <div class="footer"></div>-->
     <div class="header">
       <el-row>
-        <br/>
-        <br/>
+        <br />
+        <br />
       </el-row>
       <el-row>
         <el-col :span="24">
@@ -67,7 +67,7 @@ import "@/assets/css/home.css";
 export default {
   name: "home",
   components: {
-    login,
+    login
   },
   data() {
     return {
@@ -77,7 +77,7 @@ export default {
   methods: {
     onChangeDialog(type) {
       this.show = type;
-    }
+    },
   }
 };
 </script>

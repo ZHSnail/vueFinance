@@ -232,12 +232,14 @@
               </template>
             </el-menu-item>
           </router-link>
-          <el-menu-item index="5-2">
-            <template slot="title">
-              <i class="el-icon-edit-outline"></i>
-              <span slot="title">出纳扎账</span>
-            </template>
-          </el-menu-item>
+          <router-link to="/finance/cashier/settleAccount" tag="div">
+            <el-menu-item index="5-2">
+              <template slot="title">
+                <i class="el-icon-edit-outline"></i>
+                <span slot="title">出纳扎账</span>
+              </template>
+            </el-menu-item>
+          </router-link>
           <el-menu-item index="5-3">
             <template slot="title">
               <i class="el-icon-setting"></i>
@@ -249,22 +251,38 @@
       <el-submenu index="6">
         <template slot="title">
           <i class="el-icon-connection"></i>
-          <span slot="title">往来管理</span>
+          <span slot="title">总账管理</span>
         </template>
         <el-menu-item-group>
           <el-menu-item index="6-1">
             <template slot="title">
               <i class="el-icon-thumb"></i>
-              <span slot="title">往来对账</span>
+              <span slot="title">会计科目余额表</span>
             </template>
           </el-menu-item>
           <el-menu-item index="6-2">
             <template slot="title">
               <i class="el-icon-box"></i>
               <!-- 查询分析也里面 -->
-              <span slot="title">款项管理</span>
+              <span slot="title">会计科目明细账</span>
             </template>
           </el-menu-item>
+          <el-menu-item index="6-3">
+            <template slot="title">
+              <i class="el-icon-box"></i>
+              <!-- 查询分析也里面 -->
+              <span slot="title">科目三栏式明细账</span>
+            </template>
+          </el-menu-item>
+          <router-link to="/finance/lender/accountInfo" tag="div">
+          <el-menu-item index="6-4">
+            <template slot="title">
+              <i class="el-icon-box"></i>
+              <!-- 查询分析也里面 -->
+              <span slot="title">会计科目</span>
+            </template>
+          </el-menu-item>
+          </router-link>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="7">
@@ -299,12 +317,14 @@
               <span slot="title">初始设置</span>
             </template>
           </el-menu-item>
+          <router-link to="/finance/system/test" tag="div">
           <el-menu-item index="8-2">
             <template slot="title">
               <i class="el-icon-date"></i>
               <span slot="title">日志管理</span>
             </template>
           </el-menu-item>
+          </router-link>
           <el-menu-item index="8-3">
             <template slot="title">
               <i class="el-icon-data-line"></i>

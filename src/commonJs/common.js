@@ -209,6 +209,10 @@ function findObj(array, key, val) {
         }
     }
 }
+
+function getUrl() {
+    return "http://127.0.0.1"
+}
 export default {
     timestampToDate,
     getNowFormatDate,
@@ -217,5 +221,6 @@ export default {
     checkForm,
     copyObj,
     clearObj,
-    findObj
+    findObj,
+    getUrl,
 }

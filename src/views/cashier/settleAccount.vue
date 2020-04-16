@@ -1,10 +1,10 @@
 <template>
-  <div class="voucherPosting">
-    <my-pageheader titleContent="凭证过账"></my-pageheader>
-    <div>
+  <div class="settleAccount">
+        <my-pageheader titleContent="出纳扎帐"></my-pageheader>
+         <div>
       <searchForm style="width:500px" :formOptions="formOptions" btnItems="search"></searchForm>
     </div>
-    <el-button type="danger" @click="posting()" size="medium">过账</el-button>
+    <el-button type="danger" @click="posting()" size="medium">扎帐</el-button>
     <el-table
       cell-class-name="centerAlign"
       @selection-change="handleSelectionChange"
@@ -48,10 +48,10 @@
 
 <script>
 export default {
-  name: "voucherPosting",
-  components: {},
-  props: {},
-  data() {
+  name:'settleAccount',
+  components:{},
+  props:{},
+  data(){
     return {
       tableData: [],
       total: 200,
@@ -65,20 +65,20 @@ export default {
         }
       ],
       multipleSelection: []
-    };
+    }
   },
-  watch: {},
-  computed: {},
-  methods: {
+  watch:{},
+  computed:{},
+  methods:{
     handleCurrentChange(val) {},
     posting() {},
     handleSelectionChange(val) {
       this.multipleSelection = val;
     }
   },
-  created() {},
-  mounted() {}
-};
+  created(){},
+  mounted(){}
+}
 </script>
 <style scoped>
 </style>

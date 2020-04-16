@@ -21,11 +21,11 @@
       </el-col>
       <el-col :xs="4" :lg="4" class="centerArea">
         <div class="avatar">
-          <el-dropdown>
+          <el-dropdown @command="handleCommand">
             <el-avatar style="background:#37C23A">user</el-avatar>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item icon="el-icon-error">
-                <el-link :underline="false" href="https://www.zhku.edu.cn/">退出</el-link>
+              <el-dropdown-item icon="el-icon-error" command="a">
+                退出
               </el-dropdown-item>
               <el-dropdown-item icon="el-icon-phone">联系我们</el-dropdown-item>
               <el-dropdown-item icon="el-icon-s-promotion">反馈</el-dropdown-item>
@@ -51,7 +51,24 @@ export default {
   },
   watch: {},
   computed: {},
-  methods: {},
+  methods: {
+    handleCommand(command){
+      if(command=="a"){
+        this.axios.get("/system/loginOut").then(res => {
+            if (res.success) {
+              window.sessionStorage.removeItem("token")
+              this.$router.push({path:'/'});
+            } else {
+              this.$message({
+                type:"error",
+                message: res.msg,
+                center: true
+              });
+            }
+        });
+      }
+    }
+  },
   created() {},
   mounted() {}
 };
