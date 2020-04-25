@@ -254,34 +254,40 @@
           <span slot="title">总账管理</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item index="6-1">
-            <template slot="title">
-              <i class="el-icon-thumb"></i>
-              <span slot="title">会计科目余额表</span>
-            </template>
-          </el-menu-item>
-          <el-menu-item index="6-2">
-            <template slot="title">
-              <i class="el-icon-box"></i>
-              <!-- 查询分析也里面 -->
-              <span slot="title">会计科目明细账</span>
-            </template>
-          </el-menu-item>
-          <el-menu-item index="6-3">
-            <template slot="title">
-              <i class="el-icon-box"></i>
-              <!-- 查询分析也里面 -->
-              <span slot="title">科目三栏式明细账</span>
-            </template>
-          </el-menu-item>
+          <router-link to="/finance/lender/accountBalance" tag="div">
+            <el-menu-item index="6-1">
+              <template slot="title">
+                <i class="el-icon-thumb"></i>
+                <span slot="title">会计科目余额表</span>
+              </template>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/finance/lender/accountDetail" tag="div">
+            <el-menu-item index="6-2">
+              <template slot="title">
+                <i class="el-icon-box"></i>
+                <!-- 查询分析也里面 -->
+                <span slot="title">会计科目明细账</span>
+              </template>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/finance/lender/accountThreeCol" tag="div">
+            <el-menu-item index="6-3">
+              <template slot="title">
+                <i class="el-icon-box"></i>
+                <!-- 查询分析也里面 -->
+                <span slot="title">科目三栏式明细账</span>
+              </template>
+            </el-menu-item>
+          </router-link>
           <router-link to="/finance/lender/accountInfo" tag="div">
-          <el-menu-item index="6-4">
-            <template slot="title">
-              <i class="el-icon-box"></i>
-              <!-- 查询分析也里面 -->
-              <span slot="title">会计科目</span>
-            </template>
-          </el-menu-item>
+            <el-menu-item index="6-4">
+              <template slot="title">
+                <i class="el-icon-box"></i>
+                <!-- 查询分析也里面 -->
+                <span slot="title">会计科目</span>
+              </template>
+            </el-menu-item>
           </router-link>
         </el-menu-item-group>
       </el-submenu>
@@ -318,12 +324,12 @@
             </template>
           </el-menu-item>
           <router-link to="/finance/system/test" tag="div">
-          <el-menu-item index="8-2">
-            <template slot="title">
-              <i class="el-icon-date"></i>
-              <span slot="title">日志管理</span>
-            </template>
-          </el-menu-item>
+            <el-menu-item index="8-2">
+              <template slot="title">
+                <i class="el-icon-date"></i>
+                <span slot="title">日志管理</span>
+              </template>
+            </el-menu-item>
           </router-link>
           <el-menu-item index="8-3">
             <template slot="title">
@@ -337,12 +343,22 @@
               <span slot="title">权限管理</span>
             </template>
           </el-menu-item>
-          <el-menu-item index="8-5">
-            <template slot="title">
-              <i class="el-icon-message"></i>
-              <span slot="title">消息管理</span>
-            </template>
-          </el-menu-item>
+          <router-link to="/finance/activity/design" tag="div">
+            <el-menu-item index="8-5">
+              <template slot="title">
+                <i class="el-icon-message"></i>
+                <span slot="title">流程设计</span>
+              </template>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/finance/activity/activityInfo" tag="div">
+            <el-menu-item index="8-6">
+              <template slot="title">
+                <i class="el-icon-message"></i>
+                <span slot="title">流程管理</span>
+              </template>
+            </el-menu-item>
+          </router-link>
         </el-menu-item-group>
       </el-submenu>
     </el-menu>

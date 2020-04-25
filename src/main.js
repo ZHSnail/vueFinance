@@ -15,6 +15,9 @@ import searchForm from "@/components/common/searchForm.vue";
 import selectPayStub from "@/components/common/selectPayStub.vue";
 import selectPostWage from "@/components/common/selectPostWage.vue";
 import selectAccount from "@/components/common/selectAccount.vue";
+import importExcel from "@/components/common/importExcel.vue";
+import importResult from "@/components/common/importResult.vue";
+
 
 Vue.component('myCard', myCard)
 Vue.component('myPageheader', myPageheader)
@@ -25,6 +28,8 @@ Vue.component('searchForm', searchForm)
 Vue.component('selectPayStub', selectPayStub)
 Vue.component('selectPostWage', selectPostWage)
 Vue.component('selectAccount', selectAccount)
+Vue.component('importExcel', importExcel)
+Vue.component('importResult', importResult)
 
 router.beforeEach((to, from, next) => {
     to.matched.some(item => {

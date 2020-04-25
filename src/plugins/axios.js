@@ -11,10 +11,11 @@ import { Message, Loading } from 'element-ui'
 let config = {
     baseURL: 'http://127.0.0.1',
     timeout: 60 * 1000,
-    withCredentials: true
-        // baseURL: process.env.baseURL || process.env.apiUrl || ""
-        // timeout: 60 * 1000, // Timeout
-        // withCredentials: true, // Check cross-site Access-Control
+    withCredentials: true,
+    // responseType: "blob"
+    // baseURL: process.env.baseURL || process.env.apiUrl || ""
+    // timeout: 60 * 1000, // Timeout
+    // withCredentials: true, // Check cross-site Access-Control
 };
 let loadingInstance = null
 const _axios = axios.create(config);
@@ -22,7 +23,6 @@ const _axios = axios.create(config);
 _axios.interceptors.request.use(
     function(config) {
         config.headers.Authorization = window.sessionStorage.getItem('token');
-        console.log(config.headers.Authorization)
         loadingInstance = Loading.service({
                 lock: true,
                 text: '正在加载...',
@@ -31,7 +31,7 @@ _axios.interceptors.request.use(
         return config;
     },
     function(error) {
-        Message.error('未知错误');
+        Message.error('请求错误');
         // Do something with request error
         return Promise.reject(error);
     }
@@ -42,7 +42,7 @@ _axios.interceptors.response.use(
     function(response) {
         loadingInstance.close()
         if (response.data.code == 500) {
-            Message.error('服务器内部错误');
+            Message.error(response.data.msg);
             return new Promise(() => {
                 console.log(response.data.msg)
             })
@@ -54,7 +54,7 @@ _axios.interceptors.response.use(
         } else if (response.data.code == 200) {
             return response.data;
         } else if (response.data.code == 400) {
-            Message.error('未知错误');
+            Message.error(response.data.msg);
             return new Promise(() => {
                 console.log(response.data.msg)
             })
@@ -68,7 +68,13 @@ _axios.interceptors.response.use(
             return new Promise(() => {
                 console.log(response.data.msg)
             })
+        } else if (response.data.code == "500") {
+            Message.error(response.data.msg);
+            return new Promise(() => {
+                console.log(response.data.msg)
+            })
         }
+        return response;
         // Do something with response data
     },
     function(error) {
@@ -100,5 +106,6 @@ Vue.use(Plugin)
 
 export default {
     Plugin,
-    config
+    config,
+    _axios,
 };

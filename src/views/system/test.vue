@@ -32,9 +32,9 @@ export default {
       console.log()
       // window.open(this.Utils.getUrl()+"/modeler.html?modelId=11","_blank");                 
       this.axios.get("/test", data).then(res => {
-          this.testHtml=res.data.msg
-          console.log(res)
-          console.log(this.testHtml.split("###"))
+          // this.testHtml=res.data.msg
+          // console.log(res)
+          // console.log(this.testHtml.split("###"))
       });
     }
   },

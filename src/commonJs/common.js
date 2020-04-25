@@ -1,3 +1,5 @@
+import axios from '../plugins/axios'
+import { Message } from 'element-ui'
 /**
  * 
  * @param  time 时间戳
@@ -210,8 +212,44 @@ function findObj(array, key, val) {
     }
 }
 
+function downloadFile(url, param) {
+    console.log(axios)
+    axios._axios.get(url, { params: param, responseType: "blob" })
+        .then(res => {
+            if (res.data.type === "application/json") {
+                var reader = new FileReader();
+                var result;
+                reader.readAsText(res.data, 'utf-8');
+                reader.onload = function() {
+                    // result = JSON.parse(reader.result);
+                    result = JSON.parse(reader.result);
+                    Message.error(result.msg);
+                }
+            } else {
+                const disposition = res.headers["content-disposition"];
+                let fileName = disposition.substring(
+                    disposition.indexOf("filename=") + 9,
+                    disposition.length
+                );
+                fileName = decodeURI(fileName);
+                // 去掉双引号
+                fileName = fileName.replace('"', "");
+                // const content = res.data;
+                //以下代码一句话解释，在页面上生成一个a标签并指定href为上面的url,然后模拟点击，以实现自动下载
+                let url = window.URL.createObjectURL(new Blob([res.data]));
+                let link = document.createElement("a");
+                link.style.display = "none";
+                link.href = url;
+                link.setAttribute("download", fileName);
+                document.body.appendChild(link);
+                link.click();
+                Message.success("成功");
+            }
+        });
+}
+
 function getUrl() {
-    return "http://127.0.0.1"
+    return axios.config.baseURL
 }
 export default {
     timestampToDate,
@@ -223,4 +261,6 @@ export default {
     clearObj,
     findObj,
     getUrl,
+    downloadFile,
+
 }

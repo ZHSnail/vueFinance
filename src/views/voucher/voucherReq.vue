@@ -17,9 +17,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="记账日期" prop="postingDate">
+            <el-form-item label="记账日期" prop="bizDate">
               <el-date-picker
-                v-model="voucherReqForm.postingDate"
+                v-model="voucherReqForm.bizDate"
                 align="right"
                 type="date"
                 style="width:250px"
@@ -174,7 +174,8 @@ export default {
         ],
         accountPeriod: "",
         bizType: "",
-        dealType: "OTHER"
+        dealType: "OTHER",
+        bizDate:""
       },
       rules: {
         postingDate: [

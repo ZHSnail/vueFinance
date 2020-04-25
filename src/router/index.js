@@ -44,6 +44,13 @@ import VoucherTick from '../views/cashier/voucherTick.vue'
 import SettleAccount from '../views/cashier/settleAccount.vue'
 import Test from '../views/system/test.vue'
 import AccountInfo from '../views/lender/accountInfo.vue'
+import AccountBalance from '../views/lender/accountBalance.vue'
+import AccountDetail from '../views/lender/accountDetail.vue'
+import AccountThreeCol from '../views/lender/accountThreeCol.vue'
+import Design from '../views/activity/design.vue'
+import ActivityInfo from '../views/activity/activityInfo.vue'
+
+
 
 
 Vue.use(VueRouter)
@@ -259,11 +266,38 @@ const system = [{
     name: 'test',
     component: Test
 }];
+const activity = [{
+        path: 'activity/design',
+        name: 'design',
+        component: Design
+    },
+    {
+        path: 'activity/activityInfo',
+        name: 'activityInfo',
+        component: ActivityInfo
+    }
+];
 const lender = [{
-    path: 'lender/accountInfo',
-    name: 'accountInfo',
-    component: AccountInfo
-}];
+        path: 'lender/accountInfo',
+        name: 'accountInfo',
+        component: AccountInfo
+    },
+    {
+        path: 'lender/accountBalance',
+        name: 'accountBalance',
+        component: AccountBalance
+    },
+    {
+        path: 'lender/accountDetail',
+        name: 'accountDetail',
+        component: AccountDetail
+    },
+    {
+        path: 'lender/accountThreeCol',
+        name: 'accountThreeCol',
+        component: AccountThreeCol
+    },
+];
 const routes = [{
         path: '/',
         name: 'home',
@@ -294,6 +328,7 @@ routes[2].children = routes[2].children.concat(voucher);
 routes[2].children = routes[2].children.concat(cashier);
 routes[2].children = routes[2].children.concat(system);
 routes[2].children = routes[2].children.concat(lender);
+routes[2].children = routes[2].children.concat(activity);
 
 
 const router = new VueRouter({
