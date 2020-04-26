@@ -248,6 +248,28 @@ function downloadFile(url, param) {
         });
 }
 
+function getImage(url, param, callback) {
+    axios._axios.get(url, { params: param, responseType: "arraybuffer" })
+        .then(res => {
+            if (res.data.type === "application/json") {
+                var reader = new FileReader();
+                var result;
+                reader.readAsText(res.data, 'utf-8');
+                reader.onload = function() {
+                    // result = JSON.parse(reader.result);
+                    result = JSON.parse(reader.result);
+                    Message.error(result.msg);
+                }
+            } else {
+                return 'data:image/png;base64,' + btoa(
+                    new Uint8Array(res.data).reduce((data, byte) => data + String.fromCharCode(byte), '')
+                );
+            }
+        }).then(data => {
+            callback(data)
+        });
+}
+
 function getUrl() {
     return axios.config.baseURL
 }
@@ -262,5 +284,6 @@ export default {
     findObj,
     getUrl,
     downloadFile,
+    getImage,
 
 }
