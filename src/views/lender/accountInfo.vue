@@ -123,11 +123,7 @@
       templateName="ACCOUNT_IMPORT"
       title="导入会计科目"
     ></import-excel>
-    <import-result
-      :is-show.sync="resultShow"
-      :fileId="fileId"
-      title="导入结果"
-    ></import-result>
+    <import-result :is-show.sync="resultShow" :fileId="fileId" title="导入结果"></import-result>
     <el-row>
       <el-col :span="24">
         <el-pagination
@@ -205,8 +201,8 @@ export default {
       totalTableData: [],
       pageSize: 10,
       show: false,
-      fileId:"",
-      resultShow:false,
+      fileId: "",
+      resultShow: false
     };
   },
   watch: {},
@@ -224,6 +220,7 @@ export default {
                 center: true
               });
               this.dialogFormVisible = false;
+              this.search();
             }
           });
         }
@@ -250,7 +247,6 @@ export default {
     search(val) {
       var url = "/lender/accountCondition";
       var data = JSON.stringify(val) ? JSON.stringify(val) : "";
-      console.log(data);
       this.axios.get(url, { params: { params: data } }).then(res => {
         if (res.success) {
           this.totalTableData = res.obj;
@@ -285,7 +281,7 @@ export default {
       if (command == "import") {
         this.show = !this.show;
       }
-      if(command=="result"){
+      if (command == "result") {
         this.resultShow = !this.resultShow;
       }
     },
@@ -296,8 +292,8 @@ export default {
     },
     importFile(id) {
       this.fileId = id;
-      this.axios.post("/lender/importAccount/"+id).then(res => {
-        this.$message('正在导入数据，请在导入数据结果中查看！');
+      this.axios.post("/lender/importAccount/" + id).then(res => {
+        this.$message("正在导入数据，请在导入数据结果中查看！");
         this.show = !this.show;
         this.search();
       });

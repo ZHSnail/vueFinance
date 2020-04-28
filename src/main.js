@@ -17,6 +17,8 @@ import selectPostWage from "@/components/common/selectPostWage.vue";
 import selectAccount from "@/components/common/selectAccount.vue";
 import importExcel from "@/components/common/importExcel.vue";
 import importResult from "@/components/common/importResult.vue";
+import activitiRecord from "@/components/common/activitiRecord.vue";
+import activitiHandle from "@/components/common/activitiHandle.vue";
 
 
 Vue.component('myCard', myCard)
@@ -30,6 +32,10 @@ Vue.component('selectPostWage', selectPostWage)
 Vue.component('selectAccount', selectAccount)
 Vue.component('importExcel', importExcel)
 Vue.component('importResult', importResult)
+Vue.component('activitiRecord', activitiRecord)
+Vue.component('activitiHandle', activitiHandle)
+
+
 
 router.beforeEach((to, from, next) => {
     to.matched.some(item => {

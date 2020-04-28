@@ -76,7 +76,7 @@ export default {
         }
       ],
       pageSize: 10,
-      total: 200
+      total: 0
     };
   },
   watch: {},

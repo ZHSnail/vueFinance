@@ -49,7 +49,7 @@ import AccountDetail from '../views/lender/accountDetail.vue'
 import AccountThreeCol from '../views/lender/accountThreeCol.vue'
 import Design from '../views/activity/design.vue'
 import ActivityInfo from '../views/activity/activityInfo.vue'
-
+import RoleInfo from '../views/system/roleInfo.vue'
 
 
 
@@ -262,10 +262,16 @@ const cashier = [{
     },
 ];
 const system = [{
-    path: 'system/test',
-    name: 'test',
-    component: Test
-}];
+        path: 'system/test',
+        name: 'test',
+        component: Test
+    },
+    {
+        path: 'system/roleInfo',
+        name: 'roleInfo',
+        component: RoleInfo
+    }
+];
 const activity = [{
         path: 'activity/design',
         name: 'design',

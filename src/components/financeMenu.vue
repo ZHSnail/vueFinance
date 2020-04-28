@@ -359,6 +359,14 @@
               </template>
             </el-menu-item>
           </router-link>
+          <router-link to="/finance/system/roleInfo" tag="div">
+            <el-menu-item index="8-7">
+              <template slot="title">
+                <i class="el-icon-message"></i>
+                <span slot="title">角色管理</span>
+              </template>
+            </el-menu-item>
+          </router-link>
         </el-menu-item-group>
       </el-submenu>
     </el-menu>
