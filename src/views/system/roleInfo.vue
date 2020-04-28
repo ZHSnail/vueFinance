@@ -179,6 +179,7 @@ export default {
       this.dialogFormVisible = true;
     },
     add() {
+      this.flag =  true;
       this.dialogFormVisible = !this.dialogFormVisible;
     }
   },
