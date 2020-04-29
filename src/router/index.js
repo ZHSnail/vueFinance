@@ -51,6 +51,7 @@ import Design from '../views/activity/design.vue'
 import ActivityInfo from '../views/activity/activityInfo.vue'
 import RoleInfo from '../views/system/roleInfo.vue'
 import DormInfo from '../views/charge/dormInfo.vue'
+import ProfessionInfo from '../views/charge/professionInfo.vue'
 
 
 
@@ -96,6 +97,11 @@ const charge = [{
         path: 'charge/dormInfo',
         name: 'dormInfo',
         component: DormInfo
+    },
+    {
+        path: 'charge/professionInfo',
+        name: 'professionInfo',
+        component: ProfessionInfo
     }
 ];
 const salary = [{

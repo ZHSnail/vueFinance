@@ -2,8 +2,8 @@
   <div class="dormInfo">
     <my-pageheader titleContent="宿舍信息" needButton="true" buttonContent="添加" @handleClick="add"></my-pageheader>
     <el-table cell-class-name="centerAlign" :data="tableData" stripe style="width: 100%">
-      <el-table-column align="center" prop="dormNumber" label="宿舍号"></el-table-column>
       <el-table-column align="center" prop="buildNumber" label="楼号"></el-table-column>
+      <el-table-column align="center" prop="dormNumber" label="宿舍号"></el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-tooltip effect="light" content="编辑" placement="bottom">
@@ -37,11 +37,11 @@
         center
       >
         <el-form ref="dormInfoFrom" :rules="rules" :model="dormInfoFrom" :status-icon="true">
-          <el-form-item label="宿舍号" prop="dormNumber">
-            <el-input v-model.number="dormInfoFrom.dormNumber" class="length"></el-input>
-          </el-form-item>
           <el-form-item label="楼号" prop="buildNumber">
             <el-input v-model.number="dormInfoFrom.buildNumber" class="length"></el-input>
+          </el-form-item>
+          <el-form-item label="宿舍号" prop="dormNumber">
+            <el-input v-model.number="dormInfoFrom.dormNumber" class="length"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">

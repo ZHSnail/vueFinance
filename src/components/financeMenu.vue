@@ -52,6 +52,14 @@
               </template>
             </el-menu-item>
           </router-link>
+          <router-link to="/finance/charge/professionInfo" tag="div">
+            <el-menu-item index="1-5">
+              <template slot="title">
+                <i class="el-icon-setting"></i>
+                <span slot="title">专业管理</span>
+              </template>
+            </el-menu-item>
+          </router-link>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="2">

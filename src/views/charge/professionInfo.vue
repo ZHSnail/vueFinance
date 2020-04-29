@@ -3,7 +3,8 @@
     <my-pageheader titleContent="专业信息" needButton="true" buttonContent="添加" @handleClick="add"></my-pageheader>
     <el-table cell-class-name="centerAlign" :data="tableData" stripe style="width: 100%">
       <el-table-column align="center" prop="name" label="专业名"></el-table-column>
-      <el-table-column align="center" prop="isLeaf" label="是否叶子节点"></el-table-column>
+      <el-table-column align="center" prop="grade" label="年级"></el-table-column>
+      <el-table-column align="center" prop="isLeaf" label="叶子节点"></el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-tooltip effect="light" content="编辑" placement="bottom">
@@ -36,12 +37,39 @@
         :close-on-click-modal="false"
         center
       >
-        <el-form ref="professionInfoFrom" :rules="rules" :model="professionInfoFrom" :status-icon="true">
+        <el-form
+          ref="professionInfoFrom"
+          :rules="rules"
+          :model="professionInfoFrom"
+          :status-icon="true"
+        >
           <el-form-item label="专业名" prop="name">
             <el-input v-model="professionInfoFrom.name" class="length"></el-input>
           </el-form-item>
-          <el-form-item label="是否叶子节点" prop="isLeaf">
-            <el-input v-model="professionInfoFrom.isLeaf" class="length"></el-input>
+          <el-form-item label="年级" prop="grade">
+            <el-input v-model="professionInfoFrom.grade" class="length"></el-input>
+          </el-form-item>
+          <el-form-item label="父节点" prop="parentId">
+            <el-select
+              class="length"
+              multiple
+              placeholder="请选择父节点"
+              v-model="professionInfoFrom.parentId"
+              value-key="id"
+            >
+              <el-option
+                v-for="item in parentProfessionList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="叶子节点" prop="isLeaf" style="margin-right:150px">
+            <el-radio-group v-model="professionInfoFrom.isLeaf">
+              <el-radio label="TRUE">是</el-radio>
+              <el-radio label="FALSE">否</el-radio>
+            </el-radio-group>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -78,25 +106,30 @@ export default {
       total: 0,
       professionInfoFrom: {
         name: "",
-        isLeaf: ""
+        isLeaf: "TRUE",
+        parentId: "",
+        grade:""
       },
       rules: {
-        name: [
-          { required: true, message: "请输入宿舍号", trigger: "blur" },
-        ],
+        name: [{ required: true, message: "请输入专业号", trigger: "blur" }],
+        grade: [{ required: true, message: "请输入年级", trigger: "blur" }],
         isLeaf: [
-          { required: true, message: "请输入楼号", trigger: "blur" },
+          { required: true, message: "请选择是否叶子节点", trigger: "change" }
+        ],
+        parentId: [
+          { required: true, message: "请选择父节点", trigger: "change" }
         ]
       },
       dialogFormVisible: false,
-      flag: true
+      flag: true,
+      parentProfessionList: []
     };
   },
   watch: {},
   computed: {},
   methods: {
     search(val) {
-      var url = "/charge/dormInfoList";
+      var url = "/charge/professionList";
       var data = val ? JSON.stringify(val) : "";
       this.axios.get(url, { params: { params: data } }).then(res => {
         if (res.success) {
@@ -118,35 +151,39 @@ export default {
       this.Utils.checkForm(formRefs).then(res => {
         if (res) {
           if (this.flag) {
-            this.axios.post("/charge/dormInfo", this.professionInfoFrom).then(res => {
-              if (res.success) {
-                this.$message({
-                  type: "success",
-                  message: res.msg,
-                  center: true
-                });
-                this.dialogFormVisible = false;
-                this.search();
-              }
-            });
+            this.axios
+              .post("/charge/profession", this.professionInfoFrom)
+              .then(res => {
+                if (res.success) {
+                  this.$message({
+                    type: "success",
+                    message: res.msg,
+                    center: true
+                  });
+                  this.dialogFormVisible = false;
+                  this.search();
+                }
+              });
           } else {
-            this.axios.put("/charge/dormInfo", this.professionInfoFrom).then(res => {
-              if (res.success) {
-                this.$message({
-                  type: "success",
-                  message: res.msg,
-                  center: true
-                });
-                this.dialogFormVisible = false;
-                this.search();
-              }
-            });
+            this.axios
+              .put("/charge/profession", this.professionInfoFrom)
+              .then(res => {
+                if (res.success) {
+                  this.$message({
+                    type: "success",
+                    message: res.msg,
+                    center: true
+                  });
+                  this.dialogFormVisible = false;
+                  this.search();
+                }
+              });
           }
         }
       });
     },
     handleDelete(id) {
-      var url = "/charge/dormInfo/" + id;
+      var url = "/charge/profession/" + id;
       this.axios.delete(url).then(res => {
         if (res.success) {
           this.search();
@@ -166,18 +203,25 @@ export default {
     },
     handleEdit(index, row) {
       this.professionInfoFrom = this.Utils.copyObj(row);
-      this.professionInfoFrom.buildNumber = parseInt(this.professionInfoFrom.buildNumber);
-      this.professionInfoFrom.dormNumber = parseInt(this.professionInfoFrom.dormNumber);
       this.flag = false;
       this.dialogFormVisible = true;
     },
     add() {
       this.flag = true;
       this.dialogFormVisible = !this.dialogFormVisible;
+    },
+    findParent() {
+      var url = "/charge/parentProfession";
+      this.axios.get(url).then(res => {
+        if (res.success) {
+          this.parentProfessionList = res.obj;
+        }
+      });
     }
   },
   created() {
     this.search();
+    this.findParent();
   },
   mounted() {}
 };
