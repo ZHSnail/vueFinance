@@ -50,6 +50,7 @@ import AccountThreeCol from '../views/lender/accountThreeCol.vue'
 import Design from '../views/activity/design.vue'
 import ActivityInfo from '../views/activity/activityInfo.vue'
 import RoleInfo from '../views/system/roleInfo.vue'
+import DormInfo from '../views/charge/dormInfo.vue'
 
 
 
@@ -90,6 +91,11 @@ const charge = [{
         path: 'charge/payList/:id',
         name: 'payList',
         component: PayList
+    },
+    {
+        path: 'charge/dormInfo',
+        name: 'dormInfo',
+        component: DormInfo
     }
 ];
 const salary = [{

@@ -44,6 +44,14 @@
               </template>
             </el-menu-item>
           </router-link>
+          <router-link to="/finance/charge/dormInfo" tag="div">
+            <el-menu-item index="1-4">
+              <template slot="title">
+                <i class="el-icon-setting"></i>
+                <span slot="title">宿舍管理</span>
+              </template>
+            </el-menu-item>
+          </router-link>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="2">
