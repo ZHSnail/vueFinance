@@ -1,10 +1,21 @@
 <template>
   <div class="professionInfo">
-    <my-pageheader titleContent="专业信息" needButton="true" buttonContent="添加" @handleClick="add"></my-pageheader>
+    <my-pageheader titleContent="专业信息" :needButton="true" buttonContent="添加" @handleClick="add"></my-pageheader>
+    <div>
+      <searchForm
+        :formOptions="formOptions"
+        @onSearch="search"
+        btnItems="search"
+      ></searchForm>
+    </div>
     <el-table cell-class-name="centerAlign" :data="tableData" stripe style="width: 100%">
       <el-table-column align="center" prop="name" label="专业名"></el-table-column>
       <el-table-column align="center" prop="grade" label="年级"></el-table-column>
-      <el-table-column align="center" prop="isLeaf" label="叶子节点"></el-table-column>
+      <el-table-column align="center" prop="isLeaf" label="叶子节点">
+        <template slot-scope="scope">
+          {{scope.row.isLeaf=='TRUE' ? "是" :"否"}}
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-tooltip effect="light" content="编辑" placement="bottom">
@@ -46,13 +57,12 @@
           <el-form-item label="专业名" prop="name">
             <el-input v-model="professionInfoFrom.name" class="length"></el-input>
           </el-form-item>
-          <el-form-item label="年级" prop="grade">
+          <el-form-item label="年级" prop="grade" v-if="professionInfoFrom.isLeaf == 'TRUE'" style="margin-left:15px">
             <el-input v-model="professionInfoFrom.grade" class="length"></el-input>
           </el-form-item>
-          <el-form-item label="父节点" prop="parentId">
+          <el-form-item label="父节点" v-if="professionInfoFrom.isLeaf == 'TRUE'" prop="parentId">
             <el-select
               class="length"
-              multiple
               placeholder="请选择父节点"
               v-model="professionInfoFrom.parentId"
               value-key="id"
@@ -88,6 +98,7 @@
           :total="total"
           class="centerAlign"
           :hide-on-single-page="true"
+          :current-page="pageNum"
         ></el-pagination>
       </el-col>
     </el-row>
@@ -101,9 +112,29 @@ export default {
   props: {},
   data() {
     return {
+      formOptions: [
+        {
+          label: "专业名", // label文字
+          prop: "name", // 字段名
+          element: "el-input", // 指定elementui组件
+          placeholder: "请输入专业名" // elementui组件属性
+        },
+        {
+          label: "只显示叶子节点", // label文字
+          prop: "isLeaf", // 字段名
+          element: "el-select", // 指定elementui组件
+          placeholder: "只显示叶子节点", // elementui组件属性
+          options: [
+            { label: "是", value: "TRUE" },
+            { label: "否", value: "FALSE" },
+          ],
+          initValue:"TRUE"
+        }
+      ],
       tableData: [],
       pageSize: 10,
       total: 0,
+      pageNum:1,
       professionInfoFrom: {
         name: "",
         isLeaf: "TRUE",
@@ -117,12 +148,16 @@ export default {
           { required: true, message: "请选择是否叶子节点", trigger: "change" }
         ],
         parentId: [
-          { required: true, message: "请选择父节点", trigger: "change" }
+          { required: true, message: "请选择父节点", trigger: "blur" }
         ]
       },
       dialogFormVisible: false,
       flag: true,
-      parentProfessionList: []
+      parentProfessionList: [],
+      searchVal:{
+        name: "",
+        isLeaf: "",
+      },
     };
   },
   watch: {},
@@ -131,6 +166,9 @@ export default {
     search(val) {
       var url = "/charge/professionList";
       var data = val ? JSON.stringify(val) : "";
+      if(val){
+        this.searchVal = this.Utils.copyObj(val);
+      }
       this.axios.get(url, { params: { params: data } }).then(res => {
         if (res.success) {
           this.tableData = res.obj.list;
@@ -139,7 +177,9 @@ export default {
       });
     },
     handleCurrentChange(val) {
-      var data = { pageNum: val };
+      this.pageNum = val;
+      var data = this.Utils.copyObj(this.searchVal);
+      data.pageNum = val;
       this.search(data);
     },
     handleClose() {
@@ -161,7 +201,7 @@ export default {
                     center: true
                   });
                   this.dialogFormVisible = false;
-                  this.search();
+                  this.handleCurrentChange(this.pageNum);
                 }
               });
           } else {
@@ -175,7 +215,7 @@ export default {
                     center: true
                   });
                   this.dialogFormVisible = false;
-                  this.search();
+                  this.handleCurrentChange(this.pageNum);
                 }
               });
           }
@@ -217,10 +257,10 @@ export default {
           this.parentProfessionList = res.obj;
         }
       });
-    }
+    },
   },
   created() {
-    this.search();
+    this.search({isLeaf:"TRUE"});
     this.findParent();
   },
   mounted() {}

@@ -60,6 +60,14 @@
               </template>
             </el-menu-item>
           </router-link>
+          <router-link to="/finance/charge/studentInfo" tag="div">
+            <el-menu-item index="1-6">
+              <template slot="title">
+                <i class="el-icon-setting"></i>
+                <span slot="title">学生管理</span>
+              </template>
+            </el-menu-item>
+          </router-link>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="2">

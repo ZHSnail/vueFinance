@@ -1,6 +1,6 @@
 <template>
   <div class="dormInfo">
-    <my-pageheader titleContent="宿舍信息" needButton="true" buttonContent="添加" @handleClick="add"></my-pageheader>
+    <my-pageheader titleContent="宿舍信息" :needButton="true" buttonContent="添加" @handleClick="add"></my-pageheader>
     <el-table cell-class-name="centerAlign" :data="tableData" stripe style="width: 100%">
       <el-table-column align="center" prop="buildNumber" label="楼号"></el-table-column>
       <el-table-column align="center" prop="dormNumber" label="宿舍号"></el-table-column>
@@ -60,6 +60,7 @@
           :total="total"
           class="centerAlign"
           :hide-on-single-page="true"
+          :current-page="pageNum"
         ></el-pagination>
       </el-col>
     </el-row>
@@ -91,7 +92,8 @@ export default {
         ]
       },
       dialogFormVisible: false,
-      flag: true
+      flag: true,
+      pageNum:1
     };
   },
   watch: {},
@@ -108,6 +110,7 @@ export default {
       });
     },
     handleCurrentChange(val) {
+      this.pageNum = val;
       var data = { pageNum: val };
       this.search(data);
     },
@@ -128,7 +131,7 @@ export default {
                   center: true
                 });
                 this.dialogFormVisible = false;
-                this.search();
+                 this.handleCurrentChange(this.pageNum);
               }
             });
           } else {
@@ -140,7 +143,7 @@ export default {
                   center: true
                 });
                 this.dialogFormVisible = false;
-                this.search();
+                 this.handleCurrentChange(this.pageNum);
               }
             });
           }

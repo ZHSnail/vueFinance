@@ -22,7 +22,7 @@
       <el-col :xs="4" :lg="4" class="centerArea">
         <div class="avatar">
           <el-dropdown @command="handleCommand">
-            <el-avatar style="background:#37C23A">user</el-avatar>
+            <el-avatar style="background:#37C23A">{{userName}}</el-avatar>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item icon="el-icon-error" command="a">
                 退出
@@ -46,7 +46,8 @@ export default {
   props: {},
   data() {
     return {
-      url: headImg
+      url: headImg,
+      userName:""
     };
   },
   watch: {},
@@ -56,7 +57,8 @@ export default {
       if(command=="a"){
         this.axios.get("/system/loginOut").then(res => {
             if (res.success) {
-              window.sessionStorage.removeItem("token")
+              window.sessionStorage.removeItem("token");
+              window.sessionStorage.removeItem("userInfo");
               this.$router.push({path:'/'});
             } else {
               this.$message({
@@ -69,7 +71,11 @@ export default {
       }
     }
   },
-  created() {},
+  created() {
+    var userInfo = this.Utils.getUser();
+    this.userName = userInfo.name;
+    this.userName=this.userName.substr(1,3)
+  },
   mounted() {}
 };
 </script>

@@ -52,6 +52,7 @@ import ActivityInfo from '../views/activity/activityInfo.vue'
 import RoleInfo from '../views/system/roleInfo.vue'
 import DormInfo from '../views/charge/dormInfo.vue'
 import ProfessionInfo from '../views/charge/professionInfo.vue'
+import StudentInfo from '../views/charge/studentInfo.vue'
 
 
 
@@ -102,7 +103,12 @@ const charge = [{
         path: 'charge/professionInfo',
         name: 'professionInfo',
         component: ProfessionInfo
-    }
+    },
+    {
+        path: 'charge/studentInfo',
+        name: 'studentInfo',
+        component: StudentInfo
+    },
 ];
 const salary = [{
         path: 'salary/staffInfo',

@@ -77,6 +77,7 @@ export default {
           this.axios.post("/system/login", data).then(res => {
             if (res.success) {
               sessionStorage.setItem("token", res.obj.token);
+              sessionStorage.setItem("userInfo", JSON.stringify(res.obj.userInfo));
               this.$router.push({path:'/finance'});
             } else {
               this.$message({

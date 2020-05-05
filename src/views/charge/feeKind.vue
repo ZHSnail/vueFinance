@@ -3,19 +3,23 @@
     <div>
       <my-pageheader titleContent="费用类别设置" :needButton="true" buttonContent="添加" @handleClick="add"></my-pageheader>
     </div>
+    <div>
+      <searchForm :formOptions="formOptions" @onSearch="search" btnItems="search"></searchForm>
+    </div>
     <div class="content">
-      <el-table
-        cell-class-name="centerAlign"
-        :data="tableData"
-        stripe
-        style="width: 100%"
-      >
+      <el-table cell-class-name="centerAlign" :data="tableData" stripe style="width: 100%">
         <el-table-column align="center" prop="name" label="费用名称"></el-table-column>
         <el-table-column align="center" prop="timeMold" label="时间单位"></el-table-column>
-        <el-table-column align="center" prop="feeMethod" label="收费方式"></el-table-column>
+        <el-table-column align="center" label="收费方式">
+          <template slot-scope="scope">
+            <span v-if="scope.row.feeMethod=='DORM'">面向宿舍</span>
+            <span v-if="scope.row.feeMethod=='MAJOR'">面向专业</span>
+            <span v-if="scope.row.feeMethod=='ROLE'">面向角色</span>
+          </template>
+        </el-table-column>
         <el-table-column align="center" label="会计科目">
           <template slot-scope="scope">
-            <span v-for="(item) in scope.row.account" :key="item.id">{{item.code+" " + item.name}}</span>
+            {{scope.row.account.accountName}}
           </template>
         </el-table-column>
         <el-table-column align="center" label="状态">
@@ -37,6 +41,20 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-row>
+        <el-col :span="24">
+          <el-pagination
+            background
+            @current-change="handleCurrentChange"
+            :page-size="pageSize"
+            layout="prev, pager, next, jumper"
+            :total="total"
+            class="centerAlign"
+            :hide-on-single-page="true"
+            :current-page="pageNum"
+          ></el-pagination>
+        </el-col>
+      </el-row>
     </div>
     <div>
       <!-- 添加费用类别的弹窗 -->
@@ -62,17 +80,17 @@
               <el-option label="面向角色" value="ROLE"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="会计科目" prop="account">
-            <el-select class="length" multiple v-model="feeForm.account" placeholder="请选择会计科目">
+          <el-form-item label="会计科目" prop="accountId">
+            <el-select class="length" v-model="feeForm.accountId" placeholder="请选择会计科目">
               <el-option
                 v-for="item in accountList"
                 :key="item.id"
-                :label="item.name"
+                :label="item.accountName"
                 :value="item.id"
               >
                 <el-row>
                   <el-col :span="12">{{ item.code }}</el-col>
-                  <el-col :span="12" class="rightAlign">{{item.name}}</el-col>
+                  <el-col :span="12" class="rightAlign">{{item.accountName}}</el-col>
                 </el-row>
               </el-option>
             </el-select>
@@ -86,7 +104,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+          <el-button type="primary" @click="save">确 定</el-button>
         </div>
       </el-dialog>
     </div>
@@ -102,98 +120,7 @@ export default {
   props: {},
   data() {
     return {
-      tableData: [
-        {
-          timeMold: "学年",
-          name: "学费",
-          // role: [{ id: "1", name: "理科类学生" }],//按角色收费
-          // major:[{id:"1",name:""}],//按专业收费
-          // dorm:[{id:"1", buildingNo:"",roomNo:""}],//按宿舍收费
-          // account:[{id:"1",name:""}],//可选的会计科目
-          account: [
-            { id: "1", name: "行政收入", code: "4001" },
-            { id: "2", name: "现金\n", code: "1001" }
-            // { id: "2", name: "现金", code: "1001" },
-            // { id: "2", name: "现金\n", code: "1001" },
-            // { id: "2", name: "现金", code: "1001" },
-            // { id: "2", name: "现金\n", code: "1001" },
-            // { id: "2", name: "现金", code: "1001" },
-            // { id: "2", name: "现金\n", code: "1001" }
-          ],
-          state: "TRUE", //状态
-          feeMethod: "专业" //MAJOR 专业。DORM 宿舍。ROLE 角色。
-        },
-        {
-          timeMold: "学年",
-          name: "宿舍费",
-          // role: [{ id: "2", name: "文科类学生" }],//按角色收费
-          // major:[{id:"1",name:""}],//按专业收费
-          // dorm:[{id:"1", buildingNo:"",roomNo:""}],//按宿舍收费
-          // account:[{id:"1",name:"行政收入"}],//可选的会计科目
-          account: [
-            { id: "1", name: "行政收入", code: "4001" },
-            { id: "2", name: "现金", code: "1001" }
-          ],
-          feeMethod: "宿舍", //MAJOR 专业。DORM 宿舍。ROLE 角色。
-          state: "TRUE" //状态
-        },
-        {
-          timeMold: "月份",
-          name: "电费",
-          // role: [
-          //   { id: "1", name: "理科类学生" },
-          //   { id: "2", name: "文科类学生" },
-          //   { id: "3", name: "艺术类学生" },
-          //   { id: "4", name: "老师" },
-          //   { id: "5", name: "职工" }
-          // ],//按角色收费
-          // major:[{id:"1",name:""}],//按专业收费
-          // dorm:[{id:"1", buildingNo:"",roomNo:""}],//按宿舍收费
-          // account:[{id:"1",name:""}],//可选的会计科目
-          account: [
-            { id: "1", name: "行政收入", code: "4001" },
-            { id: "2", name: "现金", code: "1001" }
-          ],
-          feeMethod: "宿舍", //MAJOR 专业。DORM 宿舍。ROLE 角色。
-          state: "TRUE" //状态
-        },
-        {
-          timeMold: "年份",
-          name: "宿舍费",
-          // role: [
-          //   { id: "1", name: "理科类学生" },
-          //   { id: "2", name: "文科类学生" },
-          //   { id: "3", name: "艺术类学生" }
-          // ],//按角色收费
-          // major:[{id:"1",name:""}],//按专业收费
-          // dorm:[{id:"1", buildingNo:"",roomNo:""}],//按宿舍收费
-          // account:[{id:"1",name:""}],//可选的会计科目
-          account: [
-            { id: "1", name: "行政收入", code: "4001" },
-            { id: "2", name: "现金", code: "1001" }
-          ], //这里应该是一个数组
-          feeMethod: "宿舍", //MAJOR 专业。DORM 宿舍。ROLE 角色。
-          state: "TRUE" //状态
-        },
-        {
-          timeMold: "季度",
-          name: "水费",
-          // role: [
-          //   { id: "1", name: "理科类学生" },
-          //   { id: "2", name: "文科类学生" },
-          //   { id: "3", name: "艺术类学生" }
-          // ],//按角色收费
-          // major:[{id:"1",name:""}],//按专业收费
-          // dorm:[{id:"1", buildingNo:"",roomNo:""}],//按宿舍收费
-          // account:[{id:"1",name:""}],//可选的会计科目
-          account: [
-            { id: "1", name: "行政收入", code: "4001" },
-            { id: "2", name: "现金", code: "1001" }
-          ], //对象数组
-          feeMethod: "宿舍", //MAJOR 专业。DORM 宿舍。ROLE 角色。
-          state: "FALSE" //状态
-        }
-      ],
+      tableData: [],
       cellStyle: { display: "block" },
       dialogFormVisible: false,
       feeForm: {
@@ -202,7 +129,7 @@ export default {
         amount: "",
         feeMethod: "",
         state: "TRUE",
-        account: []
+        accountId: ""
       },
       rules: {
         name: [{ required: true, message: "请输入费用名称", trigger: "blur" }],
@@ -216,7 +143,7 @@ export default {
         feeMethod: [
           { required: true, message: "请选择收费方式", trigger: "change" }
         ],
-        account: [
+        accountId: [
           {
             required: true,
             message: "请选择会计科目",
@@ -224,37 +151,116 @@ export default {
           }
         ]
       },
-      accountList: [
-        { id: "1", name: "行政收入", code: "4001" },
-        { id: "2", name: "现金", code: "1001" }
-      ]
+      accountList: [],
+      formOptions: [
+        {
+          label: "费用名称", // label文字
+          prop: "name", // 字段名
+          element: "el-input", // 指定elementui组件
+          placeholder: "请输入费用名称" // elementui组件属性
+        },
+        {
+          label: "状态", // label文字
+          prop: "state", // 字段名
+          element: "el-select", // 指定elementui组件
+          placeholder: "状态", // elementui组件属性
+          options: [
+            { label: "是", value: "TRUE" },
+            { label: "否", value: "FALSE" }
+          ],
+          initValue: "TRUE"
+        }
+      ],
+      pageSize: 10,
+      total: 0,
+      pageNum: 1,
+      flag: true,
+      searchVal: {
+        name: "",
+        isLeaf: ""
+      }
     };
   },
   watch: {},
   computed: {},
   methods: {
-    handleEdit(index, row) {
-      this.feeForm.name = row.name;
-      this.feeForm.timeMold = row.timeMold;
-      var tempAccount = [];
-      row.account.forEach(element => {
-        tempAccount.push(element.id);
+    search(val) {
+      var url = "/charge/feeKindList";
+      var data = val ? JSON.stringify(val) : "";
+      if (val) {
+        this.searchVal = this.Utils.copyObj(val);
+      }
+      this.axios.get(url, { params: { params: data } }).then(res => {
+        if (res.success) {
+          this.tableData = res.obj.list;
+          this.total = res.obj.total;
+        }
       });
-      this.feeForm.account = tempAccount;
-      this.feeForm.state = row.state;
+    },
+    handleCurrentChange(val) {
+      this.pageNum = val;
+      var data = this.Utils.copyObj(this.searchVal);
+      data.pageNum = val;
+      this.search(data);
+    },
+    handleEdit(index, row) {
+      this.feeForm = this.Utils.copyObj(row);
+      this.flag = false;
       this.dialogFormVisible = true;
-      this.feeForm.feeMethod = row.feeMethod;
     },
     add() {
-      this.dialogFormVisible = true;
+      this.flag = true;
+      this.dialogFormVisible = !this.dialogFormVisible;
     },
-    handleClose(formName) {
-      //关闭之后清除表单的内容，
-      console.log(formName);
-      this.$refs[formName].resetFields();
+    handleClose() {
+      this.$refs["feeForm"].resetFields();
+      this.Utils.clearObj(this.feeForm);
+    },
+    findAccountList() {
+      var url = "/lender/allAccount";
+      this.axios.get(url).then(res => {
+        if (res.success) {
+          this.accountList = res.obj;
+        }
+      });
+    },
+    save() {
+      var formRefs = [this.$refs["feeForm"]];
+      this.Utils.checkForm(formRefs).then(res => {
+        if (res) {
+          if (this.flag) {
+            this.axios.post("/charge/feeKind", this.feeForm).then(res => {
+              if (res.success) {
+                this.$message({
+                  type: "success",
+                  message: res.msg,
+                  center: true
+                });
+                this.dialogFormVisible = false;
+                this.handleCurrentChange(this.pageNum);
+              }
+            });
+          } else {
+            this.axios.put("/charge/feeKind", this.feeForm).then(res => {
+              if (res.success) {
+                this.$message({
+                  type: "success",
+                  message: res.msg,
+                  center: true
+                });
+                this.dialogFormVisible = false;
+                this.handleCurrentChange(this.pageNum);
+              }
+            });
+          }
+        }
+      });
     }
   },
-  created() {},
+  created() {
+    this.search({state:"TRUE"});
+    this.findAccountList();
+  },
   mounted() {}
 };
 </script>

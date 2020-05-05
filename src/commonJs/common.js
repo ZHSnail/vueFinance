@@ -273,6 +273,13 @@ function getImage(url, param, callback) {
 function getUrl() {
     return axios.config.baseURL
 }
+
+/**
+ * 获取当前用户
+ */
+function getUser() {
+    return JSON.parse(window.sessionStorage.getItem("userInfo"));
+}
 export default {
     timestampToDate,
     getNowFormatDate,
@@ -285,5 +292,5 @@ export default {
     getUrl,
     downloadFile,
     getImage,
-
+    getUser,
 }
