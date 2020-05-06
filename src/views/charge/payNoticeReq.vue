@@ -244,6 +244,7 @@ export default {
         }
         data.feeScope = tempFeeScope;
       }
+      data.feeKindList = this.feeForm.feeKind;
       data.deadLineMin = this.Utils.timestampToDate(this.feeForm.deadline[0]);
       data.deadLineMax = this.Utils.timestampToDate(this.feeForm.deadline[0]);
       this.axios.post("/charge/savePayNotice", data).then(res => {
