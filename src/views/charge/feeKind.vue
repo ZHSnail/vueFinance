@@ -14,7 +14,7 @@
           <template slot-scope="scope">
             <span v-if="scope.row.feeMethod=='DORM'">面向宿舍</span>
             <span v-if="scope.row.feeMethod=='MAJOR'">面向专业</span>
-            <span v-if="scope.row.feeMethod=='ROLE'">面向角色</span>
+            <!-- <span v-if="scope.row.feeMethod=='ROLE'">面向角色</span> -->
           </template>
         </el-table-column>
         <el-table-column align="center" label="会计科目">
@@ -77,7 +77,7 @@
             <el-select class="length" v-model="feeForm.feeMethod" clearable placeholder="请选择收费方式">
               <el-option label="面向宿舍" value="DORM"></el-option>
               <el-option label="面向专业" value="MAJOR"></el-option>
-              <el-option label="面向角色" value="ROLE"></el-option>
+              <!-- <el-option label="面向角色" value="ROLE"></el-option> -->
             </el-select>
           </el-form-item>
           <el-form-item label="会计科目" prop="accountId">

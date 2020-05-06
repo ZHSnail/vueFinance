@@ -56,27 +56,6 @@
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="缴费角色" prop="feeScope" v-if="feeForm.feeKind.feeMethod == 'ROLE'">
-                <el-select
-                  class="length"
-                  multiple
-                  placeholder="请选择需要缴费的角色"
-                  v-model="feeForm.feeScope"
-                  value-key="id"
-                >
-                  <el-option
-                    v-for="item in roleList"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item"
-                  >
-                    <el-row>
-                      <el-col :span="12">{{ item.name }}</el-col>
-                      <el-col :span="12" class="rightAlign">共{{ " "+item.total+" " }}人</el-col>
-                    </el-row>
-                  </el-option>
-                </el-select>
-              </el-form-item>
               <el-form-item
                 label="缴费专业"
                 prop="feeScope"
@@ -115,20 +94,12 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="会计科目" v-if="feeForm.feeKind.accountList" prop="account">
-                <el-select class="length" clearable placeholder="请选择会计科目" v-model="feeForm.account">
-                  <el-option
-                    v-for="item in feeForm.feeKind.accountList"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id"
-                  >
-                    <el-row>
-                      <el-col :span="12">{{ item.code }}</el-col>
-                      <el-col :span="12">{{ item.name }}</el-col>
-                    </el-row>
-                  </el-option>
-                </el-select>
+              <el-form-item label="会计科目" v-if="feeForm.feeKind.account" prop="account">
+                <el-input
+                  class="length"
+                  v-model="feeForm.feeKind.account.accountName"
+                  :readonly="true"
+                ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -144,14 +115,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="收费机构" prop="org">
-                <el-select class="length" clearable v-model="feeForm.org" placeholder="请选择收费机构">
-                  <el-option
-                    v-for="item in orgList"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id"
-                  ></el-option>
-                </el-select>
+                <el-input class="length" v-model="feeForm.org"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -167,7 +131,7 @@
       </my-collapse>
     </div>
     <div class="rightAlign">
-      <el-button type="primary" @click="save('feeForm')">暂存</el-button>
+      <el-button type="primary" @click="save()">暂存</el-button>
       <el-button type="primary" @click="commit('feeForm')">提交</el-button>
     </div>
   </div>
@@ -209,56 +173,12 @@ export default {
       }
     };
     return {
-      feeKindList: [
-        {
-          id: "1",
-          timeMold: "学年",
-          name: "学费",
-          amount: "7562.00",
-          roleList: [{ id: "1", name: "理科类学生" }],
-          feeMethod: "MAJOR", // 专业。DORM 宿舍。ROLE 角色。
-          accountList: [
-            { id: "1", name: "行政收入", code: "4001" },
-            { id: "2", name: "现金", code: "1001" }
-          ]
-        },
-        {
-          id: "2",
-          timeMold: "学年",
-          name: "宿舍费",
-          amount: "8000.00",
-          accountList: [
-            { id: "1", name: "行政收入", code: "4001" },
-            { id: "2", name: "现金", code: "1001" }
-          ],
-          feeMethod: "DORM", //MAJOR 专业。DORM 宿舍。ROLE 角色。
-          roleList: [{ id: "2", name: "文科类学生" }]
-        },
-        {
-          id: "3",
-          timeMold: "月份",
-          name: "电费",
-          amount: "5000.00",
-          roleList: [
-            { id: "1", name: "理科类学生" },
-            { id: "2", name: "文科类学生" },
-            { id: "3", name: "艺术类学生" },
-            { id: "4", name: "老师" },
-            { id: "5", name: "职工" }
-          ],
-          accountList: [
-            { id: "1", name: "行政收入", code: "4001" },
-            { id: "2", name: "现金", code: "1001" }
-          ],
-          feeMethod: "DORM" //MAJOR 专业。DORM 宿舍。ROLE 角色。
-        }
-      ],
+      feeKindList: [],
       orgList: [
         { id: "1", name: "仲恺农业工程学院" },
         { id: "2", name: "物业管理处" }
       ],
       feeForm: {
-        role: [], //缴费角色
         memo: "", //摘要
         deadline: [], //缴费期限
         org: "", //收费机构
@@ -266,7 +186,6 @@ export default {
         period: "", //期间
         amount: "", //收费金额
         total: "", //总金额
-        account: "", //会计科目
         feeScope: [], //收费的范围，
         totalAmount: 0,
         totalUser: 0
@@ -290,9 +209,6 @@ export default {
           { required: true, message: "请输入收费金额", trigger: "blur" },
           { type: "number", message: "收费金额必须为数字值" }
         ],
-        account: [
-          { required: true, message: "请选择会计科目", trigger: "change" }
-        ],
         feeScope: [
           { required: true, validator: validateFeeScope, trigger: "change" }
         ]
@@ -310,68 +226,33 @@ export default {
           }
         ]
       },
-      roleList: [
-        { id: "1", name: "学生", total: "34" },
-        { id: "4", name: "老师", total: "60" },
-        { id: "5", name: "职工", total: "70" }
-      ],
-      dormList: [
-        { id: "1", buildingNo: "1栋", total: "34" },
-        { id: "2", buildingNo: "2栋", total: "1000" },
-        { id: "3", buildingNo: "3栋", total: "200" },
-        { id: "4", buildingNo: "4栋", total: "6000" },
-        { id: "5", buildingNo: "5栋", total: "7000" },
-        { id: "6", buildingNo: "6栋", total: "34" },
-        { id: "7", buildingNo: "7栋", total: "34" }
-      ],
-      majorList: [
-        {
-          label: "经济学",
-          value: "经济学",
-          children: [
-            { value: { id: "1", total: "34" }, label: "投资学" },
-            { value: { id: "2", total: "34" }, label: "国际经济与贸易" }
-          ]
-        },
-        {
-          label: "法学",
-          value: "法学",
-          children: [{ value: { id: "3", total: "34" }, label: "社会工作" }]
-        },
-        {
-          label: "文学",
-          value: "文学",
-
-          children: [
-            { value: { id: "4", total: "34" }, label: "英语" },
-            { value: { id: "5", total: "34" }, label: "日语" },
-            { value: { id: "6", total: "34" }, label: "商务英语" }
-          ]
-        },
-        {
-          label: "理学",
-          value: "理学",
-
-          children: [
-            { value: { id: "7", total: "34" }, label: "信息与计算科学" },
-            { value: { id: "8", total: "34" }, label: "应用化学" },
-            { value: { id: "9", total: "34" }, label: "统计学" }
-          ]
-        }
-      ]
+      dormList: [],
+      majorList: []
     };
   },
   watch: {},
   computed: {},
   methods: {
-    save(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          console.log(this.feeForm);
-          alert("submit!");
-        } else {
-          console.log("error submit!!");
-          return false;
+    save() {
+      var data = this.Utils.copyObj(this.feeForm);
+      //按专业选
+      if (this.feeForm.feeKind.feeMethod == "MAJOR") {
+        var tempFeeScope = [];
+        for (var i = 0; i < this.feeForm.feeScope.length; i++) {
+          var temp = this.feeForm.feeScope[i][2];
+          tempFeeScope.push(temp);
+        }
+        data.feeScope = tempFeeScope;
+      }
+      data.deadLineMin = this.Utils.timestampToDate(this.feeForm.deadline[0]);
+      data.deadLineMax = this.Utils.timestampToDate(this.feeForm.deadline[0]);
+      this.axios.post("/charge/savePayNotice", data).then(res => {
+        if (res.success) {
+          this.$message({
+            type: "success",
+            message: res.msg,
+            center: true
+          });
         }
       });
     },
@@ -380,7 +261,7 @@ export default {
     parseMajor(feeScope) {
       var trueValue = [];
       feeScope.forEach(array => {
-        trueValue.push(array[1]);
+        trueValue.push(array[2]);
       });
       return trueValue;
     },
@@ -397,9 +278,39 @@ export default {
       this.feeForm.totalUser = temp;
       this.feeForm.totalAmount = this.feeForm.totalUser * this.feeForm.amount;
     },
-
+    getFeeKindList() {
+      var url = "/charge/allFeeKind";
+      this.axios.get(url).then(res => {
+        if (res.success) {
+          this.feeKindList = res.obj;
+        }
+      });
+    },
+    findProfessionList() {
+      var url = "/charge/proObjSelect";
+      this.axios.get(url).then(res => {
+        if (res.success) {
+          this.majorList = res.obj;
+        }
+      });
+    },
+    findDormList() {
+      var url = "/charge/dormInfos";
+      this.axios.get(url).then(res => {
+        if (res.success) {
+          this.dormList = res.obj;
+          this.dormList.forEach(item => {
+            item.buildingNo = item.buildNumber + "栋" + item.dormNumber;
+          });
+        }
+      });
+    }
   },
-  created() {},
+  created() {
+    this.getFeeKindList();
+    this.findProfessionList();
+    this.findDormList();
+  },
   mounted() {
     //去除选择框的值
     this.$watch("feeForm.feeKind", function(newVal, oldVal) {
