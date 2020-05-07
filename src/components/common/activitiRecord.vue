@@ -15,7 +15,7 @@
         >
           <div class="box-card centerAlign">
             {{item.activityName}}
-            <div class="smallCircle" :class="item.circleClass">
+            <div class="smallCircle" :class="item.circleClass" v-if="item.comment">
               <div class="bigCircle" :class="item.circleClass">
                 <span :class="item.textClass">{{item.comment.type}}</span>
               </div>
@@ -64,6 +64,7 @@ export default {
   methods: {
     arrangeClass(list) {
       list.forEach(element => {
+        if(element.comment){
         if (
           element.comment.type == "申请" ||
           element.comment.type == "重新提交"
@@ -83,6 +84,7 @@ export default {
           element.circleClass = "info";
           element.textClass = "text-info";
         }
+        }  
       });
     },
     open() {
@@ -111,6 +113,7 @@ export default {
     };
     this.axios.get(url, { params: data }).then(res => {
       this.recordList = res.obj;
+      console.log(res.obj)
       this.arrangeClass(this.recordList);
     });
   },

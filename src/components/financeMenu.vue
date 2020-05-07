@@ -68,6 +68,14 @@
               </template>
             </el-menu-item>
           </router-link>
+          <router-link to="/finance/charge/payNoticeReview" tag="div">
+            <el-menu-item index="1-7">
+              <template slot="title">
+                <i class="el-icon-setting"></i>
+                <span slot="title">流程审核</span>
+              </template>
+            </el-menu-item>
+          </router-link>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="2">

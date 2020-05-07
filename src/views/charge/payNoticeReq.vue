@@ -131,7 +131,8 @@
       </my-collapse>
     </div>
     <div class="rightAlign">
-      <el-button type="primary" @click="save()">暂存</el-button>
+      <el-button type="danger" v-if="showDeleteButton" @click="remove()">删除</el-button>
+      <el-button type="info" @click="save()">暂存</el-button>
       <el-button type="primary" @click="commit('feeForm')">提交</el-button>
     </div>
   </div>
@@ -174,10 +175,6 @@ export default {
     };
     return {
       feeKindList: [],
-      orgList: [
-        { id: "1", name: "仲恺农业工程学院" },
-        { id: "2", name: "物业管理处" }
-      ],
       feeForm: {
         memo: "", //摘要
         deadline: [], //缴费期限
@@ -227,13 +224,15 @@ export default {
         ]
       },
       dormList: [],
-      majorList: []
+      majorList: [],
+      tempFeeScope: [],
+      showDeleteButton: false
     };
   },
   watch: {},
   computed: {},
   methods: {
-    save() {
+    arrangeData() {
       var data = this.Utils.copyObj(this.feeForm);
       //按专业选
       if (this.feeForm.feeKind.feeMethod == "MAJOR") {
@@ -246,7 +245,11 @@ export default {
       }
       data.feeKindList = this.feeForm.feeKind;
       data.deadLineMin = this.Utils.timestampToDate(this.feeForm.deadline[0]);
-      data.deadLineMax = this.Utils.timestampToDate(this.feeForm.deadline[0]);
+      data.deadLineMax = this.Utils.timestampToDate(this.feeForm.deadline[1]);
+      return data;
+    },
+    save() {
+      var data = this.arrangeData();
       this.axios.post("/charge/savePayNotice", data).then(res => {
         if (res.success) {
           this.$message({
@@ -254,15 +257,35 @@ export default {
             message: res.msg,
             center: true
           });
+          this.$router.push({ path: "/finance/charge/payOnline" });
         }
       });
     },
-    commit(formName) {},
+    commit(formName) {
+      var formRefs = [this.$refs["feeForm"]];
+      this.Utils.checkForm(formRefs).then(res => {
+        if (res) {
+          var data = this.arrangeData();
+          this.axios.post("/charge/commitPayNotice", data).then(res => {
+            if (res.success) {
+              this.$message({
+                type: "success",
+                message: res.msg,
+                center: true
+              });
+              this.$router.push({ path: "/finance/charge/payOnline" });
+            }
+          });
+        }
+      });
+    },
     //解析级联选择器中的选中值。提交时也需要整理级联选择器的值
     parseMajor(feeScope) {
       var trueValue = [];
       feeScope.forEach(array => {
-        trueValue.push(array[2]);
+        if (typeof array != undefined && array != undefined) {
+          trueValue.push(array[2]);
+        }
       });
       return trueValue;
     },
@@ -305,12 +328,42 @@ export default {
           });
         }
       });
+    },
+    initData(id) {
+      var url = "/charge/payNotice/" + id;
+      this.axios.get(url).then(res => {
+        if (res.success) {
+          this.feeForm = this.Utils.copyObj(res.obj);
+          var deadline = [];
+          deadline.push(res.obj.deadLineMin);
+          deadline.push(res.obj.deadLineMax);
+          this.feeForm.deadline = deadline;
+          this.tempFeeScope = JSON.parse(res.obj.feeScope);
+        }
+      });
+    },
+    remove() {
+      var url = "/charge/payNotice/" + this.$route.params.id;
+      this.axios.delete(url).then(res => {
+        if (res.success) {
+          this.$message({
+            type: "success",
+            message: res.msg,
+            center: true
+          });
+          this.search();
+        }
+      });
     }
   },
   created() {
     this.getFeeKindList();
     this.findProfessionList();
     this.findDormList();
+    if (typeof this.$route.params.id != undefined) {
+      this.showDeleteButton = true;
+      this.initData(this.$route.params.id);
+    }
   },
   mounted() {
     //去除选择框的值
@@ -324,7 +377,7 @@ export default {
     });
     //动态算总人数
     this.$watch("feeForm.feeScope", function(newVal, oldVal) {
-      if (!this.Utils.isEmptyObj(newVal)) {
+      if (!this.Utils.isEmptyObj(newVal) && newVal.length != 0) {
         this.getTotalUser(newVal);
       } else {
         this.feeForm.totalUser = 0;
@@ -334,6 +387,44 @@ export default {
     //动态算总人数
     this.$watch("feeForm.amount", function(newVal, oldVal) {
       this.feeForm.totalAmount = newVal * this.feeForm.totalUser;
+    });
+
+    this.$watch("dormList", function(newVal, oldVal) {
+      if (typeof this.$route.params.id != undefined) {
+        var temp = [];
+        this.tempFeeScope.forEach(item => {
+          var Obj = this.Utils.findObj(this.dormList, "id", item);
+          temp.push(Obj);
+        });
+        this.feeForm.feeScope = temp;
+      }
+    });
+
+    this.$watch("majorList", function(newVal, oldVal) {
+      if (typeof this.$route.params.id != undefined) {
+        var temp = [];
+        this.tempFeeScope.forEach(professionId => {
+          this.majorList.forEach(item => {
+            if (item.children) {
+              var tempChildren = item.children;
+              for (var i = 0; i < tempChildren.length; i++) {
+                if (tempChildren[i].children) {
+                  for (var j = 0; j < tempChildren[i].children.length; j++) {
+                    if (tempChildren[i].children[j].value.id === professionId) {
+                      var tempMajor = [];
+                      tempMajor.push(item.value);
+                      tempMajor.push(tempChildren[i].value);
+                      tempMajor.push(tempChildren[i].children[j].value);
+                      temp.push(tempMajor);
+                    }
+                  }
+                }
+              }
+            }
+          });
+        });
+        this.feeForm.feeScope = temp;
+      }
     });
   }
 };

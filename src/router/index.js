@@ -53,8 +53,8 @@ import RoleInfo from '../views/system/roleInfo.vue'
 import DormInfo from '../views/charge/dormInfo.vue'
 import ProfessionInfo from '../views/charge/professionInfo.vue'
 import StudentInfo from '../views/charge/studentInfo.vue'
-
-
+import PayNoticeReview from '../views/charge/payNoticeReview.vue'
+import PayNoticeApprove from '../views/charge/payNoticeApprove.vue'
 
 Vue.use(VueRouter)
 
@@ -108,6 +108,16 @@ const charge = [{
         path: 'charge/studentInfo',
         name: 'studentInfo',
         component: StudentInfo
+    },
+    {
+        path: 'charge/payNoticeReview',
+        name: 'payNoticeReview',
+        component: PayNoticeReview
+    },
+    {
+        path: 'charge/payNoticeApprove/:id',
+        name: 'payNoticeApprove',
+        component: PayNoticeApprove
     },
 ];
 const salary = [{

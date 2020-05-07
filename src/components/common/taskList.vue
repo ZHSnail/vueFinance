@@ -74,7 +74,7 @@ export default {
   computed: {},
   methods: {},
   created() {
-      if (
+    if (
       this.taskObj.hasOwnProperty("draftList") &&
       this.taskObj.draftList.length != 0
     ) {

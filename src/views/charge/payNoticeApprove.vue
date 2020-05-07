@@ -1,7 +1,7 @@
 <template>
-  <div class="payNoticeDetail">
+  <div class="payNoticeApprove">
     <div>
-      <my-pageheader titleContent="通知缴费单详情"></my-pageheader>
+      <my-pageheader titleContent="通知缴费单审核"></my-pageheader>
     </div>
     <div>
       <my-collapse title="费用清单" :total="feeForm.totalAmount+''" totalTitle="费用合计" class="leftAlign">
@@ -23,16 +23,14 @@
         </el-row>
       </my-collapse>
       <activiti-record workKey="payNoticeReq" :bizId="id"></activiti-record>
-      <div class="rightAlign">
-      <el-button type="danger" v-if="show" @click="revoke()">撤回</el-button>
-    </div>
+      <activiti-handle workKey="payNoticeReq" :bizId="id"></activiti-handle>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "payNoticeDetail",
+  name: "payNoticeApprove",
   components: {},
   props: {},
   data() {
@@ -40,7 +38,6 @@ export default {
       feeForm:{},
       id:"",
       userInfo:{},
-      show:false,
     };
   },
   watch: {},
@@ -56,36 +53,13 @@ export default {
           deadline.push(res.obj.deadLineMax);
           this.feeForm.deadline = deadline;
           this.userInfo = this.Utils.getUser();
-          if(this.userInfo.id === this.feeForm.creater){
-            this.show = true;
-          }
         }
       });
     },
-    revoke(){
-      var data = {
-        workKey: "payNoticeReq",
-        businessKey: this.id,
-        comment: ""
-      };
-      var url = "/activiti/revoke";
-      this.axios.post(url, data).then(res => {
-        if (res.success) {
-          this.$message({
-            type: "success",
-            message: res.msg,
-            center: true
-          });
-          this.$router.push({ path: "/finance/charge/payOnline" });
-        }
-      });
-      
-    }
     },
   created() {
     if (typeof this.$route.params.id != undefined) {
       this.id = this.$route.params.id;
-      this.showDeleteButton = true;
       this.initData(this.$route.params.id);
     }
   },

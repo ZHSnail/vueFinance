@@ -201,8 +201,8 @@ function clearObj(obj) {
 /**
  * 从数组中找含有某个值的对象
  * @param {Object} obj 对象
- * @param {Object} key 值
- * @param {Object} val 键
+ * @param {Object} key 键
+ * @param {Object} val 值
  */
 function findObj(array, key, val) {
     for (var i = 0; i < array.length; i++) {
