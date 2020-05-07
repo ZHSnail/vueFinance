@@ -390,7 +390,7 @@ export default {
     });
 
     this.$watch("dormList", function(newVal, oldVal) {
-      if (typeof this.$route.params.id != undefined) {
+      if (typeof this.$route.params.id != undefined && this.feeForm.feeKind.feeMethod == "DORM") {
         var temp = [];
         this.tempFeeScope.forEach(item => {
           var Obj = this.Utils.findObj(this.dormList, "id", item);
@@ -401,7 +401,7 @@ export default {
     });
 
     this.$watch("majorList", function(newVal, oldVal) {
-      if (typeof this.$route.params.id != undefined) {
+      if (typeof this.$route.params.id != undefined && this.feeForm.feeKind.feeMethod == "MAJOR") {
         var temp = [];
         this.tempFeeScope.forEach(professionId => {
           this.majorList.forEach(item => {
