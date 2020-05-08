@@ -4,34 +4,45 @@
       <my-pageheader titleContent="收费查询"></my-pageheader>
     </div>
     <div>
-      <searchForm :formOptions="formOptions" btnItems="search,export"></searchForm>
+      <searchForm :formOptions="formOptions" btnItems="search,export" @onExport="exportData" @onSearch="search"></searchForm>
     </div>
-    <el-table
-      cell-class-name="centerAlign"
-      :data="tableData"
-      stripe
-      style="width: 100%"
-    >
+    <el-table cell-class-name="centerAlign" :data="tableData" stripe style="width: 100%">
       <el-table-column type="index" align="center" label="序号" width="50"></el-table-column>
-      <el-table-column align="center" prop="code" label="单号" width="120">
+      <el-table-column align="center" prop="code" label="单号" width="150">
         <template slot-scope="scope">
           <router-link :to="'payNoticeDetail/'+scope.row.id" tag="div">
             <el-link type="primary" :underline="false">{{scope.row.code}}</el-link>
           </router-link>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="createUser" label="发起人"></el-table-column>
+      <el-table-column align="center" prop="creater" label="发起人"></el-table-column>
       <el-table-column align="center" label="收费机构" prop="org"></el-table-column>
-      <el-table-column align="center" prop="feeKind" label="费用类别"></el-table-column>
+      <el-table-column align="center" prop="feeKind.name" label="费用类别"></el-table-column>
       <el-table-column align="center" label="收费情况">
         <template slot-scope="scope">
-          <router-link :to="'payList/'+scope.row.id" tag="div">
-            <el-link type="primary" :underline="false">详情</el-link>
-          </router-link>
+          <div v-if="scope.row.status == 'EXE'">
+            <router-link :to="'payList/'+scope.row.id" tag="div">
+              <el-link type="primary" :underline="false">详情</el-link>
+            </router-link>
+          </div>
+          <div v-if="scope.row.status == 'FINSH'">
+            <router-link :to="'payList/'+scope.row.id" tag="div">
+              <el-link type="primary" :underline="false">已完成收费</el-link>
+            </router-link>
+          </div>
+          <div v-if="scope.row.status == 'CMT'">待审核通过</div>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="应收金额" prop="total"></el-table-column>
-      <el-table-column align="center" label="状态" prop="state"></el-table-column>
+      <el-table-column align="center" label="应收金额" prop="totalAmount">
+        <template slot-scope="scope">{{scope.row.totalAmount + " 元"}}</template>
+      </el-table-column>
+      <el-table-column align="center" label="状态" prop="status">
+        <template slot-scope="scope">
+          <span v-if="scope.row.status == 'CMT'">审核中</span>
+          <span v-if="scope.row.status == 'EXE'">正在进行</span>
+          <span v-if="scope.row.status == 'FINSH'">已完成</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="摘要" prop="memo"></el-table-column>
     </el-table>
     <el-row>
@@ -44,6 +55,7 @@
           :total="total"
           class="centerAlign"
           :hide-on-single-page="true"
+          :current-page="pageNum"
         ></el-pagination>
       </el-col>
     </el-row>
@@ -66,143 +78,79 @@ export default {
         },
         {
           label: "状态", // label文字
-          prop: "state", // 字段名
+          prop: "status", // 字段名
           element: "el-select", // 指定elementui组件
           placeholder: "请选择状态", // elementui组件属性
           options: [
             { label: "审批中", value: "CMT" },
             { label: "正在进行", value: "EXE" },
-            { label: "已完成", value: "EXE" }
+            { label: "已完成", value: "FINSH" }
           ]
         },
         {
           label: "费用类别", // label文字
-          prop: "feeKind", // 字段名
+          prop: "feeKindId", // 字段名
           element: "el-select", // 指定elementui组件
           placeholder: "请选择费用类别", // elementui组件属性
-          options: [
-            { label: "理科类学费", value: "1" },
-            { label: "文科类学费", value: "2" },
-            { label: "电费", value: "3" },
-            { label: "宿舍费", value: "4" },
-            { label: "水费", value: "5" }
-          ]
+          options: []
         }
       ],
-      tableData: [
-        {
-          id: "1",
-          code: "SF2002160001",
-          createUser: "张三",
-          org: "仲恺农业工程学院",
-          feeKind: "宿舍费",
-          total: "450000.00",
-          state: "正在进行",
-          memo: "2018-2019应收学费"
-        },
-        {
-          id: "2",
-          code: "SF2002160001",
-          createUser: "张三",
-          org: "仲恺农业工程学院",
-          feeKind: "学费",
-          total: "450000.00",
-          state: "正在进行",
-          memo: "2018-2019应收学费"
-        },
-        {
-          id: "3",
-          code: "SF2002160001",
-          createUser: "张三",
-          org: "仲恺农业工程学院",
-          feeKind: "学费",
-          total: "450000.00",
-          state: "正在进行",
-          memo: "2018-2019应收学费"
-        },
-        {
-          id: "4",
-          code: "SF2002160001",
-          createUser: "张三",
-          org: "仲恺农业工程学院",
-          feeKind: "学费",
-          total: "450000.00",
-          state: "正在进行",
-          memo: "2018-2019应收学费"
-        },
-        {
-          id: "5",
-          code: "SF2002160001",
-          createUser: "张三",
-          org: "仲恺农业工程学院",
-          feeKind: "学费",
-          total: "450000.00",
-          state: "正在进行",
-          memo: "2018-2019应收学费"
-        },
-        {
-          id: "6",
-          code: "SF2002160001",
-          createUser: "张三",
-          org: "仲恺农业工程学院",
-          feeKind: "学费",
-          total: "450000.00",
-          state: "正在进行",
-          memo: "2018-2019应收学费"
-        },
-        {
-          id: "6",
-          code: "SF2002160001",
-          createUser: "张三",
-          org: "仲恺农业工程学院",
-          feeKind: "学费",
-          total: "450000.00",
-          state: "正在进行",
-          memo: "2018-2019应收学费"
-        },
-        {
-          id: "6",
-          code: "SF2002160001",
-          createUser: "张三",
-          org: "仲恺农业工程学院",
-          feeKind: "学费",
-          total: "450000.00",
-          state: "正在进行",
-          memo: "2018-2019应收学费"
-        },
-        {
-          id: "6",
-          code: "SF2002160001",
-          createUser: "张三",
-          org: "仲恺农业工程学院",
-          feeKind: "学费",
-          total: "450000.00",
-          state: "正在进行",
-          memo: "2018-2019应收学费"
-        },
-        {
-          id: "6",
-          code: "SF2002160001",
-          createUser: "张三",
-          org: "仲恺农业工程学院",
-          feeKind: "学费",
-          total: "450000.00",
-          state: "正在进行",
-          memo: "2018-2019应收学费"
-        }
-      ],
-      total: 200,
-      pageSize: 10
+      tableData: [],
+      pageSize: 10,
+      total: 0,
+      pageNum: 1,
+      searchVal: {
+        code: "",
+        status: "",
+        feeKindId: ""
+      }
     };
   },
   watch: {},
   computed: {},
   methods: {
-    handleCurrentChange(){
-
-    }
+    search(val) {
+      var url = "/charge/payNoticeList";
+      var data = val ? JSON.stringify(val) : "";
+      if (val) {
+        this.searchVal = this.Utils.copyObj(val);
+      }
+      this.axios.get(url, { params: { params: data } }).then(res => {
+        if (res.success) {
+          this.tableData = res.obj.list;
+          this.total = res.obj.total;
+        }
+      });
+    },
+    handleCurrentChange(val) {
+      this.pageNum = val;
+      var data = this.Utils.copyObj(this.searchVal);
+      data.pageNum = val;
+      this.search(data);
+    },
+    getFeeKindList() {
+      var url = "/charge/allFeeKind";
+      this.axios.get(url).then(res => {
+        if (res.success) {
+          res.obj.forEach(item => {
+            var temp = {};
+            temp.label = item.name;
+            temp.value = item.id;
+            this.formOptions[2].options.push(temp);
+          });
+        }
+      });
+    },
+    exportData(val) {
+      var url = "/charge/payNoticeExport";
+      var data = JSON.stringify(val) ? JSON.stringify(val) : "";
+      this.Utils.downloadFile(url, { data: data });
+    },
   },
-  created() {},
+  created() {
+    this.getFeeKindList();
+    this.search();
+  },
   mounted() {}
 };
 </script>

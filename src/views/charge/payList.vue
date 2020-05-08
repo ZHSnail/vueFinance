@@ -4,7 +4,7 @@
       <my-pageheader titleContent="收费情况"></my-pageheader>
     </div>
     <div>
-      <searchForm :formOptions="formOptions" btnItems="search,export"></searchForm>
+      <searchForm :formOptions="formOptions" btnItems="search,export" @onExport="exportData" @onSearch="search"></searchForm>
     </div>
     <el-table
       cell-class-name="centerAlign"
@@ -21,12 +21,21 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="userName" label="缴费用户"></el-table-column>
-      <el-table-column align="center" prop="feeKind" label="费用类别"></el-table-column>
-      <el-table-column align="center" label="付款状态" prop="state"></el-table-column>
-      <el-table-column align="center" label="付款金额" prop="payMoney"></el-table-column>
-      <el-table-column align="center" label="付款日期" prop="payTime"></el-table-column>
+      <el-table-column align="center" prop="payNotice.feeKind.name" label="费用类别"></el-table-column>
+      <el-table-column align="center" label="付款状态" prop="status">
+        <template slot-scope="scope">
+          <span v-if="scope.row.status == 'PAID'">已付款</span>
+          <span v-if="scope.row.status == 'UNPAID'">未付款</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="付款金额" prop="amount">
+        <template slot-scope="scope">
+          {{scope.row.amount + " 元"}}
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="付款日期" prop="payDate"></el-table-column>
       <el-table-column align="center" prop="memo" label="摘要"></el-table-column>
-      <el-table-column align="center" label="操作">
+      <!-- <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-tooltip effect="light" content="通知该用户缴费" placement="bottom">
             <el-button
@@ -38,9 +47,9 @@
             ></el-button>
           </el-tooltip>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
-    <el-row>
+        <el-row>
       <el-col :span="24">
         <el-pagination
           background
@@ -50,9 +59,10 @@
           :total="total"
           class="centerAlign"
           :hide-on-single-page="true"
+          :current-page="pageNum"
         ></el-pagination>
       </el-col>
-    </el-row>
+        </el-row>
   </div>
 </template>
 
@@ -78,139 +88,57 @@ export default {
         },
         {
           label: "付款状态", // label文字
-          prop: "state", // 字段名
+          prop: "status", // 字段名
           element: "el-select", // 指定elementui组件
           placeholder: "请选择付款状态", // elementui组件属性
           options: [
-            { label: "已付款", value: "CMT" },
-            { label: "未付款", value: "EXE" }
+            { label: "已付款", value: "PAID" },
+            { label: "未付款", value: "UNPAID" }
           ]
         }
       ],
-      tableData: [
-        {
-          id: "1",
-          code: "XF2002160001",
-          userName: "张三",
-          org: "仲恺农业工程学院",
-          feeKind: "宿舍费",
-          payMoney: "450000.00",
-          state: "已付款",
-          payTime: "2020-02-02",
-          memo: "2018-2019应收学费"
-        },
-        {
-          id: "2",
-          code: "XF2002160001",
-          userName: "张三",
-          org: "仲恺农业工程学院",
-          feeKind: "学费",
-          payMoney: "450000.00",
-          state: "已付款",
-          payTime: "2020-02-02",
-          memo: "2018-2019应收学费"
-        },
-        {
-          id: "3",
-          code: "XF2002160001",
-          userName: "张三",
-          org: "仲恺农业工程学院",
-          feeKind: "学费",
-          payMoney: "450000.00",
-          state: "已付款",
-          payTime: "2020-02-02",
-          memo: "2018-2019应收学费"
-        },
-        {
-          id: "4",
-          code: "XF2002160001",
-          userName: "张三",
-          org: "仲恺农业工程学院",
-          feeKind: "学费",
-          payMoney: "450000.00",
-          state: "已付款",
-          payTime: "2020-02-02",
-          memo: "2018-2019应收学费"
-        },
-        {
-          id: "5",
-          code: "XF2002160001",
-          userName: "张三",
-          org: "仲恺农业工程学院",
-          feeKind: "学费",
-          payMoney: "450000.00",
-          state: "已付款",
-          payTime: "2020-02-02",
-          memo: "2018-2019应收学费"
-        },
-        {
-          id: "6",
-          code: "XF2002160001",
-          userName: "张三",
-          org: "仲恺农业工程学院",
-          feeKind: "学费",
-          payMoney: "450000.00",
-          state: "已付款",
-          payTime: "2020-02-02",
-          memo: "2018-2019应收学费"
-        },
-        {
-          id: "6",
-          code: "XF2002160001",
-          userName: "张三",
-          org: "仲恺农业工程学院",
-          feeKind: "学费",
-          payMoney: "450000.00",
-          state: "已付款",
-          payTime: "2020-02-02",
-          memo: "2018-2019应收学费"
-        },
-        {
-          id: "6",
-          code: "XF2002160001",
-          userName: "张三",
-          org: "仲恺农业工程学院",
-          feeKind: "学费",
-          payMoney: "450000.00",
-          state: "已付款",
-          payTime: "2020-02-02",
-          memo: "2018-2019应收学费"
-        },
-        {
-          id: "6",
-          code: "XF2002160001",
-          userName: "张三",
-          org: "仲恺农业工程学院",
-          feeKind: "学费",
-          payMoney: "450000.00",
-          state: "已付款",
-          payTime: "2020-02-02",
-          memo: "2018-2019应收学费"
-        },
-        {
-          id: "6",
-          code: "XF2002160001",
-          userName: "张三",
-          org: "仲恺农业工程学院",
-          feeKind: "学费",
-          payMoney: "450000.00",
-          state: "未付款",
-          payTime: "2020-02-02",
-          memo: "2018-2019应收学费"
-        }
-      ],
-      total: 200,
-      pageSize: 10
+      tableData: [],
+      pageSize: 10,
+      total: 0,
+      pageNum: 1,
+      searchVal: {
+        code: "",
+        status: "",
+        userName: ""
+      }
     };
   },
   watch: {},
   computed: {},
   methods: {
-    handleCurrentChange(){
-
-    }
+    search(val) {
+      var url = "/charge/payDetailList/"+this.$route.params.id;
+      var data = val ? JSON.stringify(val) : "";
+      if (val) {
+        this.searchVal = this.Utils.copyObj(val);
+      }
+      this.axios.get(url, { params: { params: data } }).then(res => {
+        if (res.success) {
+          this.tableData = res.obj.list;
+          this.total = res.obj.total;
+        }
+      });
+    },
+    handleCurrentChange(val) {
+      this.pageNum = val;
+      var data = this.Utils.copyObj(this.searchVal);
+      data.pageNum = val;
+      this.search(data);
+    },
+    exportData(val) {
+      var url = "/charge/payNoticeExport";
+      var data = JSON.stringify(val) ? JSON.stringify(val) : "";
+      this.Utils.downloadFile(url, { data: data });
+    },
   },
-  created() {},
+  created() {
+     this.search();
+  },
   mounted() {}
 };
 </script>

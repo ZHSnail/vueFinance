@@ -8,7 +8,7 @@
         <div>
           <my-card :objList="taskObj.draftList" :url="draftUrl">
             <template v-slot:item="{ item }">
-                <slot name="draftItem" :draftItem="item"></slot>
+              <slot name="draftItem" :draftItem="item"></slot>
             </template>
           </my-card>
         </div>
@@ -20,7 +20,7 @@
         <div>
           <my-card :objList="taskObj.cmtList" :url="detailUrl">
             <template v-slot:item="{ item }">
-                <slot name="cmtItem" :cmtItem="item"></slot>
+              <slot name="cmtItem" :cmtItem="item"></slot>
             </template>
           </my-card>
         </div>
@@ -32,7 +32,7 @@
         <div>
           <my-card :objList="taskObj.exeList" :url="detailUrl">
             <template v-slot:item="{ item }">
-                <slot name="exeItem" :exeItem="item"></slot>
+              <slot name="exeItem" :exeItem="item"></slot>
             </template>
           </my-card>
         </div>
@@ -44,7 +44,7 @@
         <div>
           <my-card :objList="taskObj.finishList" :url="detailUrl">
             <template v-slot:item="{ item }">
-                <slot name="finishItem" :finishItem="item"></slot>
+              <slot name="finishItem" :finishItem="item"></slot>
             </template>
           </my-card>
         </div>
@@ -59,46 +59,48 @@ export default {
   name: "taskList",
   components: {},
   props: {
-      taskObj:Object,
-      needExe:Boolean,
-      draftUrl:String,
-      detailUrl:String,
-      needFinsh:Boolean,
+    taskObj: Object,
+    needExe: Boolean,
+    draftUrl: String,
+    detailUrl: String,
+    needFinsh: Boolean
   },
   data() {
-    return {
-        activeNames:[],
-    };
+    return {};
   },
   watch: {},
-  computed: {},
-  methods: {},
-  created() {
-    if (
-      this.taskObj.hasOwnProperty("draftList") &&
-      this.taskObj.draftList.length != 0
-    ) {
-      this.activeNames.push("1");
-    }
-    if (
-      this.taskObj.hasOwnProperty("cmtList") &&
-      this.taskObj.cmtList.length != 0
-    ) {
-      this.activeNames.push("2");
-    }
-    if (
-      this.taskObj.hasOwnProperty("exeList") &&
-      this.taskObj.exeList.length != 0
-    ) {
-      this.activeNames.push("3");
-    }
-    if (
-      this.taskObj.hasOwnProperty("finishList") &&
-      this.taskObj.finishList.length != 0
-    ) {
-      this.activeNames.push("4");
+  computed: {
+    activeNames: function() {
+      var temp = [];
+      if (
+        this.taskObj.hasOwnProperty("draftList") &&
+        this.taskObj.draftList.length != 0
+      ) {
+        temp.push("1");
+      }
+      if (
+        this.taskObj.hasOwnProperty("cmtList") &&
+        this.taskObj.cmtList.length != 0
+      ) {
+        temp.push("2");
+      }
+      if (
+        this.taskObj.hasOwnProperty("exeList") &&
+        this.taskObj.exeList.length != 0
+      ) {
+        temp.push("3");
+      }
+      if (
+        this.taskObj.hasOwnProperty("finishList") &&
+        this.taskObj.finishList.length != 0
+      ) {
+        temp.push("4");
+      }
+      return temp;
     }
   },
+  methods: {},
+  created() {},
   mounted() {}
 };
 </script>

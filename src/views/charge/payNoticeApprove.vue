@@ -23,7 +23,7 @@
         </el-row>
       </my-collapse>
       <activiti-record workKey="payNoticeReq" :bizId="id"></activiti-record>
-      <activiti-handle workKey="payNoticeReq" :bizId="id"></activiti-handle>
+      <activiti-handle workKey="payNoticeReq" url="/finance/charge/payNoticeReview" :bizId="id"></activiti-handle>
     </div>
   </div>
 </template>

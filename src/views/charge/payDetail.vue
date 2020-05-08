@@ -1,47 +1,48 @@
 <template>
   <div class="payDetail">
     <div>
-      <my-pageheader titleContent="缴费单详情" :needButton="true" buttonContent="打印" @handClick="print"></my-pageheader>
+      <!-- <my-pageheader titleContent="缴费单详情" :needButton="true" buttonContent="打印" @handClick="print"></my-pageheader> -->
+      <my-pageheader titleContent="缴费单详情"></my-pageheader>
     </div>
     <div>
       <my-collapse title="基本信息" class="leftAlign">
           <el-row>
             <el-col :span="12">
-              缴费用户：张三
+              缴费用户：{{payDetail.userName}}
             </el-col>
             <el-col :span="12">
-              单号：XF202002120001
+              单号：{{payDetail.code}}
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="12">
-              付款日期:2020-02-14
+            <el-col :span="12" v-if="payDetail.status == 'PAID' ">
+              付款日期:{{payDetail.payDate}}
             </el-col>
             <el-col :span="12">
-              缴费状态：<span style="color:red">未付款</span>
+              缴费状态：<span style="color:red" v-if="payDetail.status == 'UNPAID' ">未付款</span> <span v-if="payDetail.status == 'PAID' ">已付款</span>
             </el-col>
           </el-row>
       </my-collapse>
-      <my-collapse title="费用清单" total="4500.00" totalTitle="费用合计" class="leftAlign">
+      <my-collapse title="费用清单" :total="payDetail.amount+''" totalTitle="费用合计" class="leftAlign">
           <el-row>
             <el-col :span="12">
-              费用类别：学费
+              费用类别：{{payDetail.payNotice.feeKind.name}}
             </el-col>
             <el-col :span="12">
-              金额:4500.00
+              金额:{{payDetail.amount}}
             </el-col>
           </el-row>
             <el-row>
             <el-col :span="12">
-              学年：2019-2020
+              {{payDetail.payNotice.feeKind.timeMold}}：{{payDetail.payNotice.period}}
             </el-col>
             <el-col :span="12">
-              收费机构:仲恺农业工程学院
+              收费机构:{{payDetail.payNotice.org}}
             </el-col>
           </el-row>
       </my-collapse>
     </div>
-    <div class="rightAlign"><el-button type="primary" @click="toPay">前往付款</el-button></div>
+    <div class="rightAlign" v-if="show"><el-button type="primary" @click="toPay">前往付款</el-button></div>
   </div>
 </template>
 
@@ -59,6 +60,9 @@ export default {
   props: {},
   data() {
     return {
+      id:"",
+      show:false,
+      payDetail:{}
     };
   },
   watch: {},
@@ -69,8 +73,26 @@ export default {
     toPay(){
 
     },
+    initData(id) {
+      var url = "/charge/payDetail/" + id;
+      this.axios.get(url).then(res => {
+        if (res.success) {
+          console.log(res.obj)
+          this.payDetail = this.Utils.copyObj(res.obj);
+          this.userInfo = this.Utils.getUser();
+          if(this.userInfo.id === this.payDetail.userId && this.payDetail.status === 'UNPAID'){
+            this.show = true;
+          }
+        }
+      });
+    },
   },
-  created() {},
+  created() {
+    if (typeof this.$route.params.id != undefined) {
+      this.id = this.$route.params.id;
+      this.initData(this.$route.params.id);
+    }
+  },
   mounted() {}
 };
 </script>

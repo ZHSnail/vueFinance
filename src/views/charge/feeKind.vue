@@ -17,9 +17,14 @@
             <!-- <span v-if="scope.row.feeMethod=='ROLE'">面向角色</span> -->
           </template>
         </el-table-column>
-        <el-table-column align="center" label="会计科目">
+        <el-table-column align="center" label="借方会计科目">
           <template slot-scope="scope">
-            {{scope.row.account.accountName}}
+            {{scope.row.debitAccount.accountName}}
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="贷方会计科目">
+          <template slot-scope="scope">
+            {{scope.row.creditAccount.accountName}}
           </template>
         </el-table-column>
         <el-table-column align="center" label="状态">
@@ -80,8 +85,23 @@
               <!-- <el-option label="面向角色" value="ROLE"></el-option> -->
             </el-select>
           </el-form-item>
-          <el-form-item label="会计科目" prop="accountId">
-            <el-select class="length" v-model="feeForm.accountId" placeholder="请选择会计科目">
+          <el-form-item label="借方会计科目" prop="debitAccountId">
+            <el-select class="length" v-model="feeForm.debitAccountId" placeholder="请选择借方会计科目">
+              <el-option
+                v-for="item in accountList"
+                :key="item.id"
+                :label="item.accountName"
+                :value="item.id"
+              >
+                <el-row>
+                  <el-col :span="12">{{ item.code }}</el-col>
+                  <el-col :span="12" class="rightAlign">{{item.accountName}}</el-col>
+                </el-row>
+              </el-option>
+            </el-select>           
+          </el-form-item>
+          <el-form-item label="贷方会计科目" prop="creditAccountId">
+            <el-select class="length" v-model="feeForm.creditAccountId" placeholder="请选择贷方会计科目">
               <el-option
                 v-for="item in accountList"
                 :key="item.id"
@@ -129,7 +149,8 @@ export default {
         amount: "",
         feeMethod: "",
         state: "TRUE",
-        accountId: ""
+        debitAccountId: "",
+        creditAccountId:""
       },
       rules: {
         name: [{ required: true, message: "请输入费用名称", trigger: "blur" }],
@@ -143,13 +164,20 @@ export default {
         feeMethod: [
           { required: true, message: "请选择收费方式", trigger: "change" }
         ],
-        accountId: [
+        debitAccountId: [
           {
             required: true,
-            message: "请选择会计科目",
+            message: "请选择借方会计科目",
             trigger: "change"
           }
-        ]
+        ],
+        creditAccountId: [
+          {
+            required: true,
+            message: "请选择贷方会计科目",
+            trigger: "change"
+          }
+        ],
       },
       accountList: [],
       formOptions: [
@@ -177,7 +205,7 @@ export default {
       flag: true,
       searchVal: {
         name: "",
-        isLeaf: ""
+        state: ""
       }
     };
   },

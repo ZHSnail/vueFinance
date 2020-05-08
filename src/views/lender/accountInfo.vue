@@ -35,6 +35,16 @@
       <el-table-column align="center" prop="accountName" label="科目名称"></el-table-column>
       <el-table-column align="center" prop="code" label="科目编码"></el-table-column>
       <el-table-column align="center" prop="level" label="级次"></el-table-column>
+      <el-table-column align="center" prop="type" label="科目类型">
+        <template slot-scope="scope">
+          <span v-if="scope.row.type == 'ASSETS'">资产类</span>
+          <span v-if="scope.row.type == 'COST'">成本类</span>
+          <span v-if="scope.row.type == 'EXPENSES'">费用类</span>
+          <span v-if="scope.row.type == 'LIABILITIES'">负债类</span>
+          <span v-if="scope.row.type == 'OWNER'">所有者权益类</span>
+          <span v-if="scope.row.type == 'INCOME'">收入类</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="isCash" label="是否现金"></el-table-column>
       <el-table-column align="center" prop="isBank" label="是否银行"></el-table-column>
       <el-table-column align="center" prop="isDetail" label="是否明细"></el-table-column>
@@ -90,6 +100,16 @@
                   <el-col :span="12" class="rightAlign">{{item.accountName}}</el-col>
                 </el-row>
               </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="科目类型" prop="type">
+            <el-select class="length" v-model="accountForm.type" placeholder="请选择科目类型">
+              <el-option label="资产类" value="ASSETS"></el-option>
+              <el-option label="成本类" value="COST"></el-option>
+              <el-option label="费用类" value="EXPENSES"></el-option>
+              <el-option label="负债类" value="LIABILITIES"></el-option>
+              <el-option label="所有者权益类" value="OWNER"></el-option>
+              <el-option label="收入类" value="INCOME"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="是否明细" prop="isDetail">
@@ -169,7 +189,8 @@ export default {
         parentId: "",
         isCash: "TRUE",
         isBank: "TRUE",
-        isDetail: "TRUE"
+        isDetail: "TRUE",
+        type:"",
       },
       rules: {
         accountName: [
@@ -194,6 +215,9 @@ export default {
         ],
         parentId: [
           { required: true, message: "请选择父级科目", trigger: "change" }
+        ],
+        type:[
+          { required: true, message: "请选择会计科目类型", trigger: "change" }
         ]
       },
       accountList: [],

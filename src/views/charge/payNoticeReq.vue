@@ -360,7 +360,7 @@ export default {
     this.getFeeKindList();
     this.findProfessionList();
     this.findDormList();
-    if (typeof this.$route.params.id != undefined) {
+    if (typeof this.$route.params.id != "undefined") {
       this.showDeleteButton = true;
       this.initData(this.$route.params.id);
     }
@@ -390,7 +390,7 @@ export default {
     });
 
     this.$watch("dormList", function(newVal, oldVal) {
-      if (typeof this.$route.params.id != undefined && this.feeForm.feeKind.feeMethod == "DORM") {
+      if (typeof this.$route.params.id != "undefined" && typeof this.feeForm.feeKind != "undefined" && this.feeForm.feeKind.feeMethod == "DORM") {
         var temp = [];
         this.tempFeeScope.forEach(item => {
           var Obj = this.Utils.findObj(this.dormList, "id", item);
@@ -401,7 +401,7 @@ export default {
     });
 
     this.$watch("majorList", function(newVal, oldVal) {
-      if (typeof this.$route.params.id != undefined && this.feeForm.feeKind.feeMethod == "MAJOR") {
+      if (typeof this.$route.params.id != "undefined" && typeof this.feeForm.feeKind != "undefined" && this.feeForm.feeKind.feeMethod == "MAJOR") {
         var temp = [];
         this.tempFeeScope.forEach(professionId => {
           this.majorList.forEach(item => {

@@ -56,7 +56,7 @@ export default {
           deadline.push(res.obj.deadLineMax);
           this.feeForm.deadline = deadline;
           this.userInfo = this.Utils.getUser();
-          if(this.userInfo.id === this.feeForm.creater){
+          if(this.userInfo.id === this.feeForm.creater && this.feeForm.status === "CMT"){
             this.show = true;
           }
         }
@@ -85,7 +85,6 @@ export default {
   created() {
     if (typeof this.$route.params.id != undefined) {
       this.id = this.$route.params.id;
-      this.showDeleteButton = true;
       this.initData(this.$route.params.id);
     }
   },

@@ -2,7 +2,7 @@
   <div class="payNoticeReview">
     <div>
       <my-pageheader titleContent="通知缴费单审核"></my-pageheader>
-      <div style="margin-top:20px">
+      <div style="margin-top:20px" v-if="taskList.length != 0">
         <my-card
           :objList="taskList"
           :total="total"
@@ -23,6 +23,9 @@
             </row>
           </template>
         </my-card>
+      </div>
+      <div class="centerAlign" v-else>
+        <h4 style="color:red">暂无数据</h4>
       </div>
     </div>
   </div>

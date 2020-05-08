@@ -77,14 +77,15 @@
       <el-tab-pane label="在线缴费" name="payOline">
         <my-card
           :objList="feeDetailList"
-          :total="100"
-          :page-size="7"
+          :total="total"
+          :page-size="page.pageSize"
           @getCurrentPage="getCurrentPage"
+          v-if="feeDetailList.length != 0"
         >
           <template v-slot:item="{ item }">
             <row>
               <template slot="left">
-                <span class="xlarge">{{item.name}}</span>
+                <span class="xlarge">{{item.payNotice.feeKind.name}}</span>
               </template>
             </row>
             <row>
@@ -92,11 +93,12 @@
               <template slot="right">{{item.createTime}}</template>
             </row>
             <row>
-              <template slot="left">金额：{{item.amount}}</template>
-              <template slot="right">{{item.org}}</template>
+              <template slot="left">金额：{{item.amount + " 元"}}</template>
+              <template slot="right">{{item.payNotice.org}}</template>
             </row>
           </template>
         </my-card>
+        <h4 class="centerAlign" style="color:red" v-else>暂无数据</h4>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -110,92 +112,19 @@ export default {
   props: {},
   data() {
     return {
-      feeDetailList: [
-        {
-          id: "1",
-          code: "XF2002120003",
-          name: "学费",
-          createTime: this.Utils.getNowFormatDate(),
-          amount: this.Utils.convertCurrency(1000),
-          org: "仲恺农业工程学院",
-          payTime: "2019-2020",
-          timeMold: "学年"
-        },
-        {
-          id: "2",
-          code: "XF2002120003",
-          name: "宿舍费",
-          createTime: this.Utils.getNowFormatDate(),
-          amount: "2000.00",
-          org: "仲恺农业工程学院"
-        },
-        {
-          id: "3",
-          code: "XF2002120003",
-          name: "电费",
-          createTime: this.Utils.getNowFormatDate(),
-          org: "仲恺农业工程学院"
-        },
-        {
-          id: "4",
-          code: "XF2002120003",
-          name: "电费",
-          createTime: this.Utils.getNowFormatDate(),
-          org: "仲恺农业工程学院"
-        }
-      ],
-      currentPage: 1,
+      feeDetailList: [],
       active: false,
-      payNoticeList: {
-        draftList: [
-          {
-            id: "1",
-            code: "SF2002160001",
-            memo: "2019-2020学年学费",
-            amount: "7962.12",
-            status: "草稿",
-            createTime: this.Utils.getNowFormatDate()
-          }
-        ], //草稿列表
-        cmtList: [
-          {
-            id: "2",
-            code: "SF2002160001",
-            memo: "2019-2020学年学费",
-            amount: "7962.12",
-            status: "审核中",
-            createTime: this.Utils.getNowFormatDate()
-          }
-        ], //审核中的列表
-        exeList: [
-          {
-            id: "3",
-            code: "SF2002160001",
-            memo: "2019-2020学年学费",
-            amount: "7962.12",
-            status: "正在执行",
-            createTime: this.Utils.getNowFormatDate()
-          }
-        ], //正在执行的列表
-        finishList: [
-          {
-            id: "4",
-            code: "SF2002160001",
-            memo: "2019-2020学年学费",
-            amount: "7962.12",
-            status: "已完成",
-            createTime: this.Utils.getNowFormatDate()
-          }
-        ] //已经完成的列表
-      },
+      payNoticeList: {},
+      total: 0,
+      page: {
+        pageNum: 1,
+        pageSize: 7
+      }
     };
   },
   watch: {},
   computed: {},
   methods: {
-    getCurrentPage(val) {
-      this.currentPage = val;
-    },
     handleClick(tab, event) {
       if (tab.label == "通知缴费") {
         this.active = false;
@@ -213,10 +142,23 @@ export default {
           this.payNoticeList = res.obj;
         }
       });
+    },
+    searchData() {
+      var url = "/charge/payDetailList";
+      this.axios.get(url,{ params: { params: JSON.stringify(this.page) } }).then(res => {
+        if (res.success) {
+          this.feeDetailList = res.obj.list;
+          this.total = res.obj.total
+        }
+      });
+    },
+    getCurrentPage(val) {
+      this.page.pageNum = val;
     }
   },
   created() {
     this.findPayNoticeList();
+    this.searchData();
   },
   mounted() {}
 };

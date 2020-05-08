@@ -20,7 +20,8 @@ export default {
   components: {},
   props: {
     workKey: String,
-    bizId: String
+    bizId: String,
+    url:String
   },
   data() {
     return {
@@ -46,6 +47,7 @@ export default {
             message: res.msg,
             center: true
           });
+          this.$router.push({ path: this.url });
         }
       });
     },
@@ -63,6 +65,7 @@ export default {
             message: res.msg,
             center: true
           });
+          this.$router.push({ path: this.url });
         }
       });
     }
