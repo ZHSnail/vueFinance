@@ -349,12 +349,14 @@
           <span slot="title">系统管理</span>
         </template>
         <el-menu-item-group>
+          <router-link to="/finance/system/accountInit" tag="div">
           <el-menu-item index="8-1">
             <template slot="title">
               <i class="el-icon-s-operation"></i>
               <span slot="title">初始设置</span>
             </template>
           </el-menu-item>
+          </router-link>
           <router-link to="/finance/system/test" tag="div">
             <el-menu-item index="8-2">
               <template slot="title">

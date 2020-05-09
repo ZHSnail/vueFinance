@@ -55,6 +55,7 @@ import ProfessionInfo from '../views/charge/professionInfo.vue'
 import StudentInfo from '../views/charge/studentInfo.vue'
 import PayNoticeReview from '../views/charge/payNoticeReview.vue'
 import PayNoticeApprove from '../views/charge/payNoticeApprove.vue'
+import AccountInit from '../views/system/accountInit.vue'
 
 Vue.use(VueRouter)
 
@@ -298,7 +299,12 @@ const system = [{
         path: 'system/roleInfo',
         name: 'roleInfo',
         component: RoleInfo
-    }
+    },
+    {
+        path: 'system/accountInit',
+        name: 'accountInit',
+        component: AccountInit
+    },
 ];
 const activity = [{
         path: 'activity/design',

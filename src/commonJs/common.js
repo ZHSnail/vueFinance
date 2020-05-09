@@ -280,6 +280,13 @@ function getUrl() {
 function getUser() {
     return JSON.parse(window.sessionStorage.getItem("userInfo"));
 }
+
+/**
+ * 获取当前用户
+ */
+function getSysParam() {
+    return JSON.parse(window.sessionStorage.getItem("sysParam"));
+}
 export default {
     timestampToDate,
     getNowFormatDate,
@@ -293,4 +300,5 @@ export default {
     downloadFile,
     getImage,
     getUser,
+    getSysParam,
 }
