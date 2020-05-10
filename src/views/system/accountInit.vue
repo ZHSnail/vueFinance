@@ -13,7 +13,7 @@
         ref="sysParam"
         :rules="rules"
         :model="sysParam"
-        label-width="120px"
+        label-width="80px"
         :status-icon="true"
         size="small"
       >
@@ -55,8 +55,88 @@
         </el-row>
       </el-form>
     </my-collapse>
+    <my-collapse v-if="active == 1" title="会计科目余额初始化" class="leftAlign">
+      <el-form ref="accountBalanceForm" :model="accountBalanceForm" :status-icon="true" size="mini">
+        <el-table
+          cell-class-name="centerAlign"
+          :data="accountBalanceForm.accountBalanceList"
+          stripe
+          style="width: 100%"
+        >
+          <el-table-column align="center" prop="accountName" label="科目名称"></el-table-column>
+          <el-table-column align="center" prop="accountCode" label="科目编码"></el-table-column>
+          <el-table-column align="center" prop="accountType" label="科目类型">
+            <template slot-scope="scope">
+              <span v-if="scope.row.accountType == 'ASSETS'">资产类</span>
+              <span v-if="scope.row.accountType == 'COST'">成本类</span>
+              <span v-if="scope.row.accountType == 'EXPENSES'">费用类</span>
+              <span v-if="scope.row.accountType == 'LIABILITIES'">负债类</span>
+              <span v-if="scope.row.accountType == 'OWNER'">所有者权益类</span>
+              <span v-if="scope.row.accountType == 'INCOME'">收入类</span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" label="借方期初余额">
+            <template slot-scope="scope">
+              <el-form-item
+                :prop="'accountBalanceList.' + scope.$index + '.debitStaperiodAmt'"
+                :rules="accountBalanceRules.debitStaperiodAmt"
+              >
+                <el-input v-model.number="scope.row.debitStaperiodAmt"></el-input>
+              </el-form-item>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" label="贷方期初余额">
+            <template slot-scope="scope">
+              <el-form-item
+                :prop="'accountBalanceList.' + scope.$index + '.creditStaperiodAmt'"
+                :rules="accountBalanceRules.creditStaperiodAmt"
+              >
+                <el-input v-model.number="scope.row.creditStaperiodAmt"></el-input>
+              </el-form-item>
+            </template>
+          </el-table-column>
+          <!-- <el-table-column align="center" label="借方年初余额">
+            <template slot-scope="scope">
+              <el-form-item
+                :prop="'accountBalanceList.' + scope.$index + '.debitStayearAmt'"
+                :rules="accountBalanceRules.debitStayearAmt"
+              >
+                <el-input v-model.number="scope.row.debitStayearAmt"></el-input>
+              </el-form-item>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" label="贷方年初余额">
+            <template slot-scope="scope">
+              <el-form-item
+                :prop="'accountBalanceList.' + scope.$index + '.creditStayearAmt'"
+                :rules="accountBalanceRules.creditStayearAmt"
+              >
+                <el-input v-model.number="scope.row.creditStayearAmt"></el-input>
+              </el-form-item>
+            </template>
+          </el-table-column> -->
+        </el-table>
+      </el-form>
+      <el-row>
+        <el-col :span="24">
+          <el-pagination
+            background
+            @current-change="handleCurrentChange"
+            :page-size="pageSize"
+            layout="prev, pager, next, jumper"
+            :total="total"
+            class="centerAlign"
+            :hide-on-single-page="true"
+            :current-page="pageNum"
+          ></el-pagination>
+        </el-col>
+      </el-row>
+    </my-collapse>
     <div class="rightAlign">
-      <el-button type="primary" @click="next()">下一步</el-button>
+      <el-button type="primary" v-if="active>=1" @click="pre()">上一步</el-button>
+      <el-button type="primary" v-if="active == 0" @click="checkData('sysParam')">下一步</el-button>
+      <el-button type="primary" v-if="active == 1" @click="checkData('sysParam')">下一步</el-button>
+      <el-button type="success" v-if="active == 2">试算会计科目</el-button>
     </div>
   </div>
 </template>
@@ -117,14 +197,40 @@ export default {
             }
           }
         ]
-      }
+      },
+      accountList: [],
+      accountBalanceForm: {
+        accountBalanceList: []
+      },
+      accountBalanceRules: {
+        debitStaperiodAmt: [
+          { required: true, message: "请输入借方期初余额", trigger: "blur" }
+        ],
+        creditStaperiodAmt: [
+          { required: true, message: "请输入贷方期初余额", trigger: "blur" }
+        ],
+        debitStayearAmt: [
+          { required: true, message: "请输入借方年初余额", trigger: "blur" }
+        ],
+        creditStayearAmt: [
+          { required: true, message: "请输入贷方年初余额", trigger: "blur" }
+        ]
+      },
+      accountBalanceData: [],
+      pageSize: 10,
+      total: 0,
+      pageNum: 1,
+      pageTemp:1,
     };
   },
   watch: {},
   computed: {},
   methods: {
+    pre() {
+      this.active = this.active - 1;
+    },
     next() {
-      if (this.active++ > 2) this.active = 0;
+      this.active = this.active + 1;
       console.log(this.sysParam);
       //  this.sysParam.nowAccountPeriod =  this.Utils.timestampToDate(this.sysParam.nowAccountPeriod)
     },
@@ -140,10 +246,55 @@ export default {
           this.$router.push("/finance");
         }
       });
+    },
+    checkData(name) {
+      // var formRefs = [this.$refs[name]];
+      // this.Utils.checkForm(formRefs).then(res => {
+      //   if (res) {
+      //     this.next();
+      //   }
+      // });
+      this.next();
+    },
+    findAccountList() {
+      var url = "/lender/allAccount";
+      this.axios.get(url).then(res => {
+        if (res.success) {
+          res.obj.forEach(item => {
+            (item.debitStaperiodAmt = ""), //借方
+              (item.creditStaperiodAmt = ""), //贷方期初余额
+              (item.debitStayearAmt = ""), //借方年初余额
+              (item.creditStayearAmt = ""), //贷方年初余额
+              (item.accountPeriod = this.sysParam.nowAccountPeriod);
+          });
+          this.accountBalanceForm.accountBalanceList = this.Utils.copyObj(
+            res.obj
+          );
+        }
+      });
+    },
+    search(val) {
+      var url = "/lender/accBalanceInitData";
+      var data = val ? JSON.stringify(val) : "";
+      this.axios.get(url, { params: { params: data } }).then(res => {
+        if (res.success) {
+          console.log(res.obj)
+          this.accountBalanceForm.accountBalanceList = this.Utils.copyObj(
+            res.obj.list
+          );
+          this.total = res.obj.total;
+        }
+      });
+    },
+    handleCurrentChange(val) {
+      this.pageNum = val;
+      var data = { pageNum: val };
+      this.search(data);
     }
   },
   created() {
     this.check();
+    this.search();
   },
   mounted() {}
 };

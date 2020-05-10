@@ -89,7 +89,6 @@ export default {
         if (res.success) {
           this.tableData = res.obj.list;
           this.total = res.obj.total;
-          console.log(this.total);
         }
       });
     },
