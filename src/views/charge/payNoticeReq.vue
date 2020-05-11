@@ -94,14 +94,27 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="会计科目" v-if="feeForm.feeKind.account" prop="account">
+              <el-form-item label="借方会计科目" v-if="feeForm.feeKind.debitAccount" prop="account">
                 <el-input
                   class="length"
-                  v-model="feeForm.feeKind.account.accountName"
+                  v-model="feeForm.feeKind.debitAccount.accountName"
                   :readonly="true"
                 ></el-input>
               </el-form-item>
             </el-col>
+            
+            <el-col :span="8">
+              <el-form-item label="贷方会计科目" v-if="feeForm.feeKind.creditAccount" prop="account">
+                <el-input
+                  class="length"
+                  v-model="feeForm.feeKind.creditAccount.accountName"
+                  :readonly="true"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+            
+          </el-row>
+          <el-row>
             <el-col :span="8">
               <el-form-item
                 prop="period"
@@ -111,8 +124,6 @@
                 <el-input class="length" v-model="feeForm.period"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
             <el-col :span="8">
               <el-form-item label="收费机构" prop="org">
                 <el-input class="length" v-model="feeForm.org"></el-input>

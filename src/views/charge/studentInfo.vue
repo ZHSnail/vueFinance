@@ -102,7 +102,7 @@
           :total="total"
           class="centerAlign"
           :hide-on-single-page="true"
-          :current-page="pageNum"
+          :current-page.sync="pageNum"
         ></el-pagination>
       </el-col>
     </el-row>
@@ -187,6 +187,7 @@ export default {
         if (res.success) {
           this.tableData = res.obj.list;
           this.total = res.obj.total;
+          this.pageNum = res.obj.pageNum;
         }
       });
     },

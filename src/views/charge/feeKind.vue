@@ -56,7 +56,7 @@
             :total="total"
             class="centerAlign"
             :hide-on-single-page="true"
-            :current-page="pageNum"
+            :current-page.sync="pageNum"
           ></el-pagination>
         </el-col>
       </el-row>
@@ -86,7 +86,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="借方会计科目" prop="debitAccountId">
-            <el-select class="length" v-model="feeForm.debitAccountId" placeholder="请选择借方会计科目">
+            <select-account v-model="feeForm.debitAccountId" height="32" width="250px"></select-account>
+            <!-- <el-select class="length" v-model="feeForm.debitAccountId" placeholder="请选择借方会计科目">
               <el-option
                 v-for="item in accountList"
                 :key="item.id"
@@ -98,10 +99,11 @@
                   <el-col :span="12" class="rightAlign">{{item.accountName}}</el-col>
                 </el-row>
               </el-option>
-            </el-select>           
+            </el-select>            -->
           </el-form-item>
           <el-form-item label="贷方会计科目" prop="creditAccountId">
-            <el-select class="length" v-model="feeForm.creditAccountId" placeholder="请选择贷方会计科目">
+            <select-account v-model="feeForm.creditAccountId" height="32" width="250px"></select-account>
+            <!-- <el-select class="length" v-model="feeForm.creditAccountId" placeholder="请选择贷方会计科目">
               <el-option
                 v-for="item in accountList"
                 :key="item.id"
@@ -113,7 +115,7 @@
                   <el-col :span="12" class="rightAlign">{{item.accountName}}</el-col>
                 </el-row>
               </el-option>
-            </el-select>
+            </el-select> -->
           </el-form-item>
           <el-form-item label="状态" style="margin-left:35px">
             <el-radio-group class="length" v-model="feeForm.state">
@@ -222,6 +224,7 @@ export default {
         if (res.success) {
           this.tableData = res.obj.list;
           this.total = res.obj.total;
+          this.pageNum = res.obj.pageNum;
         }
       });
     },
@@ -243,14 +246,6 @@ export default {
     handleClose() {
       this.$refs["feeForm"].resetFields();
       this.Utils.clearObj(this.feeForm);
-    },
-    findAccountList() {
-      var url = "/lender/allAccount";
-      this.axios.get(url).then(res => {
-        if (res.success) {
-          this.accountList = res.obj;
-        }
-      });
     },
     save() {
       var formRefs = [this.$refs["feeForm"]];
@@ -287,7 +282,6 @@ export default {
   },
   created() {
     this.search({state:"TRUE"});
-    this.findAccountList();
   },
   mounted() {}
 };

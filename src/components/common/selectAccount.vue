@@ -35,10 +35,10 @@
       center
       append-to-body
       :close-on-click-modal="false"
-      width="400px"
+      :destroy-on-close="true"
     >
       <div>
-        <searchForm style="width:500px" :formOptions="formOptions" btnItems="search"></searchForm>
+        <searchForm :formOptions="formOptions"  @onSearch="search" btnItems="search"></searchForm>
       </div>
       <el-table
         ref="singleTable"
@@ -50,8 +50,18 @@
         style="width: 100%"
       >
         <el-table-column type="selection" v-if="ismultiple" width="55"></el-table-column>
+        <el-table-column align="center" prop="type" label="科目类型">
+        <template slot-scope="scope">
+          <span v-if="scope.row.type == 'ASSETS'">资产类</span>
+          <span v-if="scope.row.type == 'COST'">成本类</span>
+          <span v-if="scope.row.type == 'EXPENSES'">费用类</span>
+          <span v-if="scope.row.type == 'LIABILITIES'">负债类</span>
+          <span v-if="scope.row.type == 'OWNER'">所有者权益类</span>
+          <span v-if="scope.row.type == 'INCOME'">收入类</span>
+        </template>
+      </el-table-column>
         <el-table-column align="center" prop="code" label="会计科目编码"></el-table-column>
-        <el-table-column align="center" prop="name" label="会计科目名称"></el-table-column>
+        <el-table-column align="center" prop="accountName" label="会计科目名称"></el-table-column>
       </el-table>
       <div slot="footer" class="dialog-footer" v-if="ismultiple">
         <el-button size="mini" @click="dialogFormVisible = false">取 消</el-button>
@@ -65,6 +75,7 @@
           layout="prev, pager, next"
           :total="total"
           class="centerAlign"
+          :current-page.sync="pageNum"
           small
           :hide-on-single-page="true"
         ></el-pagination>
@@ -88,29 +99,50 @@ export default {
   },
   data() {
     return {
-      accountList: [
-        { id: "1", name: "行政收入", code: "4001" },
-        { id: "2", name: "现金", code: "1001" },
-        { id: "3", name: "行政收入", code: "4001" },
-        { id: "4", name: "现金", code: "1001" }
-      ],
+      accountList: [],
       account: this.value,
       show: false,
       showList: [], //展示列表
-      total: 200,
-      pageSize: 10,
       style: {
         height:(this.height ? this.height : 40)+'px' ,
         width:this.width
       },
       formOptions: [
         {
-          label: "名称或编码", // label文字
-          prop: "name", // 字段名
+          label: "科目名称", // label文字
+          prop: "accountName", // 字段名
           element: "el-input", // 指定elementui组件
-          placeholder: "请输入会计科目名称或者会计科目编码" // elementui组件属性
+          placeholder: "请输入科目名称" // elementui组件属性
+        },
+        {
+          label: "科目编码", // label文字
+          prop: "code", // 字段名
+          element: "el-input", // 指定elementui组件
+          placeholder: "请输入科目编码" // elementui组件属性
+        },
+        {
+          label: "科目类型", // label文字
+          prop: "type", // 字段名
+          element: "el-select", // 指定elementui组件
+          placeholder: "请选择科目类型", // elementui组件属性
+          options: [
+            {label:"资产类",value:"ASSETS"},
+            {label:"成本类",value:"COST"},
+            {label:"费用类",value:"EXPENSES"},
+            {label:"负债类",value:"LIABILITIES"},
+            {label:"所有者权益类",value:"OWNER"},
+            {label:"收入类",value:"INCOME"},
+          ],
         }
-      ]
+      ],
+      pageSize: 10,
+      total: 0,
+      pageNum:1,
+      searchVal:{
+        accountName: "",
+        code: "",
+        type:""
+      },
     };
   },
   watch: {
@@ -133,6 +165,7 @@ export default {
   computed: {},
   methods: {
     open() {
+      this.search();
       this.show = !this.show;
     },
     query() {
@@ -152,7 +185,7 @@ export default {
           this.$refs.singleTable.toggleRowSelection(val);
         } else {
           this.showList = [];
-          this.showList.push(val.name);
+          this.showList.push(val.accountName);
           this.account = val.id;
           this.$emit("input", this.account);
           this.show = !this.show;
@@ -164,7 +197,7 @@ export default {
       if (this.ismultiple) {
         this.account = [];
         this.showList.forEach(item => {
-          var Obj = this.Utils.findObj(this.accountList, "name", item);
+          var Obj = this.Utils.findObj(this.accountList, "accountName", item);
           this.account.push(Obj.id);
         });
         this.$emit("input", this.account);
@@ -178,17 +211,36 @@ export default {
       this.$emit("input", this.account);
       this.show = !this.show;
     },
-    handlePageChange(val) {},
     handleSelectionChange(val) {
       if (val.length > 0) {
         this.showList = [];
         this.account = [];
         val.forEach(item => {
           this.account.push(item.id);
-          this.showList.push(item.name);
+          this.showList.push(item.accountName);
         });
       }
-    }
+    },
+    search(val) {
+      var url = "/lender/allAccount";
+      var data = val ? JSON.stringify(val) : "";
+      if(val){
+        this.searchVal = this.Utils.copyObj(val);
+      }
+      this.axios.get(url, { params: { params: data } }).then(res => {
+        if (res.success) {
+          this.accountList = res.obj.list;
+          this.pageNum = res.obj.pageNum;
+          this.total = res.obj.total;
+        }
+      });
+    },
+    handlePageChange(val) {
+      this.pageNum = val;
+      var data = this.Utils.copyObj(this.searchVal);
+      data.pageNum = val;
+      this.search(data);
+    },
   },
   created() {
     this.showList = [];
@@ -196,13 +248,13 @@ export default {
       this.account.forEach(item => {
         var Obj = this.Utils.findObj(this.accountList, "id", item);
         if (Obj) {
-          this.showList.push(Obj.name);
+          this.showList.push(Obj.accountName);
         }
       });
     } else {
       var Obj = this.Utils.findObj(this.accountList, "id", this.account);
       if (Obj) {
-        this.showList.push(Obj.name);
+        this.showList.push(Obj.accountName);
       }
     }
   },
@@ -210,4 +262,5 @@ export default {
 };
 </script>
 <style scoped>
+
 </style>
