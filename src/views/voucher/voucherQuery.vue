@@ -1,6 +1,13 @@
 <template>
   <div class="voucherQuery">
     <my-pageheader titleContent="凭证查询"></my-pageheader>
+    <div>
+      <searchForm
+        :formOptions="formOptions"
+        @onSearch="search"
+        btnItems="search"
+      ></searchForm>
+    </div>
      <el-table cell-class-name="centerAlign" :data="tableData" stripe style="width: 100%">
       <el-table-column align="center" prop="code" label="凭证号"></el-table-column>
       <el-table-column align="center" prop="name" label="会计期间"></el-table-column>
@@ -29,6 +36,7 @@
           :total="total"
           class="centerAlign"
           :hide-on-single-page="true"
+          :current-page.sync="pageNum"
         ></el-pagination>
       </el-col>
     </el-row>
@@ -42,17 +50,58 @@ export default {
   props: {},
   data() {
     return {
+      formOptions: [
+        {
+          label: "凭证号", // label文字
+          prop: "code", // 字段名
+          element: "el-input", // 指定elementui组件
+          placeholder: "请输入凭证号" // elementui组件属性
+        },
+        {
+          label: "会计期间", // label文字
+          prop: "accountPeriod", // 字段名
+          element: "el-date-picker", // 指定elementui组件
+          placeholder: "请选择会计期间", // elementui组件属性
+          type:"month"
+        }
+      ],
       tableData: [],
-      total: 200,
-      pageSize: 10
+      pageSize: 10,
+      total: 0,
+      pageNum:1,
+      searchVal:{
+        name: "",
+        isLeaf: "",
+      },
     };
   },
   watch: {},
   computed: {},
   methods: {
-    handleCurrentChange(val) {}
+    search(val) {
+      var url = "/charge/professionList";
+      var data = val ? JSON.stringify(val) : "";
+      if(val){
+        this.searchVal = this.Utils.copyObj(val);
+      }
+      this.axios.get(url, { params: { params: data } }).then(res => {
+        if (res.success) {
+          this.tableData = res.obj.list;
+          this.total = res.obj.total;
+          this.pageNum = res.obj.pageNum;
+        }
+      });
+    },
+    handleCurrentChange(val) {
+      this.pageNum = val;
+      var data = this.Utils.copyObj(this.searchVal);
+      data.pageNum = val;
+      this.search(data);
+    },
   },
-  created() {},
+  created() {
+    // this.search({isLeaf:"TRUE"});
+  },
   mounted() {}
 };
 </script>

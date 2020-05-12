@@ -60,7 +60,17 @@
       end-placeholder="结束日期"
       value-format="yyyy-MM"
     ></el-date-picker>
-
+    <!-- month -->
+    <el-date-picker
+      v-if="isDatePickerMonth"
+      v-model="currentVal"
+      v-bind="bindProps"
+      v-on="bindEvents"
+      type="month"
+      size="mini"
+      clearable
+      value-format="yyyyMM"
+    ></el-date-picker>
     <!-- others -->
     <el-date-picker
       v-if="isDatePickerOthers"
@@ -170,8 +180,13 @@ export default {
       return (
         isDatePicker &&
         !this.isDatePickerDateRange &&
-        !this.isDatePickerMonthRange
+        !this.isDatePickerMonthRange &&!this.isDatePickerMonth
       );
+    },
+    isDatePickerMonth(){
+         const isDatePicker = this.itemOptions.element === "el-date-picker";
+         const isMonth = this.itemOptions.type === "month";
+        return isDatePicker && isMonth;
     },
     // el-cascader
     isCascader() {
