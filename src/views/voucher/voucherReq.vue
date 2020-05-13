@@ -37,14 +37,14 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="会计期间" prop="accountPeriod">
-              <el-input class="length" readonly  v-model="voucherReqForm.accountPeriod"></el-input>
+              <el-input class="length" readonly v-model="voucherReqForm.accountPeriod"></el-input>
             </el-form-item>
           </el-col>
           <!-- <el-col :span="8">
             <el-form-item label="业务类型" prop="bizType">
               <el-input class="length" v-model="voucherReqForm.bizType"></el-input>
             </el-form-item>
-          </el-col> -->
+          </el-col>-->
         </el-row>
         <el-row>
           <el-col :span="24">
@@ -137,7 +137,7 @@
                 <el-button size="small" type="primary">点击上传</el-button>
                 <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
               </el-upload>
-            </el-form-item> -->
+            </el-form-item>-->
           </el-col>
         </el-row>
       </el-form>
@@ -172,15 +172,13 @@ export default {
         accountPeriod: "",
         bizType: "",
         dealType: "OTHER",
-        bizDate:""
+        bizDate: ""
       },
       rules: {
         bizDate: [
           { required: true, message: "请选择记账日期", trigger: "change" }
         ],
-        memo: [
-          { required: true, message: "请输入摘要", trigger: "blur" }
-        ],
+        memo: [{ required: true, message: "请输入摘要", trigger: "blur" }],
         debitAccount: [
           { required: true, message: "请选择借方科目", trigger: "change" }
         ],
@@ -221,36 +219,56 @@ export default {
         if (res.success) {
           this.voucherReqForm = this.Utils.copyObj(res.obj);
           this.voucherReqForm.originator = res.obj.originatorName;
-          console.log(res.obj)
+          var debitAccountList = res.obj.accountTempList.filter(
+            item => item.direction === "DEBIT"
+          );
+          var creditAccountList = res.obj.accountTempList.filter(
+            item => item.direction === "CREDIT"
+          );
+          this.voucherReqForm.entryList = [];
+          for (var i = 0; i < debitAccountList.length; i++) {
+            var entry = {
+              debitAccount: "",
+              creditAccount: "",
+              debitAmt: "",
+              creditAmt: ""
+            };
+            entry.debitAccount = debitAccountList[i].accountId;
+            entry.debitAmt = debitAccountList[i].debitAmt;
+            entry.creditAccount = creditAccountList[i].accountId;
+            entry.creditAmt = creditAccountList[i].creditAmt;
+            this.voucherReqForm.entryList.push(entry);
+          }
+          console.log(this.voucherReqForm.entryList)
         }
       });
     },
-    arrangeData(){
-        var data = this.Utils.copyObj(this.voucherReqForm);
-        var accountTempList = [];
-        var debitTotal = 0;
-        var creditTotal = 0;
-        this.userInfo = this.Utils.getUser();
-        data.originator = this.userInfo.id;
-        data.entryList.forEach(item => {
-          var debitTemp = {};
-          debitTemp.accountId = item.debitAccount;
-          debitTemp.debitAmt = item.debitAmt;
-          debitTemp.direction = "DEBIT";
-          debitTotal += item.debitAmt;
-          var creditTemp = {};
-          creditTemp.accountId = item.creditAccount;
-          creditTemp.creditAmt = item.creditAmt;
-          creditTemp.direction = "CREDIT";
-          creditTotal += item.creditAmt;
-          accountTempList.push(debitTemp);
-          accountTempList.push(creditTemp);
-        });
-        data.debitTotal = debitTotal;
-        data.creditTotal = creditTotal;
-        data.accountTempList = accountTempList;
-        data.bizDate = this.Utils.timestampToDate(this.voucherReqForm.bizDate);
-        return data;
+    arrangeData() {
+      var data = this.Utils.copyObj(this.voucherReqForm);
+      var accountTempList = [];
+      var debitTotal = 0;
+      var creditTotal = 0;
+      this.userInfo = this.Utils.getUser();
+      data.originator = this.userInfo.id;
+      data.entryList.forEach(item => {
+        var debitTemp = {};
+        debitTemp.accountId = item.debitAccount;
+        debitTemp.debitAmt = item.debitAmt;
+        debitTemp.direction = "DEBIT";
+        debitTotal += item.debitAmt;
+        var creditTemp = {};
+        creditTemp.accountId = item.creditAccount;
+        creditTemp.creditAmt = item.creditAmt;
+        creditTemp.direction = "CREDIT";
+        creditTotal += item.creditAmt;
+        accountTempList.push(debitTemp);
+        accountTempList.push(creditTemp);
+      });
+      data.debitTotal = debitTotal;
+      data.creditTotal = creditTotal;
+      data.accountTempList = accountTempList;
+      data.bizDate = this.Utils.timestampToDate(this.voucherReqForm.bizDate);
+      return data;
     },
     save() {
       var data = this.arrangeData();
@@ -282,17 +300,17 @@ export default {
           });
         }
       });
-    },
+    }
   },
   created() {
     if (typeof this.$route.params.id != "undefined") {
       this.showDeleteButton = true;
       this.initData(this.$route.params.id);
-    }else{
-       var sysParam = this.Utils.getSysParam();
-    this.voucherReqForm.accountPeriod = sysParam.nowAccountPeriod;
-    this.userInfo = this.Utils.getUser();
-    this.voucherReqForm.originator = this.userInfo.name;
+    } else {
+      var sysParam = this.Utils.getSysParam();
+      this.voucherReqForm.accountPeriod = sysParam.nowAccountPeriod;
+      this.userInfo = this.Utils.getUser();
+      this.voucherReqForm.originator = this.userInfo.name;
     }
   },
   mounted() {}
