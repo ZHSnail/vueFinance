@@ -9,22 +9,39 @@
       ></searchForm>
     </div>
      <el-table cell-class-name="centerAlign" :data="tableData" stripe style="width: 100%">
-      <el-table-column align="center" prop="code" label="凭证号"></el-table-column>
-      <el-table-column align="center" prop="name" label="会计期间"></el-table-column>
-      <el-table-column align="center" prop="name" label="记账日期"></el-table-column>
-      <el-table-column align="center" prop="name" label="摘要"></el-table-column>
-      <el-table-column align="center" prop="preMeth" label="业务类型">
+      <el-table-column align="center" label="凭证号">
         <template slot-scope="scope">
-          <span>{{scope.row.state == "TRUE" ? "启用":"停用"}}</span>
+          <router-link :to="'voucherDetail/'+scope.row.id" tag="div">
+            <el-link type="primary" :underline="false">{{scope.row.code}}</el-link>
+          </router-link>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="fixAccount" label="过账状态">
-        <template slot-scope="scope">
-          <span v-for="(item) in scope.row.account" :key="item.id">{{item.code+" " + item.name}}</span>
-        </template>
+      <el-table-column align="center" prop="accountPeriod" label="会计期间"></el-table-column>
+      <el-table-column align="center" prop="bizDate" label="记账日期"></el-table-column>
+      <el-table-column align="center" prop="memo" label="摘要"></el-table-column>
+      <el-table-column align="center" prop="bizName" label="业务类型">
+        <!-- <template slot-scope="scope">
+          <span v-if="scope.row.bizType == 'CHARGE_PAY'">收费付款</span>
+          <span v-if="scope.row.bizType == 'SALARY_PAY'">工资付款</span>
+          <span v-if="scope.row.bizType == 'ASSETS_REG'">固定资产登记</span>
+          <span v-if="scope.row.bizType == 'ASSETS_DEPRECIATED'">固定资产折旧</span>
+          <span v-if="scope.row.bizType == 'ASSETS_PURCHASE'">固定资产采购</span>
+          <span v-if="scope.row.bizType == 'MANUAL_VOUCHE'">手工凭证</span>
+        </template> -->
       </el-table-column>
-      <el-table-column align="center" prop="name" label="制单人"></el-table-column>
-      <el-table-column align="center" prop="name" label="状态"></el-table-column>
+      <el-table-column align="center" prop="postingStatus" label="过账状态">
+        <!-- <template slot-scope="scope">
+          <span v-if="scope.row.postingStatus == 'POSTED'">已过账</span>
+          <span v-if="scope.row.postingStatus == 'UNPOST'">未过账</span>
+        </template> -->
+      </el-table-column>
+      <el-table-column align="center" prop="originatorName" label="制单人"></el-table-column>
+      <el-table-column align="center" prop="status" label="状态">
+        <!-- <template slot-scope="scope">
+          <span v-if="scope.row.status == 'CMT'">审核中</span>
+          <span v-if="scope.row.status == 'EXE'">已完成</span>
+        </template> -->
+      </el-table-column>
     </el-table>
     <el-row>
       <el-col :span="24">
@@ -70,8 +87,8 @@ export default {
       total: 0,
       pageNum:1,
       searchVal:{
-        name: "",
-        isLeaf: "",
+        code: "",
+        accountPeriod: "",
       },
     };
   },
@@ -79,13 +96,14 @@ export default {
   computed: {},
   methods: {
     search(val) {
-      var url = "/charge/professionList";
+      var url = "/voucher/voucherList";
       var data = val ? JSON.stringify(val) : "";
       if(val){
         this.searchVal = this.Utils.copyObj(val);
       }
       this.axios.get(url, { params: { params: data } }).then(res => {
         if (res.success) {
+          console.log(res.obj)
           this.tableData = res.obj.list;
           this.total = res.obj.total;
           this.pageNum = res.obj.pageNum;
@@ -100,7 +118,7 @@ export default {
     },
   },
   created() {
-    // this.search({isLeaf:"TRUE"});
+    this.search();
   },
   mounted() {}
 };

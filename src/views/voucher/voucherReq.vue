@@ -29,22 +29,22 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="摘要" prop="voucherMemo">
-              <el-input class="length" v-model="voucherReqForm.voucherMemo"></el-input>
+            <el-form-item label="摘要" prop="memo">
+              <el-input class="length" v-model="voucherReqForm.memo"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="会计期间" prop="accountPeriod">
-              <el-input class="length" v-model="voucherReqForm.accountPeriod"></el-input>
+              <el-input class="length" readonly  v-model="voucherReqForm.accountPeriod"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <!-- <el-col :span="8">
             <el-form-item label="业务类型" prop="bizType">
               <el-input class="length" v-model="voucherReqForm.bizType"></el-input>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
         <el-row>
           <el-col :span="24">
@@ -86,10 +86,10 @@
             <el-col :span="12">
               <el-form-item
                 label="借方金额"
-                :prop="'entryList.' + index + '.debitAmount'"
-                :rules="rules.debitAmount"
+                :prop="'entryList.' + index + '.debitAmt'"
+                :rules="rules.debitAmt"
               >
-                <el-input class="length" v-model.number="entry.debitAmount"></el-input>
+                <el-input class="length" v-model.number="entry.debitAmt"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -106,10 +106,10 @@
             <el-col :span="12">
               <el-form-item
                 label="贷方金额"
-                :prop="'entryList.' + index + '.creditAmount'"
-                :rules="rules.creditAmount"
+                :prop="'entryList.' + index + '.creditAmt'"
+                :rules="rules.creditAmt"
               >
-                <el-input class="length" v-model.number="entry.creditAmount"></el-input>
+                <el-input class="length" v-model.number="entry.creditAmt"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -124,22 +124,20 @@
       <el-form :model="voucherReqForm">
         <el-row>
           <el-col :span="24">
-            <el-form-item label="附件">
+            <!-- <el-form-item label="附件">
               <el-upload
                 class="upload-demo"
                 action="https://jsonplaceholder.typicode.com/posts/"
                 :on-preview="handlePreview"
                 :on-remove="handleRemove"
                 :before-remove="beforeRemove"
-                multiple
-                :limit="3"
                 :on-exceed="handleExceed"
                 :file-list="fileList"
               >
                 <el-button size="small" type="primary">点击上传</el-button>
                 <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
               </el-upload>
-            </el-form-item>
+            </el-form-item> -->
           </el-col>
         </el-row>
       </el-form>
@@ -162,14 +160,13 @@ export default {
     return {
       voucherReqForm: {
         originator: "",
-        postingDate: "",
-        voucherMemo: "",
+        memo: "",
         entryList: [
           {
             debitAccount: "",
             creditAccount: "",
-            debitAmount: "",
-            creditAmount: ""
+            debitAmt: "",
+            creditAmt: ""
           }
         ],
         accountPeriod: "",
@@ -178,10 +175,10 @@ export default {
         bizDate:""
       },
       rules: {
-        postingDate: [
+        bizDate: [
           { required: true, message: "请选择记账日期", trigger: "change" }
         ],
-        voucherMemo: [
+        memo: [
           { required: true, message: "请输入摘要", trigger: "blur" }
         ],
         debitAccount: [
@@ -190,63 +187,114 @@ export default {
         creditAccount: [
           { required: true, message: "请选择贷方科目", trigger: "change" }
         ],
-        debitAmount: [
+        debitAmt: [
           { required: true, message: "请输入借方金额", trigger: "blur" },
           { type: "number", message: "借方金额必须为数字值" }
         ],
-        creditAmount: [
+        creditAmt: [
           { required: true, message: "请输入贷方金额", trigger: "blur" },
           { type: "number", message: "贷方金额必须为数字值" }
         ]
       },
       pickerOptions: tools.pickerOptionsDay,
-      fileList: [
-        {
-          name: "food.jpeg",
-          url:
-            "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-        },
-        {
-          name: "food2.jpeg",
-          url:
-            "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-        }
-      ]
+      fileList: []
     };
   },
   watch: {},
   computed: {},
   methods: {
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    handlePreview(file) {
-      console.log(file);
-    },
-    handleExceed(files, fileList) {
-      this.$message.warning(
-        `当前限制选择 3 个文件，本次选择了 ${
-          files.length
-        } 个文件，共选择了 ${files.length + fileList.length} 个文件`
-      );
-    },
-    beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`);
-    },
     addEntry() {
       var entry = {
         debitAccount: "",
         creditAccount: "",
-        debitAmount: "",
-        creditAmount: ""
+        debitAmt: "",
+        creditAmt: ""
       };
       this.voucherReqForm.entryList.push(entry);
     },
     deleteEntry(index) {
       this.voucherReqForm.entryList.splice(index, 1);
+    },
+    initData(id) {
+      var url = "/voucher/voucher/" + id;
+      this.axios.get(url).then(res => {
+        if (res.success) {
+          this.voucherReqForm = this.Utils.copyObj(res.obj);
+          this.voucherReqForm.originator = res.obj.originatorName;
+          console.log(res.obj)
+        }
+      });
+    },
+    arrangeData(){
+        var data = this.Utils.copyObj(this.voucherReqForm);
+        var accountTempList = [];
+        var debitTotal = 0;
+        var creditTotal = 0;
+        this.userInfo = this.Utils.getUser();
+        data.originator = this.userInfo.id;
+        data.entryList.forEach(item => {
+          var debitTemp = {};
+          debitTemp.accountId = item.debitAccount;
+          debitTemp.debitAmt = item.debitAmt;
+          debitTemp.direction = "DEBIT";
+          debitTotal += item.debitAmt;
+          var creditTemp = {};
+          creditTemp.accountId = item.creditAccount;
+          creditTemp.creditAmt = item.creditAmt;
+          creditTemp.direction = "CREDIT";
+          creditTotal += item.creditAmt;
+          accountTempList.push(debitTemp);
+          accountTempList.push(creditTemp);
+        });
+        data.debitTotal = debitTotal;
+        data.creditTotal = creditTotal;
+        data.accountTempList = accountTempList;
+        data.bizDate = this.Utils.timestampToDate(this.voucherReqForm.bizDate);
+        return data;
+    },
+    save() {
+      var data = this.arrangeData();
+      this.axios.post("/voucher/saveVoucher", data).then(res => {
+        if (res.success) {
+          this.$message({
+            type: "success",
+            message: res.msg,
+            center: true
+          });
+          this.$router.push({ path: "/finance/voucher/voucherList" });
+        }
+      });
+    },
+    commit(formName) {
+      var formRefs = [this.$refs["voucherReqForm"]];
+      this.Utils.checkForm(formRefs).then(res => {
+        if (res) {
+          var data = this.arrangeData();
+          this.axios.post("/voucher/commitVoucher", data).then(res => {
+            if (res.success) {
+              this.$message({
+                type: "success",
+                message: res.msg,
+                center: true
+              });
+              this.$router.push({ path: "/finance/voucher/voucherList" });
+            }
+          });
+        }
+      });
+    },
+  },
+  created() {
+    if (typeof this.$route.params.id != "undefined") {
+      this.showDeleteButton = true;
+      this.initData(this.$route.params.id);
+    }else{
+       var sysParam = this.Utils.getSysParam();
+    this.voucherReqForm.accountPeriod = sysParam.nowAccountPeriod;
+    this.userInfo = this.Utils.getUser();
+    this.voucherReqForm.originator = this.userInfo.name;
     }
   },
-  created() {},
   mounted() {}
 };
 </script>

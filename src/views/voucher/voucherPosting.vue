@@ -2,9 +2,13 @@
   <div class="voucherPosting">
     <my-pageheader titleContent="凭证过账"></my-pageheader>
     <div>
-      <searchForm style="width:500px" :formOptions="formOptions" btnItems="search"></searchForm>
+      <searchForm
+        :formOptions="formOptions"
+        @onSearch="search"
+        btnItems="search"
+      ></searchForm>
     </div>
-    <el-button type="danger" @click="posting()" size="medium">过账</el-button>
+    <el-button type="danger" @click="posting()" style="margin-bottom:25px" size="medium">过账</el-button>
     <el-table
       cell-class-name="centerAlign"
       @selection-change="handleSelectionChange"
@@ -13,22 +17,31 @@
       style="width: 100%"
     >
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column align="center" prop="code" label="凭证号"></el-table-column>
-      <el-table-column align="center" prop="name" label="会计期间"></el-table-column>
-      <el-table-column align="center" prop="name" label="摘要"></el-table-column>
-      <el-table-column align="center" prop="name" label="金额"></el-table-column>
-      <el-table-column align="center" prop="preMeth" label="业务类型">
+      <el-table-column align="center" label="凭证号">
         <template slot-scope="scope">
+          <router-link :to="'voucherDetail/'+scope.row.id" tag="div">
+            <el-link type="primary" :underline="false">{{scope.row.code}}</el-link>
+          </router-link>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" prop="accountPeriod" label="会计期间"></el-table-column>
+      <el-table-column align="center" prop="memo" label="摘要"></el-table-column>
+      <el-table-column align="center" label="金额">
+        <el-table-column align="center" prop="debitTotal" label="借方"></el-table-column>
+        <el-table-column align="center" prop="creditTotal" label="贷方"></el-table-column>
+      </el-table-column>
+      <el-table-column align="center" prop="bizName" label="业务类型">
+        <!-- <template slot-scope="scope">
           <span>{{scope.row.state == "TRUE" ? "启用":"停用"}}</span>
-        </template>
+        </template> -->
       </el-table-column>
-      <el-table-column align="center" prop="fixAccount" label="过账状态">
-        <template slot-scope="scope">
+      <el-table-column align="center" prop="postingStatus" label="过账状态">
+        <!-- <template slot-scope="scope">
           <span v-for="(item) in scope.row.account" :key="item.id">{{item.code+" " + item.name}}</span>
-        </template>
+        </template> -->
       </el-table-column>
-      <el-table-column align="center" prop="name" label="制单人"></el-table-column>
-      <el-table-column align="center" prop="name" label="审核人"></el-table-column>
+      <el-table-column align="center" prop="originatorName" label="制单人"></el-table-column>
+      <el-table-column align="center" prop="auditerName" label="审核人"></el-table-column>
     </el-table>
     <el-row>
       <el-col :span="24">
@@ -40,6 +53,7 @@
           :total="total"
           class="centerAlign"
           :hide-on-single-page="true"
+          :current-page.sync="pageNum"
         ></el-pagination>
       </el-col>
     </el-row>
@@ -53,30 +67,64 @@ export default {
   props: {},
   data() {
     return {
-      tableData: [],
-      total: 200,
-      pageSize: 10,
       formOptions: [
         {
-          label: "名称或编码", // label文字
-          prop: "name", // 字段名
+          label: "凭证号", // label文字
+          prop: "code", // 字段名
           element: "el-input", // 指定elementui组件
-          placeholder: "请输入会计科目名称或者会计科目编码" // elementui组件属性
+          placeholder: "请输入凭证号" // elementui组件属性
+        },
+        {
+          label: "会计期间", // label文字
+          prop: "accountPeriod", // 字段名
+          element: "el-date-picker", // 指定elementui组件
+          placeholder: "请选择会计期间", // elementui组件属性
+          type:"month"
         }
       ],
+      tableData: [],
+      pageSize: 10,
+      total: 0,
+      pageNum:1,
+      searchVal:{
+        code: "",
+        accountPeriod: "",
+      },
       multipleSelection: []
     };
   },
   watch: {},
   computed: {},
   methods: {
-    handleCurrentChange(val) {},
+   search(val) {
+      var url = "/voucher/unpostVoucherList";
+      var data = val ? JSON.stringify(val) : "";
+      if(val){
+        this.searchVal = this.Utils.copyObj(val);
+      }
+      this.axios.get(url, { params: { params: data } }).then(res => {
+        if (res.success) {
+          console.log(res.obj)
+          this.tableData = res.obj.list;
+          this.total = res.obj.total;
+          this.pageNum = res.obj.pageNum;
+        }
+      });
+    },
+    handleCurrentChange(val) {
+      this.pageNum = val;
+      var data = this.Utils.copyObj(this.searchVal);
+      data.pageNum = val;
+      this.search(data);
+    },
     posting() {},
     handleSelectionChange(val) {
       this.multipleSelection = val;
     }
   },
-  created() {},
+  created() {
+     this.search();
+  },
   mounted() {}
 };
 </script>
