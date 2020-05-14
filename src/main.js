@@ -19,7 +19,7 @@ import importExcel from "@/components/common/importExcel.vue";
 import importResult from "@/components/common/importResult.vue";
 import activitiRecord from "@/components/common/activitiRecord.vue";
 import activitiHandle from "@/components/common/activitiHandle.vue";
-
+import upload from "@/components/common/upload.vue";
 
 Vue.component('myCard', myCard)
 Vue.component('myPageheader', myPageheader)
@@ -34,7 +34,7 @@ Vue.component('importExcel', importExcel)
 Vue.component('importResult', importResult)
 Vue.component('activitiRecord', activitiRecord)
 Vue.component('activitiHandle', activitiHandle)
-
+Vue.component('upload', upload)
 
 
 router.beforeEach((to, from, next) => {

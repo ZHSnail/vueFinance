@@ -263,12 +263,10 @@ export default {
         var url = "/lender/selectedAccount/"+this.account;
        this.axios.get(url).then(res => {
         if (res.success) {
-          console.log(res.obj)
           this.showList.push(res.obj.name);
         }
       });
       }
-      console.log(this.account)
       // var Obj = this.Utils.findObj(this.accountList, "id", this.account);
       // if (Obj) {
       //   this.showList.push(Obj.accountName);

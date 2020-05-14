@@ -124,20 +124,9 @@
       <el-form :model="voucherReqForm">
         <el-row>
           <el-col :span="24">
-            <!-- <el-form-item label="附件">
-              <el-upload
-                class="upload-demo"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :before-remove="beforeRemove"
-                :on-exceed="handleExceed"
-                :file-list="fileList"
-              >
-                <el-button size="small" type="primary">点击上传</el-button>
-                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-              </el-upload>
-            </el-form-item>-->
+            <el-form-item label="附件">
+              <upload module="voucher" :needUpload="true"></upload>
+            </el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -161,14 +150,7 @@ export default {
       voucherReqForm: {
         originator: "",
         memo: "",
-        entryList: [
-          {
-            debitAccount: "",
-            creditAccount: "",
-            debitAmt: "",
-            creditAmt: ""
-          }
-        ],
+        entryList: [],
         accountPeriod: "",
         bizType: "",
         dealType: "OTHER",
@@ -217,15 +199,16 @@ export default {
       var url = "/voucher/voucher/" + id;
       this.axios.get(url).then(res => {
         if (res.success) {
-          this.voucherReqForm = this.Utils.copyObj(res.obj);
-          this.voucherReqForm.originator = res.obj.originatorName;
+          var voucherReqForm = {};
+          voucherReqForm = this.Utils.copyObj(res.obj);
+          voucherReqForm.originator = res.obj.originatorName;
           var debitAccountList = res.obj.accountTempList.filter(
             item => item.direction === "DEBIT"
           );
           var creditAccountList = res.obj.accountTempList.filter(
             item => item.direction === "CREDIT"
           );
-          this.voucherReqForm.entryList = [];
+          voucherReqForm.entryList = [];
           for (var i = 0; i < debitAccountList.length; i++) {
             var entry = {
               debitAccount: "",
@@ -237,9 +220,9 @@ export default {
             entry.debitAmt = debitAccountList[i].debitAmt;
             entry.creditAccount = creditAccountList[i].accountId;
             entry.creditAmt = creditAccountList[i].creditAmt;
-            this.voucherReqForm.entryList.push(entry);
+            voucherReqForm.entryList.push(entry);
           }
-          console.log(this.voucherReqForm.entryList)
+          this.voucherReqForm = voucherReqForm;
         }
       });
     },
@@ -288,16 +271,24 @@ export default {
       this.Utils.checkForm(formRefs).then(res => {
         if (res) {
           var data = this.arrangeData();
-          this.axios.post("/voucher/commitVoucher", data).then(res => {
-            if (res.success) {
-              this.$message({
-                type: "success",
-                message: res.msg,
-                center: true
-              });
-              this.$router.push({ path: "/finance/voucher/voucherList" });
-            }
-          });
+          if (data.debitTotal != data.creditTotal) {
+            this.$message({
+              type: "error",
+              message: "会计科目借贷不平！！",
+              center: true
+            });
+          } else {
+            this.axios.post("/voucher/commitVoucher", data).then(res => {
+              if (res.success) {
+                this.$message({
+                  type: "success",
+                  message: res.msg,
+                  center: true
+                });
+                this.$router.push({ path: "/finance/voucher/voucherList" });
+              }
+            });
+          }
         }
       });
     }
