@@ -125,7 +125,7 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="附件">
-              <upload module="voucher" :needUpload="true"></upload>
+              <upload module="voucher" :file-ids.sync="fileList" :needUpload="true"></upload>
             </el-form-item>
           </el-col>
         </el-row>
@@ -177,7 +177,7 @@ export default {
         ]
       },
       pickerOptions: tools.pickerOptionsDay,
-      fileList: []
+      fileList: ["5ebe8406fd9f2730b98a2bc7"],
     };
   },
   watch: {},

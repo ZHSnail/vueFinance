@@ -8,6 +8,8 @@
       :data="uploadData"
       :on-success="uploadSuccess"
       :on-remove="handleRemove"
+      :file-list="fileIds"
+      :on-preview="handlePreview"
     >
       <el-button v-if="needUpload" size="small" type="primary">点击上传</el-button>
     </el-upload>
@@ -20,7 +22,9 @@ export default {
   components: {},
   props: {
     module: String, //模块
-    needUpload:Boolean,
+    needUpload: Boolean,
+    fileIds: Array,
+    needDownload: Boolean
   },
   data() {
     return {
@@ -28,17 +32,21 @@ export default {
       headers: {
         Authorization: window.sessionStorage.getItem("token")
       },
-      uploadData: {},
-      fileId: "",
+      uploadData: {}
     };
   },
-  watch: {},
+  watch: {
+    fileIds: function(newValue, oldValue) {
+      //每当fileIds的值改变则发送事件update:word , 并且把值传过去
+      this.$emit("update:fileIds", newValue);
+    }
+  },
   computed: {},
   methods: {
     uploadSuccess(response, file, fileList) {
       if (response.success) {
-        this.fileId = response.obj.id;
-        this.canImport = true;
+        this.fileIds.push(response.obj.id);
+        console.log(file);
         this.$message({
           type: "success",
           message: "上传文件成功",
@@ -52,31 +60,31 @@ export default {
         });
       }
     },
-     handleRemove(file, fileList) {
-      if (
-        this.fileId != "" &&
-        this.fileId != undefined &&
-        this.fileId != null
-      ) {
-        var url = "/system/file/" + this.fileId;
-        this.axios.delete(url).then(res => {
-          if (res.success) {
-            this.$message({
-              type: "success",
-              message: res.msg,
-              center: true
-            });
-          } else {
-            this.$message({
-              type: "error",
-              message: res.msg,
-              center: true
-            });
-          }
-        });
-        this.fileId ="";
-      }
+    handleRemove(file, fileList) {
+      var url = "/system/file/" + file.response.obj.id;
+      this.axios.delete(url).then(res => {
+        if (res.success) {
+          this.$message({
+            type: "success",
+            message: res.msg,
+            center: true
+          });
+          this.fileIds.splice(this.fileIds.indexOf(file.response.obj.id), 1);
+        } else {
+          this.$message({
+            type: "error",
+            message: res.msg,
+            center: true
+          });
+        }
+      });
     },
+    handlePreview(file) {
+      var url = "/system/download";
+      if (this.needDownload) {
+        this.Utils.downloadFile(url, { id: this.fileId });
+      }
+    }
   },
   created() {
     this.uploadUrl = this.Utils.getUrl();
