@@ -82,40 +82,13 @@
             <el-select class="length" v-model="feeForm.feeMethod" clearable placeholder="请选择收费方式">
               <el-option label="面向宿舍" value="DORM"></el-option>
               <el-option label="面向专业" value="MAJOR"></el-option>
-              <!-- <el-option label="面向角色" value="ROLE"></el-option> -->
             </el-select>
           </el-form-item>
           <el-form-item label="借方会计科目" prop="debitAccountId">
             <select-account v-model="feeForm.debitAccountId" height="32" width="250px"></select-account>
-            <!-- <el-select class="length" v-model="feeForm.debitAccountId" placeholder="请选择借方会计科目">
-              <el-option
-                v-for="item in accountList"
-                :key="item.id"
-                :label="item.accountName"
-                :value="item.id"
-              >
-                <el-row>
-                  <el-col :span="12">{{ item.code }}</el-col>
-                  <el-col :span="12" class="rightAlign">{{item.accountName}}</el-col>
-                </el-row>
-              </el-option>
-            </el-select>            -->
           </el-form-item>
           <el-form-item label="贷方会计科目" prop="creditAccountId">
             <select-account v-model="feeForm.creditAccountId" height="32" width="250px"></select-account>
-            <!-- <el-select class="length" v-model="feeForm.creditAccountId" placeholder="请选择贷方会计科目">
-              <el-option
-                v-for="item in accountList"
-                :key="item.id"
-                :label="item.accountName"
-                :value="item.id"
-              >
-                <el-row>
-                  <el-col :span="12">{{ item.code }}</el-col>
-                  <el-col :span="12" class="rightAlign">{{item.accountName}}</el-col>
-                </el-row>
-              </el-option>
-            </el-select> -->
           </el-form-item>
           <el-form-item label="状态" style="margin-left:35px">
             <el-radio-group class="length" v-model="feeForm.state">

@@ -8,7 +8,7 @@
       :data="uploadData"
       :on-success="uploadSuccess"
       :on-remove="handleRemove"
-      :file-list="fileIds"
+      :file-list="viewFileList"
       :on-preview="handlePreview"
     >
       <el-button v-if="needUpload" size="small" type="primary">点击上传</el-button>
@@ -32,13 +32,17 @@ export default {
       headers: {
         Authorization: window.sessionStorage.getItem("token")
       },
-      uploadData: {}
+      uploadData: {},
+      viewFileList: []
     };
   },
   watch: {
     fileIds: function(newValue, oldValue) {
       //每当fileIds的值改变则发送事件update:word , 并且把值传过去
       this.$emit("update:fileIds", newValue);
+      if(oldValue.length==0){
+        this.viewFile();
+      }
     }
   },
   computed: {},
@@ -46,7 +50,6 @@ export default {
     uploadSuccess(response, file, fileList) {
       if (response.success) {
         this.fileIds.push(response.obj.id);
-        console.log(file);
         this.$message({
           type: "success",
           message: "上传文件成功",
@@ -61,7 +64,12 @@ export default {
       }
     },
     handleRemove(file, fileList) {
-      var url = "/system/file/" + file.response.obj.id;
+      var url = "/system/file/";
+      if (file.response) {
+        url = url + file.response.obj.id;
+      } else {
+        url = url + file.id;
+      }
       this.axios.delete(url).then(res => {
         if (res.success) {
           this.$message({
@@ -69,7 +77,11 @@ export default {
             message: res.msg,
             center: true
           });
-          this.fileIds.splice(this.fileIds.indexOf(file.response.obj.id), 1);
+          if (file.response) {
+            this.fileIds.splice(this.fileIds.indexOf(file.response.obj.id), 1);
+          } else {
+            this.fileIds.splice(this.fileIds.indexOf(file.id), 1);
+          }
         } else {
           this.$message({
             type: "error",
@@ -82,15 +94,28 @@ export default {
     handlePreview(file) {
       var url = "/system/download";
       if (this.needDownload) {
-        this.Utils.downloadFile(url, { id: this.fileId });
+        this.Utils.downloadFile(url, { id: file.response?file.response.obj.id: file.id});
       }
+    },
+    viewFile(){
+      var url = "/system/viewFile";
+      var data = {
+        fileIds: this.fileIds
+      };
+      this.axios.post(url, data).then(res => {
+        this.viewFileList = res.obj;
+      });
     }
   },
   created() {
     this.uploadUrl = this.Utils.getUrl();
     this.uploadData.module = this.module;
+    if (this.fileIds.length > 0) {
+      this.viewFile();
+    }
   },
-  mounted() {}
+  mounted() {
+  }
 };
 </script>
 <style scoped>

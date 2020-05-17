@@ -56,6 +56,8 @@ import StudentInfo from '../views/charge/studentInfo.vue'
 import PayNoticeReview from '../views/charge/payNoticeReview.vue'
 import PayNoticeApprove from '../views/charge/payNoticeApprove.vue'
 import AccountInit from '../views/system/accountInit.vue'
+import VoucherReview from '../views/voucher/voucherReview.vue'
+import VoucherApprove from '../views/voucher/voucherApprove.vue'
 
 Vue.use(VueRouter)
 
@@ -272,6 +274,16 @@ const voucher = [{
         path: 'voucher/voucherPosting',
         name: 'voucherPosting',
         component: VoucherPosting
+    },
+    {
+        path: 'voucher/voucherReview',
+        name: 'voucherReview',
+        component: VoucherReview
+    },
+    {
+        path: 'voucher/voucherApprove/:id',
+        name: 'voucherApprove',
+        component: VoucherApprove
     },
 ];
 const cashier = [{

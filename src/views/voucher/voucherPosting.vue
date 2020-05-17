@@ -40,6 +40,7 @@
           <span v-for="(item) in scope.row.account" :key="item.id">{{item.code+" " + item.name}}</span>
         </template> -->
       </el-table-column>
+      <el-table-column align="center" prop="dealName" label="交易类型"></el-table-column>
       <el-table-column align="center" prop="originatorName" label="制单人"></el-table-column>
       <el-table-column align="center" prop="auditerName" label="审核人"></el-table-column>
     </el-table>
@@ -104,7 +105,6 @@ export default {
       }
       this.axios.get(url, { params: { params: data } }).then(res => {
         if (res.success) {
-          console.log(res.obj)
           this.tableData = res.obj.list;
           this.total = res.obj.total;
           this.pageNum = res.obj.pageNum;

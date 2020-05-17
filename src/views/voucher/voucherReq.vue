@@ -125,7 +125,7 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="附件">
-              <upload module="voucher" :file-ids.sync="fileList" :needUpload="true"></upload>
+              <upload module="voucher" :file-ids.sync="fileIds" :needUpload="true"></upload>
             </el-form-item>
           </el-col>
         </el-row>
@@ -177,7 +177,7 @@ export default {
         ]
       },
       pickerOptions: tools.pickerOptionsDay,
-      fileList: ["5ebe8406fd9f2730b98a2bc7"],
+      fileIds: []
     };
   },
   watch: {},
@@ -223,6 +223,9 @@ export default {
             voucherReqForm.entryList.push(entry);
           }
           this.voucherReqForm = voucherReqForm;
+          if(this.voucherReqForm.fileIds && this.voucherReqForm.fileIds.length>0){
+            this.fileIds = this.Utils.copyObj(this.voucherReqForm.fileIds);
+          }
         }
       });
     },
@@ -251,6 +254,7 @@ export default {
       data.creditTotal = creditTotal;
       data.accountTempList = accountTempList;
       data.bizDate = this.Utils.timestampToDate(this.voucherReqForm.bizDate);
+      data.fileIds = this.fileIds;
       return data;
     },
     save() {
@@ -268,29 +272,37 @@ export default {
     },
     commit(formName) {
       var formRefs = [this.$refs["voucherReqForm"]];
-      this.Utils.checkForm(formRefs).then(res => {
-        if (res) {
-          var data = this.arrangeData();
-          if (data.debitTotal != data.creditTotal) {
-            this.$message({
-              type: "error",
-              message: "会计科目借贷不平！！",
-              center: true
-            });
-          } else {
-            this.axios.post("/voucher/commitVoucher", data).then(res => {
-              if (res.success) {
-                this.$message({
-                  type: "success",
-                  message: res.msg,
-                  center: true
-                });
-                this.$router.push({ path: "/finance/voucher/voucherList" });
-              }
-            });
+      if (this.voucherReqForm.entryList.length == 0) {
+        this.$message({
+          type: "error",
+          message: "会计科目分录信息不能为空！！",
+          center: true
+        });
+      } else {
+        this.Utils.checkForm(formRefs).then(res => {
+          if (res) {
+            var data = this.arrangeData();
+            if (data.debitTotal != data.creditTotal) {
+              this.$message({
+                type: "error",
+                message: "会计科目借贷不平！！",
+                center: true
+              });
+            } else {
+              this.axios.post("/voucher/commitVoucher", data).then(res => {
+                if (res.success) {
+                  this.$message({
+                    type: "success",
+                    message: res.msg,
+                    center: true
+                  });
+                  this.$router.push({ path: "/finance/voucher/voucherList" });
+                }
+              });
+            }
           }
-        }
-      });
+        });
+      }
     }
   },
   created() {

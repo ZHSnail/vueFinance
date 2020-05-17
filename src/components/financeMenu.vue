@@ -242,12 +242,14 @@
               </template>
             </el-menu-item>
           </router-link>
-          <el-menu-item index="4-4">
-            <template slot="title">
-              <i class="el-icon-tickets"></i>
-              <span slot="title">凭证审核</span>
-            </template>
-          </el-menu-item>
+          <router-link to="/finance/voucher/voucherReview" tag="div">
+            <el-menu-item index="4-4">
+              <template slot="title">
+                <i class="el-icon-tickets"></i>
+                <span slot="title">凭证审核</span>
+              </template>
+            </el-menu-item>
+          </router-link>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="5">
@@ -272,12 +274,6 @@
               </template>
             </el-menu-item>
           </router-link>
-          <el-menu-item index="5-3">
-            <template slot="title">
-              <i class="el-icon-setting"></i>
-              <span slot="title">初始设置</span>
-            </template>
-          </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="6">
@@ -350,12 +346,12 @@
         </template>
         <el-menu-item-group>
           <router-link to="/finance/system/accountInit" tag="div">
-          <el-menu-item index="8-1">
-            <template slot="title">
-              <i class="el-icon-s-operation"></i>
-              <span slot="title">初始设置</span>
-            </template>
-          </el-menu-item>
+            <el-menu-item index="8-1">
+              <template slot="title">
+                <i class="el-icon-s-operation"></i>
+                <span slot="title">初始设置</span>
+              </template>
+            </el-menu-item>
           </router-link>
           <router-link to="/finance/system/test" tag="div">
             <el-menu-item index="8-2">

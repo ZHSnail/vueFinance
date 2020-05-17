@@ -142,6 +142,7 @@ export default {
           this.payNoticeList = res.obj;
         }
       });
+
     },
     searchData() {
       var url = "/charge/payDetailList";
@@ -154,6 +155,7 @@ export default {
     },
     getCurrentPage(val) {
       this.page.pageNum = val;
+      this.searchData();
     }
   },
   created() {

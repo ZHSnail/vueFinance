@@ -19,29 +19,12 @@
       <el-table-column align="center" prop="accountPeriod" label="会计期间"></el-table-column>
       <el-table-column align="center" prop="bizDate" label="记账日期"></el-table-column>
       <el-table-column align="center" prop="memo" label="摘要"></el-table-column>
-      <el-table-column align="center" prop="bizName" label="业务类型">
-        <!-- <template slot-scope="scope">
-          <span v-if="scope.row.bizType == 'CHARGE_PAY'">收费付款</span>
-          <span v-if="scope.row.bizType == 'SALARY_PAY'">工资付款</span>
-          <span v-if="scope.row.bizType == 'ASSETS_REG'">固定资产登记</span>
-          <span v-if="scope.row.bizType == 'ASSETS_DEPRECIATED'">固定资产折旧</span>
-          <span v-if="scope.row.bizType == 'ASSETS_PURCHASE'">固定资产采购</span>
-          <span v-if="scope.row.bizType == 'MANUAL_VOUCHE'">手工凭证</span>
-        </template> -->
-      </el-table-column>
-      <el-table-column align="center" prop="postingStatus" label="过账状态">
-        <!-- <template slot-scope="scope">
-          <span v-if="scope.row.postingStatus == 'POSTED'">已过账</span>
-          <span v-if="scope.row.postingStatus == 'UNPOST'">未过账</span>
-        </template> -->
-      </el-table-column>
+      <el-table-column align="center" prop="bizName" label="业务类型"></el-table-column>
+      <el-table-column align="center" prop="dealName" label="交易类型"></el-table-column>
+      <el-table-column align="center" prop="postingStatus" label="过账状态"></el-table-column>
+      <el-table-column align="center" prop="tickState" label="勾对状态"></el-table-column>
       <el-table-column align="center" prop="originatorName" label="制单人"></el-table-column>
-      <el-table-column align="center" prop="status" label="状态">
-        <!-- <template slot-scope="scope">
-          <span v-if="scope.row.status == 'CMT'">审核中</span>
-          <span v-if="scope.row.status == 'EXE'">已完成</span>
-        </template> -->
-      </el-table-column>
+      <el-table-column align="center" prop="status" label="状态"></el-table-column>
     </el-table>
     <el-row>
       <el-col :span="24">
@@ -103,7 +86,6 @@ export default {
       }
       this.axios.get(url, { params: { params: data } }).then(res => {
         if (res.success) {
-          console.log(res.obj)
           this.tableData = res.obj.list;
           this.total = res.obj.total;
           this.pageNum = res.obj.pageNum;

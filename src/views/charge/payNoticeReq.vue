@@ -362,7 +362,7 @@ export default {
             message: res.msg,
             center: true
           });
-          this.search();
+          this.$router.push({ path: "/finance/charge/payOnline" });
         }
       });
     }

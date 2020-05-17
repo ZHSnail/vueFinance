@@ -17,8 +17,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="编号" prop="assetsCode">
-              <el-input class="length" v-model="assetsRegForm.assetsCode"></el-input>
+            <el-form-item label="编号" prop="code">
+              <el-input class="length" v-model="assetsRegForm.code"></el-input>
             </el-form-item>
           </el-col>
 
@@ -76,10 +76,15 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="取得方式" prop="obtainMeth">
-              <el-select class="length" clearable v-model="assetsRegForm.obtainMeth" placeholder="请选择取得方式">
+            <el-form-item label="取得方式" prop="obtainMethod">
+              <el-select
+                class="length"
+                clearable
+                v-model="assetsRegForm.obtainMethod"
+                placeholder="请选择取得方式"
+              >
                 <el-option
-                  v-for="item in obtainMethList"
+                  v-for="item in obtainMethodList"
                   :key="item.id"
                   :label="item.name"
                   :value="item.value"
@@ -88,10 +93,16 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="资产类别" prop="kindId">
-             <el-select class="length" clearable v-model="assetsRegForm.kindId" placeholder="请选择资产类别">
+            <el-form-item label="资产类别" prop="assetsKindId">
+              <el-select
+                class="length"
+                clearable
+                v-model="assetsRegForm.assetsKindId"
+                placeholder="请选择资产类别"
+                @change="changeSelect"
+              >
                 <el-option
-                  v-for="item in obtainMethList"
+                  v-for="item in assetsKindList"
                   :key="item.id"
                   :label="item.name"
                   :value="item.id"
@@ -102,15 +113,15 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="折旧方法" prop="depreMeth">
-              <el-input class="length" v-model="assetsRegForm.depreMeth"></el-input>
-            </el-form-item> 
+            <el-form-item label="折旧方法" prop="depreMethodName">
+              <el-input readonly class="length" v-model="assetsRegForm.depreMethodName"></el-input>
+            </el-form-item>
           </el-col>
-           <el-col :span="8">
+          <el-col :span="8">
             <el-form-item label="备注" prop="memo">
               <el-input class="length" v-model="assetsRegForm.memo"></el-input>
-            </el-form-item>      
-          </el-col>       
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
     </my-collapse>
@@ -130,23 +141,24 @@ export default {
   data() {
     return {
       assetsRegForm: {
-        name: "",//资产名称
-        assetsCode: "",//资产编号
+        name: "", //资产名称
+        code: "", //资产编号
         norms: "", //规格
-        salvage:"",//残值率
+        salvage: "", //残值率
         orival: "", //原价值
         num: "", //数量
         cleanCost: "", //清理费用
         usefulLife: "", //预计使用年限
         storagePlace: "", //入库地点
         storageTime: "", //入库时间
-        obtainMeth: "", //取得方式
-        kindId:"",//资产类别
-        memo:"",//备注
-        depreMeth:"",//折旧方法
+        obtainMethod: "", //取得方式
+        assetsKindId: "", //资产类别
+        memo: "", //备注
+        depreMethodName: "", //折旧方法
+        depreMethod: "" //折旧方法
       },
       pickerOptions: tools.pickerOptionsDay,
-      obtainMethList: [
+      obtainMethodList: [
         {
           id: "1",
           name: "采购",
@@ -198,13 +210,9 @@ export default {
           value: "OTHER"
         }
       ],
-      rules:{
-        name: [
-          { required: true, message: "请输入资产名称", trigger: "blur" }
-        ],
-        assetsCode: [
-          { required: true, message: "请输入资产编号", trigger: "blur" }
-        ],
+      rules: {
+        name: [{ required: true, message: "请输入资产名称", trigger: "blur" }],
+        code: [{ required: true, message: "请输入资产编号", trigger: "blur" }],
         orival: [
           { required: true, message: "请输入原价值", trigger: "blur" },
           { type: "number", message: "原价值必须为数字值" }
@@ -221,34 +229,101 @@ export default {
           { required: true, message: "请输入残值率", trigger: "blur" },
           { type: "number", message: "残值率必须为数字值" }
         ],
-        depreMeth:[
-          { required: true, message: "请选择折旧方法", trigger: "change" }
-        ],
-        kindId:[
+        assetsKindId: [
           { required: true, message: "请选择资产类别", trigger: "change" }
         ],
-        obtainMeth:[
+        obtainMethod: [
           { required: true, message: "请选择取得方式", trigger: "change" }
-        ],
-      }
+        ]
+      },
+      assetsKindList: [],
+      showDeleteButton: false,
+      assetsId: "",
+      assetsRegId: ""
     };
   },
   watch: {},
   computed: {},
   methods: {
+    arrangeData() {
+      var data = {};
+      data.assets = this.Utils.copyObj(this.assetsRegForm);
+      data.assets.salvage = this.assetsRegForm.salvage / 100;
+      var obj = this.Utils.findObj(
+        this.assetsKindList,
+        "id",
+        data.assets.assetsKindId
+      );
+      data.assets.depreMethod = obj.depreMethod;
+      data.assets.storageTime = this.Utils.timestampToDate(
+        this.assetsRegForm.storageTime
+      );
+      data.memo = this.assetsRegForm.memo;
+      if (this.assetsRegId != "") {
+        data.id = this.assetsRegId;
+      }
+      if (this.assetsId != "") {
+        data.assets.id = this.assetsId;
+      }
+      return data;
+    },
     save(formName) {
-      var formRefs = [this.$refs["assetsRegForm"]];
-      this.Utils.checkForm(formRefs).then(res => {
-        if (res) {
-          alert("submit");
-        } else {
-          alert("error");
+      var data = this.arrangeData();
+      this.axios.post("/assets/saveAssetsRegister", data).then(res => {
+        if (res.success) {
+          this.$message({
+            type: "success",
+            message: res.msg,
+            center: true
+          });
+          this.$router.push({ path: "/finance/assets/assetsRegList" });
         }
       });
     },
     commit(formName) {},
+    findAssetsKindList() {
+      var url = "/assets/assetsKinds";
+      this.axios.get(url).then(res => {
+        if (res.success) {
+          this.assetsKindList = res.obj;
+        }
+      });
+    },
+    changeSelect(val) {
+      var obj = this.Utils.findObj(this.assetsKindList, "id", val);
+      this.assetsRegForm.depreMethodName = obj.depreMethodName;
+    },
+    initData(id) {
+      var url = "/assets/assetsRegister/" + id;
+      this.axios.get(url).then(res => {
+        if (res.success) {
+          var temp = {};
+          temp = this.Utils.copyObj(res.obj.assets);
+          temp.usefulLife = parseFloat(res.obj.assets.usefulLife);
+          temp.num = parseFloat(res.obj.assets.num);
+          temp.salvage = res.obj.assets.salvage * 100;
+          temp.memo = res.obj.memo;
+          var obj = this.Utils.findObj(
+            this.assetsKindList,
+            "id",
+            res.obj.assets.assetsKindId
+          );
+          temp.depreMethodName = obj.depreMethodName;
+          temp.id = res.obj.id;
+          this.assetsRegForm = this.Utils.copyObj(temp);
+          this.assetsRegId = res.obj.id;
+          this.assetsId = res.obj.assets.id;
+        }
+      });
+    }
   },
-  created() {},
+  created() {
+    this.findAssetsKindList();
+    if (typeof this.$route.params.id != "undefined") {
+      this.showDeleteButton = true;
+      this.initData(this.$route.params.id);
+    }
+  },
   mounted() {}
 };
 </script>

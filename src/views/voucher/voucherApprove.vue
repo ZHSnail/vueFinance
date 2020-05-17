@@ -1,6 +1,6 @@
 <template>
-  <div class="voucherDetail">
-    <my-pageheader titleContent="凭证详情"></my-pageheader>
+  <div class="voucherApprove">
+    <my-pageheader titleContent="凭证审核"></my-pageheader>
     <my-collapse title="基本信息" class="leftAlign">
       <el-row>
         <el-col :span="12">凭证号：{{voucherForm.code}}</el-col>
@@ -13,10 +13,6 @@
       <el-row>
         <el-col :span="12" v-if="voucherForm.bizCode">关联业务单号：{{voucherForm.bizCode}}</el-col>
         <el-col :span="12">业务类型：{{voucherForm.bizName}}</el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="12" v-if="voucherForm.tickState">勾对状态：{{voucherForm.tickState}}</el-col>
-        <el-col :span="12" v-if="voucherForm.tickDate">勾对日期：{{voucherForm.tickDate}}</el-col>
       </el-row>
       <el-row>
         <el-col :span="12">过账状态：{{voucherForm.postingStatus}}</el-col>
@@ -48,16 +44,14 @@
         <el-col :span="8">记账人：{{voucherForm.keeperName}}</el-col>
       </el-row>
     </my-collapse>
-    <activiti-record v-if="showRecord" workKey="voucherReq" :bizId="id"></activiti-record>
-    <div class="rightAlign">
-      <el-button type="danger" v-if="showRevoke" @click="revoke()">撤回</el-button>
-    </div>
+    <activiti-record workKey="voucherReq" :bizId="id"></activiti-record>
+    <activiti-handle workKey="voucherReq" url="/finance/voucher/voucherReview" :bizId="id"></activiti-handle>
   </div>
 </template>
 
 <script>
 export default {
-  name: "voucherDetail",
+  name: "voucherApprove",
   components: {},
   props: {},
   data() {
@@ -96,24 +90,6 @@ export default {
         }
       });
     },
-    revoke() {
-      var data = {
-        workKey: "voucherReq",
-        businessKey: this.id,
-        comment: ""
-      };
-      var url = "/activiti/revoke";
-      this.axios.post(url, data).then(res => {
-        if (res.success) {
-          this.$message({
-            type: "success",
-            message: res.msg,
-            center: true
-          });
-          this.$router.push({ path: "/finance/charge/payOnline" });
-        }
-      });
-    }
   },
   created() {
     if (typeof this.$route.params.id != undefined) {
