@@ -210,6 +210,14 @@
               </template>
             </el-menu-item>
           </router-link>
+          <router-link to="/finance/assets/assetsRegReview" tag="div">
+            <el-menu-item index="3-8">
+              <template slot="title">
+                <i class="el-icon-document-add"></i>
+                <span slot="title">固定资产登记审核</span>
+              </template>
+            </el-menu-item>
+          </router-link>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="4">

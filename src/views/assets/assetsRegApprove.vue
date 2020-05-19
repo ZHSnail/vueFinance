@@ -1,7 +1,7 @@
 <template>
-  <div class="assetsRegDetail">
-    <my-pageheader titleContent="固定资产登记详情"></my-pageheader>
-    <my-collapse title="基本信息" class="leftAlign">
+  <div class="assetsRegApprove">
+      <my-pageheader titleContent="固定资产登记审核"></my-pageheader>
+      <my-collapse title="基本信息" class="leftAlign">
       <el-row>
         <el-col :span="12">单号：{{assetsRegForm.code}}</el-col>
         <el-col :span="12">申请日期:{{assetsRegForm.createTime}}</el-col>
@@ -40,30 +40,24 @@
       </el-row>
     </my-collapse>
     <activiti-record workKey="assetsRegisterReq" :bizId="id"></activiti-record>
-      <div class="rightAlign">
-      <el-button type="danger" v-if="show" @click="revoke()">撤回</el-button>
-    </div>
-
+    <activiti-handle workKey="assetsRegisterReq" url="/finance/assets/assetsRegReview" :bizId="id"></activiti-handle>
   </div>
 </template>
 
 <script>
 export default {
-  name: "assetsRegDetail",
-  components: {},
-  props: {},
-  data() {
+  name:'assetsRegApprove',
+  components:{},
+  props:{},
+  data(){
     return {
-      assetsRegForm: {},
-      id: "",
-      userInfo: {},
-      show: false
-    };
+        assetsRegForm:{},
+    }
   },
-  watch: {},
-  computed: {},
-  methods: {
-    initData(id) {
+  watch:{},
+  computed:{},
+  methods:{
+      initData(id) {
       var url = "/assets/assetsRegister/" + id;
       this.axios.get(url).then(res => {
         if (res.success) {
@@ -71,43 +65,18 @@ export default {
           temp = this.Utils.copyObj(res.obj);
           temp.assets.salvage = res.obj.assets.salvage * 100;
           this.assetsRegForm = this.Utils.copyObj(temp);
-          this.userInfo = this.Utils.getUser();
-          if (
-            this.userInfo.id === this.assetsRegForm.creater &&
-            this.assetsRegForm.status === "审核中"
-          ) {
-            this.show = true;
-          }
         }
       });
     },
-    revoke() {
-      var data = {
-        workKey: "assetsRegisterReq",
-        businessKey: this.id,
-        comment: ""
-      };
-      var url = "/activiti/revoke";
-      this.axios.post(url, data).then(res => {
-        if (res.success) {
-          this.$message({
-            type: "success",
-            message: res.msg,
-            center: true
-          });
-          this.$router.push({ path: "/finance/assets/assetsRegList" });
-        }
-      });
-    }
   },
-  created() {
-    if (typeof this.$route.params.id != undefined) {
+  created(){
+      if (typeof this.$route.params.id != undefined) {
       this.id = this.$route.params.id;
       this.initData(this.$route.params.id);
     }
   },
-  mounted() {}
-};
+  mounted(){}
+}
 </script>
 <style scoped>
 </style>

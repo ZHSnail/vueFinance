@@ -12,9 +12,9 @@
       >
         <el-row>
           <el-col :span="8">
-            <el-form-item label="申请日期" prop="reqDate">
+            <el-form-item label="申请日期" prop="reqTime">
               <el-date-picker
-                v-model="assetsPurchaseForm.reqDate"
+                v-model="assetsPurchaseForm.reqTime"
                 align="right"
                 type="date"
                 style="width:220px"
@@ -24,15 +24,15 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="采购方式" prop="purchaseMeth">
+            <el-form-item label="采购方式" prop="purchaseMethod">
               <el-select
                 class="length"
                 clearable
-                v-model="assetsPurchaseForm.purchaseMeth"
+                v-model="assetsPurchaseForm.purchaseMethod"
                 placeholder="采购方式"
               >
                 <el-option
-                  v-for="item in purchaseMethList"
+                  v-for="item in purchaseMethodList"
                   :key="item.id"
                   :label="item.name"
                   :value="item.value"
@@ -41,8 +41,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="采购说明" prop="purchaseMemo">
-              <el-input class="length" v-model="assetsPurchaseForm.purchaseMemo"></el-input>
+            <el-form-item label="采购说明" prop="memo">
+              <el-input class="length" v-model="assetsPurchaseForm.memo"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -66,12 +66,17 @@
             <el-col :span="8">
               <el-form-item
                 label="资产类别"
-                :prop="'assetsList.' + index + '.kindId'"
-                :rules="assetsRules.kindId"
+                :prop="'assetsList.' + index + '.assetsKindId'"
+                :rules="assetsRules.assetsKindId"
               >
-                <el-select class="length" clearable placeholder="请选择资产类别" v-model="assets.kindId">
+                <el-select
+                  class="length"
+                  clearable
+                  placeholder="请选择资产类别"
+                  v-model="assets.assetsKindId"
+                >
                   <el-option
-                    v-for="item in purchaseMethList"
+                    v-for="item in assetsKindList"
                     :key="item.id"
                     :label="item.name"
                     :value="item.id"
@@ -127,7 +132,7 @@
                 :prop="'assetsList.' + index + '.totalAmount'"
                 :rules="assetsRules.totalAmount"
               >
-                <el-input class="length" v-model.number="assets.totalAmount"></el-input>
+                <el-input readonly class="length" v-model.number="assets.totalAmount"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -155,12 +160,12 @@ export default {
   data() {
     return {
       assetsPurchaseForm: {
-        reqDate: "",
-        purchaseMeth: "",
-        purchaseMemo: "",
+        reqTime: "",
+        purchaseMethod: "",
+        memo: "",
         assetsList: [
           {
-            kindId: "", //资产类别
+            assetsKindId: "", //资产类别
             name: "", //资产名称
             norms: "", //规格
             orival: "", //原价值
@@ -170,18 +175,16 @@ export default {
         ]
       },
       reqRules: {
-        reqDate: [
+        reqTime: [
           { required: true, message: "请选择申请日期", trigger: "change" }
         ],
-        purchaseMeth: [
+        purchaseMethod: [
           { required: true, message: "请选择采购方式", trigger: "change" }
         ],
-        purchaseMemo: [
-          { required: true, message: "请输入采购说明", trigger: "blur" }
-        ]
+        memo: [{ required: true, message: "请输入采购说明", trigger: "blur" }]
       },
       pickerOptions: tools.pickerOptionsDay,
-      purchaseMethList: [
+      purchaseMethodList: [
         {
           id: "1",
           name: "公开招标",
@@ -210,7 +213,7 @@ export default {
         {
           id: "6",
           name: "网上商城",
-          value: "E-SHOP"
+          value: "E_SHOP"
         }
       ],
       assetsRules: {
@@ -223,30 +226,27 @@ export default {
           { required: true, message: "请输入数量", trigger: "blur" },
           { type: "number", message: "数量必须为数字值" }
         ],
-        kindId: [
+        assetsKindId: [
           { required: true, message: "请选择资产类别", trigger: "change" }
-        ],
-        totalAmount: [
-          { required: true, message: "请输入预计金额（元）", trigger: "blur" },
-          { type: "number", message: "预计金额（元）必须为数字值" }
         ]
       },
+      assetsKindList: []
     };
   },
   watch: {},
   computed: {
-    total:function(){
+    total: function() {
       var temp = 0;
-      this.assetsPurchaseForm.assetsList.forEach(item=>{
-        temp +=item.totalAmount
-      })
+      this.assetsPurchaseForm.assetsList.forEach(item => {
+        temp += item.totalAmount;
+      });
       return temp;
     }
   },
   methods: {
     addAssets() {
       var assets = {
-        kindId: "", //资产类别
+        assetsKindId: "", //资产类别
         name: "", //资产名称
         norms: "", //规格
         orival: "", //原价值
@@ -271,9 +271,86 @@ export default {
         this.assetsPurchaseForm.assetsList[index].totalAmount = 0;
       }
     },
-   
+    findAssetsKindList() {
+      var url = "/assets/assetsKinds";
+      this.axios.get(url).then(res => {
+        if (res.success) {
+          this.assetsKindList = res.obj;
+        }
+      });
+    },
+    arrangeData() {
+      var data = {};
+      data = this.Utils.copyObj(this.assetsPurchaseForm);
+      data.reqTime = this.Utils.timestampToDate(
+        this.assetsPurchaseForm.reqTime
+      );
+      return data;
+    },
+    save() {
+      var data = this.arrangeData();
+      this.axios.post("/assets/saveAssetsPurchase", data).then(res => {
+        if (res.success) {
+          this.$message({
+            type: "success",
+            message: res.msg,
+            center: true
+          });
+          this.$router.push({ path: "/finance/assets/assetsPurchaseList" });
+        }
+      });
+    },
+    commit(formName) {
+      if (this.assetsPurchaseForm.assetsList.length == 0) {
+        this.$message({
+          type: "error",
+          message: "资产清单不能为空！！",
+          center: true
+        });
+      } else {
+        var formRefs = [this.$refs["reqForm"],this.$refs["assetsForm"]];
+        this.Utils.checkForm(formRefs).then(res => {
+          if (res) {
+            var data = this.arrangeData();
+            this.axios.post("/assets/commitAssetsPurchase", data).then(res => {
+              if (res.success) {
+                this.$message({
+                  type: "success",
+                  message: res.msg,
+                  center: true
+                });
+                this.$router.push({
+                  path: "/finance/assets/assetsPurchaseList"
+                });
+              }
+            });
+          }
+        });
+      }
+    },
+    initData(id) {
+      var url = "/assets/assetsPurchase/" + id;
+      this.axios.get(url).then(res => {
+        if (res.success) {
+          var temp = {};
+          temp = this.Utils.copyObj(res.obj);
+          temp.assetsList.forEach(item => {
+            item.num = parseFloat(item.num);
+            item.orival = parseFloat(item.orival);
+            item.totalAmount = item.num * item.orival;
+          });
+          this.assetsPurchaseForm = temp;
+        }
+      });
+    }
   },
-  created() {},
+  created() {
+    this.findAssetsKindList();
+    if (typeof this.$route.params.id != "undefined") {
+      this.showDeleteButton = true;
+      this.initData(this.$route.params.id);
+    }
+  },
   mounted() {}
 };
 </script>
@@ -288,7 +365,7 @@ export default {
 .money {
   margin-left: 5px;
 }
-.length{
-  width: 220px
+.length {
+  width: 220px;
 }
 </style>

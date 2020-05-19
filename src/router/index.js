@@ -58,7 +58,8 @@ import PayNoticeApprove from '../views/charge/payNoticeApprove.vue'
 import AccountInit from '../views/system/accountInit.vue'
 import VoucherReview from '../views/voucher/voucherReview.vue'
 import VoucherApprove from '../views/voucher/voucherApprove.vue'
-
+import AssetsRegReview from '../views/assets/assetsRegReview.vue'
+import AssetsRegApprove from '../views/assets/assetsRegApprove.vue'
 Vue.use(VueRouter)
 
 //收费管理的路由
@@ -248,6 +249,16 @@ const assets = [{
         path: 'assets/depreciatedReq/:id?',
         name: 'depreciatedReq',
         component: DepreciatedReq
+    },
+    {
+        path: 'assets/assetsRegReview',
+        name: 'assetsRegReview',
+        component: AssetsRegReview
+    },
+    {
+        path: 'assets/assetsRegApprove/:id',
+        name: 'assetsRegApprove',
+        component: AssetsRegApprove
     },
 ]
 const voucher = [{

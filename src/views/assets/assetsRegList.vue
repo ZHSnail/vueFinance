@@ -6,6 +6,9 @@
         <task :taskObj="assetsRegReqList" draftUrl="assetsRegReq" detailUrl="assetsRegDetail">
           <template v-slot:draftItem="{ draftItem }">
             <row>
+              <template slot="left">单号：{{draftItem.code}}</template>
+            </row>
+            <row>
               <template slot="left">资产名称：{{draftItem.assets.name}}</template>
               <template slot="right">{{draftItem.createTime}}</template>
             </row>
@@ -43,7 +46,7 @@
         >
           <template v-slot:item="{ item }">
             <row>
-              <template slot="left" v-if="item.status != '草稿'">
+              <template slot="left">
                 <span>单号：{{item.code}}</span>
               </template>
             </row>
@@ -102,7 +105,6 @@ export default {
           element: "el-select", // 指定elementui组件
           placeholder: "请选择状态", // elementui组件属性
           options: [
-            { label: "草稿", value: "DRAFT" },
             { label: "审批中", value: "CMT" },
             { label: "已完成", value: "EXE" }
           ]
@@ -123,7 +125,6 @@ export default {
     req() {
        this.$router.push({ path: "assetsRegReq" });
     },
-    getCurrentPage(val) {},
     findAssetsRegReqList(){
       var url = "/assets/assetsRegisterTaskList";
       this.axios.get(url).then(res => {
@@ -133,12 +134,12 @@ export default {
       });
     },
     search(val) {
-      var url = "/assets/allTaskList";
+      var url = "/assets/allAssetsRegisterTaskList";
       var data={};
       data.pageSize = this.pageSize;
       if (val) {
         this.searchVal = this.Utils.copyObj(val);
-        if (this.searchVal.hasOwnProperty("status")) {
+        if (this.searchVal.hasOwnProperty("code")) {
           data.code = this.searchVal.code;
         }
         if (this.searchVal.hasOwnProperty("status")) {

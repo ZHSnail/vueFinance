@@ -260,6 +260,14 @@ export default {
       );
       data.memo = this.assetsRegForm.memo;
       if (this.assetsRegId != "") {
+        var obtainObj = this.Utils.findObj(
+        this.obtainMethodList,
+        "name",
+        data.assets.obtainMethod
+        );
+        if(obtainObj){
+          data.assets.obtainMethod = obtainObj.value;
+        }
         data.id = this.assetsRegId;
       }
       if (this.assetsId != "") {
@@ -280,7 +288,24 @@ export default {
         }
       });
     },
-    commit(formName) {},
+    commit(formName) {
+      var formRefs = [this.$refs["assetsRegForm"]];
+      this.Utils.checkForm(formRefs).then(res => {
+        if (res) {
+          var data = this.arrangeData();
+          this.axios.post("/assets/commitAssetsRegister", data).then(res => {
+            if (res.success) {
+              this.$message({
+                type: "success",
+                message: res.msg,
+                center: true
+              });
+              this.$router.push({ path: "/finance/assets/assetsRegList" });
+            }
+          });
+        }
+      });
+    },
     findAssetsKindList() {
       var url = "/assets/assetsKinds";
       this.axios.get(url).then(res => {
