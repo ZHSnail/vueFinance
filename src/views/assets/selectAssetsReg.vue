@@ -14,38 +14,50 @@
       center
     >
       <div>
-        <searchForm :formOptions="formOptions" btnItems="search"></searchForm>
+        <searchForm :formOptions="formOptions" @onSearch="search" btnItems="search"></searchForm>
       </div>
       <el-checkbox-group v-if="!isSimple" v-model="checkList">
-        <el-checkbox class="checkbox" v-for="item in assetsRegList" v-bind:key="item.id" :label="item">
+        <el-checkbox
+          class="checkbox"
+          v-for="item in assetsRegList"
+          v-bind:key="item.id"
+          :label="item"
+        >
           <el-card shadow="hover" style="width:750px">
             <row>
-              <template slot="left"><span style="font-size: medium;font-weight: bold;">{{item.name}}</span></template>
+              <template slot="left">
+                <span style="font-size: medium;font-weight: bold;">{{item.name}}</span>
+              </template>
             </row>
             <row>
-              <template slot="left">资产编号：{{item.assetsCode}}</template>
-              <template slot="right">资产类别：{{item.kindId}}</template>
+              <template slot="left">资产编号：{{item.code}}</template>
+              <template slot="right" v-if="item.assetsKind">资产类别：{{item.assetsKind.name}}</template>
             </row>
             <row>
               <template slot="left">原价值：{{item.orival}}</template>
-              <template slot="right">备注：{{item.memo}}</template>
             </row>
           </el-card>
         </el-checkbox>
       </el-checkbox-group>
       <el-checkbox-group v-if="isSimple" :max="1" v-model="checkList">
-        <el-checkbox class="checkbox" v-for="item in assetsRegList" v-bind:key="item.id" :label="item">
+        <el-checkbox
+          class="checkbox"
+          v-for="item in assetsRegList"
+          v-bind:key="item.id"
+          :label="item"
+        >
           <el-card shadow="hover" style="width:750px">
             <row>
-              <template slot="left"><span style="font-size: medium;font-weight: bold;">{{item.name}}</span></template>
+              <template slot="left">
+                <span style="font-size: medium;font-weight: bold;">{{item.name}}</span>
+              </template>
             </row>
             <row>
-              <template slot="left">资产编号：{{item.assetsCode}}</template>
-              <template slot="right">资产类别：{{item.kindId}}</template>
+              <template slot="left">资产编号：{{item.code}}</template>
+              <template slot="right" v-if="item.assetsKind">资产类别：{{item.assetsKind.name}}</template>
             </row>
             <row>
               <template slot="left">原价值：{{item.orival}}</template>
-              <template slot="right">备注：{{item.memo}}</template>
             </row>
           </el-card>
         </el-checkbox>
@@ -56,11 +68,11 @@
             background
             @current-change="handleCurrentChange"
             :page-size="pageSize"
-            small
             layout="prev, pager, next, jumper"
             :total="total"
             class="centerAlign"
             :hide-on-single-page="true"
+            :current-page.sync="pageNum"
           ></el-pagination>
         </el-col>
       </el-row>
@@ -77,13 +89,15 @@ export default {
   components: {},
   props: {
     ignoreIds: Array,
-    isSimple:Boolean,
+    isSimple: Boolean,
+    isChange:Boolean,
   },
   data() {
     return {
       dialogFormVisible: false,
-      total: 200,
       pageSize: 10,
+      total: 0,
+      pageNum: 1,
       formOptions: [
         {
           label: "名称", // label文字
@@ -93,76 +107,10 @@ export default {
         }
       ],
       checkList: [],
-      assetsRegList: [
-        {
-          id: "1",
-          name: "资产名称", //资产名称
-          assetsCode: "资产编号", //资产编号
-          norms: "规格", //规格
-          salvage: "12", //残值率
-          orival: "500", //原价值
-          num: "2", //数量
-          cleanCost: "56", //清理费用
-          usefulLife: "4", //预计使用年限
-          storagePlace: "入库地点", //入库地点
-          storageTime: "2016021314", //入库时间
-          obtainMeth: "取得方式", //取得方式
-          kindId: "资产类别", //资产类别
-          memo: "备注", //备注
-          depreMeth: "折旧方法" //折旧方法
-        },
-        {
-          id: "2",
-          name: "资产名称", //资产名称
-          assetsCode: "资产编号", //资产编号
-          norms: "规格", //规格
-          salvage: "12", //残值率
-          orival: "500", //原价值
-          num: "2", //数量
-          cleanCost: "56", //清理费用
-          usefulLife: "4", //预计使用年限
-          storagePlace: "入库地点", //入库地点
-          storageTime: "2016021314", //入库时间
-          obtainMeth: "取得方式", //取得方式
-          kindId: "资产类别", //资产类别
-          memo: "备注", //备注
-          depreMeth: "折旧方法" //折旧方法
-        },
-        {
-          id: "3",
-          name: "资产名称", //资产名称
-          assetsCode: "资产编号", //资产编号
-          norms: "规格", //规格
-          salvage: "12", //残值率
-          orival: "500", //原价值
-          num: "2", //数量
-          cleanCost: "56", //清理费用
-          usefulLife: "4", //预计使用年限
-          storagePlace: "入库地点", //入库地点
-          storageTime: "2016021314", //入库时间
-          obtainMeth: "取得方式", //取得方式
-          kindId: "资产类别", //资产类别
-          memo: "备注", //备注
-          depreMeth: "折旧方法" //折旧方法
-        },
-        {
-          id: "4",
-          name: "资产名称", //资产名称
-          assetsCode: "资产编号", //资产编号
-          norms: "规格", //规格
-          salvage: "12", //残值率
-          orival: "500", //原价值
-          num: "2", //数量
-          cleanCost: "56", //清理费用
-          usefulLife: "4", //预计使用年限
-          storagePlace: "入库地点", //入库地点
-          storageTime: "2016021314", //入库时间
-          obtainMeth: "取得方式", //取得方式
-          kindId: "资产类别", //资产类别
-          memo: "备注", //备注
-          depreMeth: "折旧方法" //折旧方法
-        }
-      ]
+      assetsRegList: [],
+      searchVal: {
+        name: ""
+      }
     };
   },
   watch: {},
@@ -171,14 +119,35 @@ export default {
     addAssets() {
       this.dialogFormVisible = !this.dialogFormVisible;
     },
-    handleCurrentChange(val){
+    save() {
+      this.dialogFormVisible = !this.dialogFormVisible;
+      this.$emit("getVal", this.checkList);
     },
-    save(){
-        this.dialogFormVisible = !this.dialogFormVisible;
-        this.$emit("getVal",this.checkList);
+    open() {
+      (this.checkList = []); this.search();
     },
-    open(){
-        this.checkList=[]
+    search(val) {
+      var url = "/assets/assetsList";
+      if(this.isChange){
+         url = "/assets/selectAssetsChangeList";
+      }
+      var data = val ? JSON.stringify(val) : "";
+      if (val) {
+        this.searchVal = this.Utils.copyObj(val);
+      }
+      this.axios.get(url, { params: { params: data } }).then(res => {
+        if (res.success) {
+          this.assetsRegList = res.obj.list;
+          this.total = res.obj.total;
+          this.pageNum = res.obj.pageNum;
+        }
+      });
+    },
+    handleCurrentChange(val) {
+      this.pageNum = val;
+      var data = this.Utils.copyObj(this.searchVal);
+      data.pageNum = val;
+      this.search(data);
     }
   },
   created() {},
@@ -195,7 +164,7 @@ export default {
 .selectAssetsReg >>> .el-card {
   border-radius: 0px;
 }
-.checkbox{
-    padding-top: 5px
+.checkbox {
+  padding-top: 5px;
 }
 </style>

@@ -12,8 +12,42 @@
       >
         <el-row>
           <el-col :span="8">
-            <el-form-item label="资产名称" prop="name">
+            <el-form-item label="取得方式" prop="obtainMethod">
+              <el-select
+                class="length"
+                clearable
+                v-model="assetsRegForm.obtainMethod"
+                placeholder="请选择取得方式"
+                @change="changeObtainMethod"
+              >
+                <el-option
+                  v-for="item in obtainMethodList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item v-if="show" label="资产名称" prop="name">
               <el-input class="length" v-model="assetsRegForm.name"></el-input>
+            </el-form-item>
+            <el-form-item v-else label="资产名称" prop="name">
+              <el-select
+                class="length"
+                clearable
+                v-model="assetsRegForm.name"
+                placeholder="请选择已购买的资产"
+                @change="changePurchaseAssets"
+              >
+                <el-option
+                  v-for="item in purchaseAssetsList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.name"
+                ></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -21,22 +55,22 @@
               <el-input class="length" v-model="assetsRegForm.code"></el-input>
             </el-form-item>
           </el-col>
-
-          <el-col :span="8">
-            <el-form-item label="规格" prop="norms">
-              <el-input class="length" v-model="assetsRegForm.norms"></el-input>
-            </el-form-item>
-          </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="原价值（元）" prop="orival">
+            <el-form-item v-if="show" label="原价值（元）" prop="orival">
               <el-input class="length" v-model.number="assetsRegForm.orival"></el-input>
+            </el-form-item>
+            <el-form-item v-else label="原价值（元）" prop="orival">
+              <el-input class="length" readonly v-model.number="assetsRegForm.orival"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="数量" prop="num">
+            <el-form-item v-if="show" label="数量" prop="num">
               <el-input class="length" v-model.number="assetsRegForm.num"></el-input>
+            </el-form-item>
+            <el-form-item v-else label="数量" prop="num">
+              <el-input class="length" readonly v-model.number="assetsRegForm.num"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -76,30 +110,38 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="取得方式" prop="obtainMethod">
-              <el-select
-                class="length"
-                clearable
-                v-model="assetsRegForm.obtainMethod"
-                placeholder="请选择取得方式"
-              >
-                <el-option
-                  v-for="item in obtainMethodList"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.value"
-                ></el-option>
-              </el-select>
+            <el-form-item v-if="show" label="规格" prop="norms">
+              <el-input class="length" v-model="assetsRegForm.norms"></el-input>
+            </el-form-item>
+            <el-form-item v-else label="规格" prop="norms">
+              <el-input class="length" v-model="assetsRegForm.norms"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="资产类别" prop="assetsKindId">
+            <el-form-item v-if="show" label="资产类别" prop="assetsKindId">
               <el-select
                 class="length"
                 clearable
                 v-model="assetsRegForm.assetsKindId"
                 placeholder="请选择资产类别"
                 @change="changeSelect"
+              >
+                <el-option
+                  v-for="item in assetsKindList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item v-else label="资产类别" prop="assetsKindId">
+              <el-select
+                class="length"
+                clearable
+                v-model="assetsRegForm.assetsKindId"
+                placeholder="请选择资产类别"
+                @change="changeSelect"
+                disabled
               >
                 <el-option
                   v-for="item in assetsKindList"
@@ -155,7 +197,8 @@ export default {
         assetsKindId: "", //资产类别
         memo: "", //备注
         depreMethodName: "", //折旧方法
-        depreMethod: "" //折旧方法
+        depreMethod: "", //折旧方法
+        showId: ""
       },
       pickerOptions: tools.pickerOptionsDay,
       obtainMethodList: [
@@ -239,7 +282,9 @@ export default {
       assetsKindList: [],
       showDeleteButton: false,
       assetsId: "",
-      assetsRegId: ""
+      assetsRegId: "",
+      show: true,
+      purchaseAssetsList: []
     };
   },
   watch: {},
@@ -261,11 +306,11 @@ export default {
       data.memo = this.assetsRegForm.memo;
       if (this.assetsRegId != "") {
         var obtainObj = this.Utils.findObj(
-        this.obtainMethodList,
-        "name",
-        data.assets.obtainMethod
+          this.obtainMethodList,
+          "name",
+          data.assets.obtainMethod
         );
-        if(obtainObj){
+        if (obtainObj) {
           data.assets.obtainMethod = obtainObj.value;
         }
         data.id = this.assetsRegId;
@@ -335,15 +380,55 @@ export default {
           );
           temp.depreMethodName = obj.depreMethodName;
           temp.id = res.obj.id;
+          if(temp.obtainMethod == "采购"){
+            this.show = false;
+          }
           this.assetsRegForm = this.Utils.copyObj(temp);
           this.assetsRegId = res.obj.id;
           this.assetsId = res.obj.assets.id;
         }
       });
+    },
+    changeObtainMethod(val) {
+      if (val === "PURCHASE") {
+        this.Utils.clearObj(this.assetsRegForm);
+        this.assetsRegForm.obtainMethod = "PURCHASE";
+        this.show = false;
+      } else {
+        this.Utils.clearObj(this.assetsRegForm);
+        this.assetsRegForm.obtainMethod = val;
+        this.show = true;
+      }
+    },
+    findPurchaseAssetsList() {
+      var url = "/assets/purchaseAssetsList";
+      this.axios.get(url).then(res => {
+        if (res.success) {
+          this.purchaseAssetsList = res.obj;
+        }
+      });
+    },
+    changePurchaseAssets(val) {
+      var obj = this.Utils.findObj(this.purchaseAssetsList, "name", val);
+      var temp = {};
+      temp = this.Utils.copyObj(obj);
+      temp.num = parseFloat(obj.num);
+      this.assetsId = obj.id;
+      temp.id = "";
+      temp.memo = "";
+      temp.obtainMethod = "PURCHASE";
+      var assetsKind = this.Utils.findObj(
+        this.assetsKindList,
+        "id",
+        obj.assetsKindId
+      );
+      temp.depreMethodName = assetsKind.depreMethodName;
+      this.assetsRegForm = this.Utils.copyObj(temp);
     }
   },
   created() {
     this.findAssetsKindList();
+    this.findPurchaseAssetsList();
     if (typeof this.$route.params.id != "undefined") {
       this.showDeleteButton = true;
       this.initData(this.$route.params.id);

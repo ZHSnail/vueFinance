@@ -60,6 +60,17 @@ import VoucherReview from '../views/voucher/voucherReview.vue'
 import VoucherApprove from '../views/voucher/voucherApprove.vue'
 import AssetsRegReview from '../views/assets/assetsRegReview.vue'
 import AssetsRegApprove from '../views/assets/assetsRegApprove.vue'
+import AssetsPurchaseApprove from '../views/assets/assetsPurchaseApprove.vue'
+import AssetsPurchaseReview from '../views/assets/assetsPurchaseReview.vue'
+import DepreciatedQuery from '../views/assets/depreciatedQuery.vue'
+import DepreciatedReview from '../views/assets/depreciatedReview.vue'
+import DepreciatedApprove from '../views/assets/depreciatedApprove.vue'
+import AssetsChgDetail from '../views/assets/assetsChgDetail.vue'
+import AssetsChgList from '../views/assets/assetsChgList.vue'
+import AssetsChgQuery from '../views/assets/assetsChgQuery.vue'
+import AssetsChgReview from '../views/assets/assetsChgReview.vue'
+import AssetsChgApprove from '../views/assets/assetsChgApprove.vue'
+
 Vue.use(VueRouter)
 
 //收费管理的路由
@@ -211,7 +222,7 @@ const assets = [{
         component: AssetsRegQuery
     },
     {
-        path: 'assets/assetsChgReq',
+        path: 'assets/assetsChgReq/:id?',
         name: 'assetsChgReq',
         component: AssetsChgReq
     },
@@ -259,6 +270,56 @@ const assets = [{
         path: 'assets/assetsRegApprove/:id',
         name: 'assetsRegApprove',
         component: AssetsRegApprove
+    },
+    {
+        path: 'assets/assetsPurchaseApprove/:id',
+        name: 'assetsPurchaseApprove',
+        component: AssetsPurchaseApprove
+    },
+    {
+        path: 'assets/assetsPurchaseReview',
+        name: 'assetsPurchaseReview',
+        component: AssetsPurchaseReview
+    },
+    {
+        path: 'assets/depreciatedQuery',
+        name: 'depreciatedQuery',
+        component: DepreciatedQuery
+    },
+    {
+        path: 'assets/depreciatedReview',
+        name: 'depreciatedReview',
+        component: DepreciatedReview
+    },
+    {
+        path: 'assets/depreciatedApprove/:id',
+        name: 'depreciatedApprove',
+        component: DepreciatedApprove
+    },
+    {
+        path: 'assets/assetsChgDetail/:id',
+        name: 'assetsChgDetail',
+        component: AssetsChgDetail
+    },
+    {
+        path: 'assets/assetsChgList',
+        name: 'assetsChgList',
+        component: AssetsChgList
+    },
+    {
+        path: 'assets/assetsChgQuery',
+        name: 'assetsChgQuery',
+        component: AssetsChgQuery
+    },
+    {
+        path: 'assets/assetsChgReview',
+        name: 'assetsChgReview',
+        component: AssetsChgReview
+    },
+    {
+        path: 'assets/assetsChgApprove/:id',
+        name: 'assetsChgApprove',
+        component: AssetsChgApprove
     },
 ]
 const voucher = [{

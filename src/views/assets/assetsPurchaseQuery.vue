@@ -19,11 +19,7 @@
       <el-table-column align="center" prop="createrName" label="申请人"></el-table-column>
       <el-table-column align="center" prop="reqTime" label="申请时间"></el-table-column>
       <el-table-column align="center" prop="purchaseMethodName" label="采购方式"></el-table-column>
-      <el-table-column align="center" prop="total" label="单据金额">
-        <template slot-scope="scope">
-          <span>{{scope.row.state == "TRUE" ? "启用":"停用"}}</span>
-        </template>
-      </el-table-column>
+      <el-table-column align="center" prop="totalAmt" label="单据金额"></el-table-column>
       <el-table-column align="center" prop="memo" label="采购说明"></el-table-column>
       <el-table-column align="center" prop="status" label="状态"></el-table-column>
     </el-table>

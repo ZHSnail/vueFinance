@@ -1,7 +1,7 @@
 <template>
-  <div class="assetsPurchaseDetail">
-    <my-pageheader titleContent="固定资产采购详情"></my-pageheader>
-    <my-collapse title="申请信息" class="leftAlign">
+  <div class="assetsPurchaseApprove">
+      <my-pageheader titleContent="固定资产采购审核"></my-pageheader>
+      <my-collapse title="申请信息" class="leftAlign">
       <el-row>
         <el-col :span="12">单号：{{assetsPurchaseForm.code}}</el-col>
         <el-col :span="12">申请日期:{{assetsPurchaseForm.reqTime}}</el-col>
@@ -30,78 +30,48 @@
         <el-col :span="12">预计金额（元）：{{item.num * item.orival}}</el-col>
       </el-row>
       <el-divider></el-divider>
-      </div>
-      
+      </div>    
     </my-collapse>
     <activiti-record workKey="assetsPurchaseReq" :bizId="id"></activiti-record>
-    <div class="rightAlign">
-      <el-button type="danger" v-if="show" @click="revoke()">撤回</el-button>
-    </div>
+    <activiti-handle workKey="assetsPurchaseReq" url="/finance/assets/assetsPurchaseReview" :bizId="id"></activiti-handle>
   </div>
 </template>
 
 <script>
 export default {
-  name: "assetsPurchaseDetail",
-  components: {},
-  props: {},
-  data() {
+  name:'assetsPurchaseApprove',
+  components:{},
+  props:{},
+  data(){
     return {
-      assetsPurchaseForm: {},
-      assetsList:[],
-      id: "",
-      userInfo: {},
-      show: false
-    };
+        assetsPurchaseForm:{},
+        assetsList:[],
+        id:""
+    }
   },
-  watch: {},
-  computed: {},
-  methods: {
-    initData(id) {
+  watch:{},
+  computed:{},
+  methods:{
+      initData(id) {
       var url = "/assets/assetsPurchase/" + id;
       this.axios.get(url).then(res => {
         if (res.success) {
           var temp = {};
           temp = this.Utils.copyObj(res.obj);
           this.assetsList = this.Utils.copyObj(res.obj.assetsList);
-          this.assetsPurchaseForm = this.Utils.copyObj(temp);
-          this.userInfo = this.Utils.getUser();
-          if (
-            this.userInfo.id === this.assetsPurchaseForm.creater &&
-            this.assetsPurchaseForm.status === "审核中"
-          ) {
-            this.show = true;
-          }
-        }
-      });
-    },
-    revoke() {
-      var data = {
-        workKey: "assetsPurchaseReq",
-        businessKey: this.id,
-        comment: ""
-      };
-      var url = "/activiti/revoke";
-      this.axios.post(url, data).then(res => {
-        if (res.success) {
-          this.$message({
-            type: "success",
-            message: res.msg,
-            center: true
-          });
-          this.$router.push({ path: "/finance/assets/assetsPurchaseList" });
+          this.assetsPurchaseForm = this.Utils.copyObj(temp);          
         }
       });
     }
   },
-  created() {
-     if (typeof this.$route.params.id != undefined) {
+  created(){
+      if (typeof this.$route.params.id != undefined) {
       this.id = this.$route.params.id;
       this.initData(this.$route.params.id);
     }
   },
-  mounted() {}
-};
+  mounted(){}
+}
 </script>
 <style scoped>
 </style>

@@ -22,9 +22,9 @@
           :placeholder="placeholder"
         />
         <span class="el-input__suffix">
-            <span class="el-input__suffix-inner">
-              <i class="el-input__icon el-icon-fin-waihuishuju"></i>
-            </span>
+          <span class="el-input__suffix-inner">
+            <i class="el-input__icon el-icon-fin-waihuishuju"></i>
+          </span>
         </span>
       </div>
     </div>
@@ -38,7 +38,7 @@
       :destroy-on-close="true"
     >
       <div>
-        <searchForm :formOptions="formOptions"  @onSearch="search" btnItems="search"></searchForm>
+        <searchForm :formOptions="formOptions" @onSearch="search" btnItems="search"></searchForm>
       </div>
       <el-table
         ref="singleTable"
@@ -51,15 +51,15 @@
       >
         <el-table-column type="selection" v-if="ismultiple" width="55"></el-table-column>
         <el-table-column align="center" prop="type" label="科目类型">
-        <template slot-scope="scope">
-          <span v-if="scope.row.type == 'ASSETS'">资产类</span>
-          <span v-if="scope.row.type == 'COST'">成本类</span>
-          <span v-if="scope.row.type == 'EXPENSES'">费用类</span>
-          <span v-if="scope.row.type == 'LIABILITIES'">负债类</span>
-          <span v-if="scope.row.type == 'OWNER'">所有者权益类</span>
-          <span v-if="scope.row.type == 'INCOME'">收入类</span>
-        </template>
-      </el-table-column>
+          <template slot-scope="scope">
+            <span v-if="scope.row.type == 'ASSETS'">资产类</span>
+            <span v-if="scope.row.type == 'COST'">成本类</span>
+            <span v-if="scope.row.type == 'EXPENSES'">费用类</span>
+            <span v-if="scope.row.type == 'LIABILITIES'">负债类</span>
+            <span v-if="scope.row.type == 'OWNER'">所有者权益类</span>
+            <span v-if="scope.row.type == 'INCOME'">收入类</span>
+          </template>
+        </el-table-column>
         <el-table-column align="center" prop="code" label="会计科目编码"></el-table-column>
         <el-table-column align="center" prop="accountName" label="会计科目名称"></el-table-column>
       </el-table>
@@ -93,9 +93,10 @@ export default {
     value: {
       type: [Array, String]
     },
-    width:String,
-    placeholder:String,
-    height:String,
+    width: String,
+    placeholder: String,
+    height: String,
+    accountId: String
   },
   data() {
     return {
@@ -104,8 +105,8 @@ export default {
       show: false,
       showList: [], //展示列表
       style: {
-        height:(this.height ? this.height : 40)+'px' ,
-        width:this.width
+        height: (this.height ? this.height : 40) + "px",
+        width: this.width
       },
       formOptions: [
         {
@@ -126,23 +127,23 @@ export default {
           element: "el-select", // 指定elementui组件
           placeholder: "请选择科目类型", // elementui组件属性
           options: [
-            {label:"资产类",value:"ASSETS"},
-            {label:"成本类",value:"COST"},
-            {label:"费用类",value:"EXPENSES"},
-            {label:"负债类",value:"LIABILITIES"},
-            {label:"所有者权益类",value:"OWNER"},
-            {label:"收入类",value:"INCOME"},
-          ],
+            { label: "资产类", value: "ASSETS" },
+            { label: "成本类", value: "COST" },
+            { label: "费用类", value: "EXPENSES" },
+            { label: "负债类", value: "LIABILITIES" },
+            { label: "所有者权益类", value: "OWNER" },
+            { label: "收入类", value: "INCOME" }
+          ]
         }
       ],
       pageSize: 10,
       total: 0,
-      pageNum:1,
-      searchVal:{
+      pageNum: 1,
+      searchVal: {
         accountName: "",
         code: "",
-        type:""
-      },
+        type: ""
+      }
     };
   },
   watch: {
@@ -153,12 +154,25 @@ export default {
           this.style.height = (this.height ? this.height : 40) + "px";
         }
         if (newVal.length / 2 != 1) {
-          if((newVal.length / 2) * 22 == 0){
-            this.style.height =  (this.height ? this.height : 40) + "px";
-          }else{
-            this.style.height = (newVal.length / 2) * 22 + (this.height ? this.height : 40) + "px";
+          if ((newVal.length / 2) * 22 == 0) {
+            this.style.height = (this.height ? this.height : 40) + "px";
+          } else {
+            this.style.height =
+              (newVal.length / 2) * 22 +
+              (this.height ? this.height : 40) +
+              "px";
           }
         }
+      }
+    },
+    accountId: function(newVal, oldVal) {
+      if (oldVal == "" && this.account=="") {
+        var url = "/lender/selectedAccount/" + newVal;
+        this.axios.get(url).then(res => {
+          if (res.success) {
+            this.showList.push(res.obj.name);
+          }
+        });
       }
     }
   },
@@ -224,7 +238,7 @@ export default {
     search(val) {
       var url = "/lender/allAccount";
       var data = val ? JSON.stringify(val) : "";
-      if(val){
+      if (val) {
         this.searchVal = this.Utils.copyObj(val);
       }
       this.axios.get(url, { params: { params: data } }).then(res => {
@@ -240,7 +254,7 @@ export default {
       var data = this.Utils.copyObj(this.searchVal);
       data.pageNum = val;
       this.search(data);
-    },
+    }
   },
   created() {
     this.search();
@@ -253,30 +267,18 @@ export default {
         }
       });
     } else {
-      // var url = "/lender/selectedAccount/"+this.account;
-      //  this.axios.get(url).then(res => {
-      //   if (res.success) {
-      //     console.log(res.obj)
-      //   }
-      // });
-      if(this.account){
-        var url = "/lender/selectedAccount/"+this.account;
-       this.axios.get(url).then(res => {
-        if (res.success) {
-          this.showList.push(res.obj.name);
-        }
-      });
+      if (this.account) {
+        var url = "/lender/selectedAccount/" + this.account;
+        this.axios.get(url).then(res => {
+          if (res.success) {
+            this.showList.push(res.obj.name);
+          }
+        });
       }
-      // var Obj = this.Utils.findObj(this.accountList, "id", this.account);
-      // if (Obj) {
-      //   this.showList.push(Obj.accountName);
-      // }
     }
   },
-  mounted() {
-  }
+  mounted() {}
 };
 </script>
 <style scoped>
-
 </style>

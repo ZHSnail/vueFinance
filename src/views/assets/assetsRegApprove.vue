@@ -1,7 +1,7 @@
 <template>
   <div class="assetsRegApprove">
-      <my-pageheader titleContent="固定资产登记审核"></my-pageheader>
-      <my-collapse title="基本信息" class="leftAlign">
+    <my-pageheader titleContent="固定资产登记审核"></my-pageheader>
+    <my-collapse title="基本信息" class="leftAlign">
       <el-row>
         <el-col :span="12">单号：{{assetsRegForm.code}}</el-col>
         <el-col :span="12">申请日期:{{assetsRegForm.createTime}}</el-col>
@@ -46,18 +46,19 @@
 
 <script>
 export default {
-  name:'assetsRegApprove',
-  components:{},
-  props:{},
-  data(){
+  name: "assetsRegApprove",
+  components: {},
+  props: {},
+  data() {
     return {
-        assetsRegForm:{},
-    }
+      assetsRegForm: {},
+      id:""
+    };
   },
-  watch:{},
-  computed:{},
-  methods:{
-      initData(id) {
+  watch: {},
+  computed: {},
+  methods: {
+    initData(id) {
       var url = "/assets/assetsRegister/" + id;
       this.axios.get(url).then(res => {
         if (res.success) {
@@ -67,16 +68,16 @@ export default {
           this.assetsRegForm = this.Utils.copyObj(temp);
         }
       });
-    },
+    }
   },
-  created(){
-      if (typeof this.$route.params.id != undefined) {
+  created() {
+    if (typeof this.$route.params.id != undefined) {
       this.id = this.$route.params.id;
       this.initData(this.$route.params.id);
     }
   },
-  mounted(){}
-}
+  mounted() {}
+};
 </script>
 <style scoped>
 </style>

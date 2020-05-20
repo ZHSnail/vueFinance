@@ -1,6 +1,6 @@
 <template>
-  <div class="depreciatedDetail">
-    <my-pageheader titleContent="计提折旧申请详情"></my-pageheader>
+  <div class="depreciatedApprove">
+    <my-pageheader titleContent="固定资产折旧审核"></my-pageheader>
     <my-collapse title="申请信息" class="leftAlign">
       <el-row>
         <el-col :span="12">单号：{{depreciatedReqForm.code}}</el-col>
@@ -38,30 +38,27 @@
       </el-row>
     </my-collapse>
     <activiti-record workKey="assetsDepreciationReq" :bizId="id"></activiti-record>
-    <div class="rightAlign">
-      <el-button type="danger" v-if="show" @click="revoke()">撤回</el-button>
-    </div>
+    <activiti-handle workKey="assetsDepreciationReq" url="/finance/assets/depreciatedReview" :bizId="id"></activiti-handle>
+
   </div>
 </template>
 
 <script>
 export default {
-  name: "depreciatedDetail",
+  name: "depreciatedApprove",
   components: {},
-  
   props: {},
   data() {
     return {
-      depreciatedReqForm: {},
+        depreciatedReqForm: {},
       id: "",
       userInfo: {},
-      show: false 
     };
   },
   watch: {},
   computed: {},
   methods: {
-    initData(id) {
+      initData(id) {
       var url = "/assets/assetsDepreciation/" + id;
       this.axios.get(url).then(res => {
         if (res.success) {
@@ -70,35 +67,17 @@ export default {
           this.depreciatedReqForm = this.Utils.copyObj(temp);
           this.userInfo = this.Utils.getUser();
           if (
-            this.userInfo.id === this.depreciatedReqForm.creater &&
-            this.depreciatedReqForm.status === "审核中"
+            this.userInfo.id === this.assetsRegForm.creater &&
+            this.assetsRegForm.status === "审核中"
           ) {
             this.show = true;
           }
         }
       });
     },
-    revoke() {
-      var data = {
-        workKey: "assetsDepreciationReq",
-        businessKey: this.id,
-        comment: ""
-      };
-      var url = "/activiti/revoke";
-      this.axios.post(url, data).then(res => {
-        if (res.success) {
-          this.$message({
-            type: "success",
-            message: res.msg,
-            center: true
-          });
-          this.$router.push({ path: "/finance/assets/depreciatedList" });
-        }
-      });
-    }
   },
   created() {
-    if (typeof this.$route.params.id != undefined) {
+      if (typeof this.$route.params.id != undefined) {
       this.id = this.$route.params.id;
       this.initData(this.$route.params.id);
     }

@@ -1,12 +1,12 @@
 <template>
-  <div class="assetsPurchaseList">
-    <my-pageheader titleContent="固定资产采购信息" :needButton="true" buttonContent="申请" @handleClick="req"></my-pageheader>
+  <div class="assetsChgList">
+    <my-pageheader titleContent="固定资产变动信息" :needButton="true" buttonContent="申请" @handleClick="req"></my-pageheader>
     <el-tabs value="reqList">
       <el-tab-pane label="申请列表" name="reqList">
         <task
-          :taskObj="assetsPurchaseReqList"
-          draftUrl="assetsPurchaseReq"
-          detailUrl="assetsPurchaseDetail"
+          :taskObj="assetsChgReqList"
+          draftUrl="assetsChgReq"
+          detailUrl="assetsChgDetail"
         >
           <template v-slot:draftItem="{ draftItem }">
             <row>
@@ -35,12 +35,12 @@
           <searchForm :formOptions="formOptions" btnItems="search"></searchForm>
         </div>
         <my-card
-          :objList="assetsPurchaseList"
+          :objList="assetsChgList"
           :total="total"
           :page-size="pageSize"
           @getCurrentPage="handleCurrentChange"
-          url="assetsPurchaseDetail"
-          v-if="assetsPurchaseList.length != 0"
+          url="assetsChgDetail"
+          v-if="assetsChgList.length != 0"
         >
           <template v-slot:item="{ item }">
             <row>
@@ -63,13 +63,13 @@
 
 <script>
 export default {
-  name: "assetsPurchaseList",
+  name: "assetsChgList",
   components: {},
   props: {},
   data() {
     return {
-      assetsPurchaseReqList: {},
-      assetsPurchaseList: [],
+      assetsChgReqList: {},
+      assetsChgList: [],
       formOptions: [
         {
           label: "单号", // label文字
@@ -101,18 +101,18 @@ export default {
   computed: {},
   methods: {
     req() {
-      this.$router.push({ path: "assetsPurchaseReq" });
+      this.$router.push({ path: "assetsChgReq" });
     },
     findAssetsPurchaseReqList(){
-      var url = "/assets/assetsPurchaseTaskList";
+      var url = "/assets/assetsChangeTaskList";
       this.axios.get(url).then(res => {
         if (res.success) {
-          this.assetsPurchaseReqList = res.obj;
+          this.assetsChgReqList = res.obj;
         }
       });
     },
     search(val) {
-      var url = "/assets/allAssetsPurchaseTaskList";
+      var url = "/assets/allAssetsChangeTaskList";
       var data={};
       data.pageSize = this.pageSize;
       if (val) {
@@ -128,7 +128,7 @@ export default {
         .get(url, { params: { params: JSON.stringify(data) } })
         .then(res => {
           if (res.success) {
-            this.assetsPurchaseList = res.obj.list;
+            this.assetsChgList = res.obj.list;
             this.total = res.obj.total;
             this.pageNum = res.obj.pageNum;
           }

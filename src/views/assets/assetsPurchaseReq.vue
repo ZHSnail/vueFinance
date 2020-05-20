@@ -46,6 +46,18 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="借方会计科目" prop="debitAccountId">
+              <select-account :account-id="assetsPurchaseForm.debitAccountId" v-model="assetsPurchaseForm.debitAccountId" height="32" width="220px"></select-account>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="贷方会计科目" prop="creditAccountId">
+              <select-account :account-id="assetsPurchaseForm.creditAccountId" v-model="assetsPurchaseForm.creditAccountId" height="32" width="220px"></select-account>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </my-collapse>
     <my-collapse title="资产清单" :total="total+''" totalTitle="申请金额合计" class="leftAlign">
@@ -163,6 +175,8 @@ export default {
         reqTime: "",
         purchaseMethod: "",
         memo: "",
+        debitAccountId:"",
+        creditAccountId:"",
         assetsList: [
           {
             assetsKindId: "", //资产类别
@@ -230,7 +244,8 @@ export default {
           { required: true, message: "请选择资产类别", trigger: "change" }
         ]
       },
-      assetsKindList: []
+      assetsKindList: [],
+      show:false,
     };
   },
   watch: {},
@@ -285,6 +300,7 @@ export default {
       data.reqTime = this.Utils.timestampToDate(
         this.assetsPurchaseForm.reqTime
       );
+      data.totalAmt = this.total;
       return data;
     },
     save() {
@@ -339,7 +355,9 @@ export default {
             item.orival = parseFloat(item.orival);
             item.totalAmount = item.num * item.orival;
           });
-          this.assetsPurchaseForm = temp;
+          this.assetsPurchaseForm  = this.Utils.copyObj(temp);
+          this.$set(this.assetsPurchaseForm,"debitAccountId",res.obj.debitAccountId);
+          this.$set(this.assetsPurchaseForm,"creditAccountId",res.obj.creditAccountId);
         }
       });
     }
@@ -351,7 +369,7 @@ export default {
       this.initData(this.$route.params.id);
     }
   },
-  mounted() {}
+  mounted() {},
 };
 </script>
 <style scoped>

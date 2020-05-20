@@ -162,7 +162,7 @@
               </template>
             </el-menu-item>
           </router-link>
-          <router-link to="/finance/assets/assetsChgReq" tag="div">
+          <router-link to="/finance/assets/assetsChgList" tag="div">
             <el-menu-item index="3-2">
               <template slot="title">
                 <i class="el-icon-document-copy"></i>
@@ -215,6 +215,46 @@
               <template slot="title">
                 <i class="el-icon-document-add"></i>
                 <span slot="title">固定资产登记审核</span>
+              </template>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/finance/assets/assetsPurchaseReview" tag="div">
+            <el-menu-item index="3-9">
+              <template slot="title">
+                <i class="el-icon-document-add"></i>
+                <span slot="title">固定资产采购审核</span>
+              </template>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/finance/assets/depreciatedQuery" tag="div">
+            <el-menu-item index="3-10">
+              <template slot="title">
+                <i class="el-icon-document-add"></i>
+                <span slot="title">计提折旧综合查询</span>
+              </template>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/finance/assets/depreciatedReview" tag="div">
+            <el-menu-item index="3-11">
+              <template slot="title">
+                <i class="el-icon-document-add"></i>
+                <span slot="title">计提折旧审核</span>
+              </template>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/finance/assets/assetsChgQuery" tag="div">
+            <el-menu-item index="3-12">
+              <template slot="title">
+                <i class="el-icon-document-add"></i>
+                <span slot="title">资产变动综合查询</span>
+              </template>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/finance/assets/assetsChgReview" tag="div">
+            <el-menu-item index="3-13">
+              <template slot="title">
+                <i class="el-icon-document-add"></i>
+                <span slot="title">资产变动审核</span>
               </template>
             </el-menu-item>
           </router-link>
