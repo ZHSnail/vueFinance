@@ -1,12 +1,9 @@
 <template>
   <div class="salaryDetail">
-    <my-pageheader titleContent="教师工资单结算详情"></my-pageheader>
-    <div>
-      <searchForm :formOptions="formOptions" btnItems="search,export"></searchForm>
-    </div>
+    <my-pageheader titleContent="结算详情"></my-pageheader>
     <el-table cell-class-name="centerAlign" :data="tableData" stripe style="width: 100%">
-      <el-table-column align="center" fixed prop="name" label="名称"></el-table-column>
-      <el-table-column align="center" fixed prop="org" label="部门"></el-table-column>
+      <el-table-column align="center" fixed prop="staffInfo.name" label="名称"></el-table-column>
+      <el-table-column align="center" fixed prop="staffInfo.orgInfo.name" label="部门"></el-table-column>
       <el-table-column align="center" label="应发项">
         <el-table-column v-for="(item, index) in tableData[0].shouldPaidList" v-bind:key="item.id">
           <template slot="header">{{item.name}}</template>
@@ -25,10 +22,10 @@
           <template slot-scope="scope">{{scope.row.untiPayList[index].amount}}</template>
         </el-table-column>
       </el-table-column>
-      <el-table-column align="center" label="应发金额"></el-table-column>
-      <el-table-column align="center" label="实发金额"></el-table-column>
-      <el-table-column align="center" label="应纳税额"></el-table-column>
-      <el-table-column align="center" label="扣费金额"></el-table-column>
+      <el-table-column align="center" label="应发金额" prop="payableAmount"></el-table-column>
+      <el-table-column align="center" label="实发金额" prop="paidAmount"></el-table-column>
+      <el-table-column align="center" label="应纳税额" prop="taxableAmount"></el-table-column>
+      <el-table-column align="center" label="扣费金额" prop="deductionAmount"></el-table-column>
     </el-table>
     <el-row>
       <el-col :span="24">
@@ -40,6 +37,7 @@
           :total="total"
           class="centerAlign"
           :hide-on-single-page="true"
+          :current-page.sync="pageNum"
         ></el-pagination>
       </el-col>
     </el-row>
@@ -53,157 +51,37 @@ export default {
   props: {},
   data() {
     return {
-      tableCols: [
-        {
-          label: "name",
-          prop: "amount"
-        }
-      ],
-      tableData: [
-        {
-          shouldPaidList: [
-            {
-              id: "1",
-              name: "测试",
-              amount: 15
-            },
-            {
-              id: "2",
-              name: "45",
-              amount: 220
-            },
-            {
-              id: "3",
-              name: "十大",
-              amount: 45646
-            },
-            {
-              id: "4",
-              name: "哈哈",
-              amount: 124
-            },
-            {
-              id: "5",
-              name: "嘻嘻",
-              amount: 524
-            },
-            {
-              id: "6",
-              name: "哈哈",
-              amount: 25
-            },
-            {
-              id: "7",
-              name: "多对多",
-              amount: 524
-            }
-          ],
-          deductList: [
-            {
-              name: "12",
-              amount: ""
-            },
-            {
-              name: "",
-              amount: ""
-            },
-            {
-              name: "52",
-              amount: ""
-            },
-            {
-              name: "",
-              amount: ""
-            },
-            {
-              name: "",
-              amount: ""
-            },
-            {
-              name: "",
-              amount: ""
-            },
-            {
-              name: "",
-              amount: ""
-            }
-          ],
-          untiPayList: [
-            {
-              name: "",
-              amount: ""
-            },
-            {
-              name: "",
-              amount: ""
-            },
-            {
-              name: "",
-              amount: ""
-            },
-            {
-              name: "",
-              amount: ""
-            },
-            {
-              name: "",
-              amount: ""
-            },
-            {
-              name: "",
-              amount: ""
-            },
-            {
-              name: "",
-              amount: ""
-            }
-          ]
-        }
-      ],
-      total: 200,
-      pageSize: 10,
-      formOptions: [
-        {
-          label: "名称", // label文字
-          prop: "name", // 字段名
-          element: "el-input", // 指定elementui组件
-          placeholder: "请输入名称" // elementui组件属性
-        },
-        {
-          label: "部门", // label文字
-          prop: "org", // 字段名
-          element: "el-select", // 指定elementui组件
-          placeholder: "请选择部门", // elementui组件属性
-          options: [
-            { label: "人事部", value: "1" },
-            { label: "校长办公室", value: "2" }
-          ]
-        },
-        {
-          label: "职工分类", // label文字
-          prop: "staffType", // 字段名
-          element: "el-select", // 指定elementui组件
-          placeholder: "请选择职工分类", // elementui组件属性
-          options: [
-            { label: "教师类", value: "1" },
-            { label: "高级管理类", value: "2" }
-          ]
-        },
-        {
-          element: "el-date-picker",
-          label: "入职日期",
-          type: "daterange",
-          prop: "entryDate" // 字段名
-        }
-      ]
+    tableData: [],
+       pageSize: 10,
+      total: 0,
+      pageNum: 1,
     };
   },
   watch: {},
   computed: {},
   methods: {
-    handleCurrentChange(val) {}
+    search(val) {
+      var url = "/salary/settleWageDetailList";
+      var data = val ? JSON.stringify(val) : "";
+      this.axios.get(url, { params: { params: data } }).then(res => {
+        if (res.success) {
+          this.tableData = res.obj.list;
+          console.log(this.tableData)
+          this.total = res.obj.total;
+          this.pageNum = res.obj.pageNum;
+        }
+      });
+    },
+    handleCurrentChange(val) {
+      this.pageNum = val;
+      var data = {};
+      data.pageNum = val;
+      this.search(data);
+    },
   },
-  created() {},
+  created() {
+    this.search({settleWageId:this.$route.params.id});
+  },
   mounted() {}
 };
 </script>

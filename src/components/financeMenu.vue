@@ -137,12 +137,20 @@
               </template>
             </el-menu-item>
           </router-link>
-          <router-link to="/finance/salary/payRollSetInfo" tag="div">
+          <!-- <router-link to="/finance/salary/payRollSetInfo" tag="div">
             <el-menu-item index="2-7">
               <template slot="title">
                 <i class="el-icon-fin-office-supplies-fill"></i>
-                <!-- 税率也写到工资设置里面 -->
                 <span slot="title">职工工资配置</span>
+              </template>
+            </el-menu-item>
+          </router-link> -->
+          <router-link to="/finance/salary/orgInfo" tag="div">
+            <el-menu-item index="2-8">
+              <template slot="title">
+                <i class="el-icon-fin-office-supplies-fill"></i>
+                <!-- 税率也写到工资设置里面 -->
+                <span slot="title">部门管理</span>
               </template>
             </el-menu-item>
           </router-link>

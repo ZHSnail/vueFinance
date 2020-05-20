@@ -70,7 +70,7 @@ import AssetsChgList from '../views/assets/assetsChgList.vue'
 import AssetsChgQuery from '../views/assets/assetsChgQuery.vue'
 import AssetsChgReview from '../views/assets/assetsChgReview.vue'
 import AssetsChgApprove from '../views/assets/assetsChgApprove.vue'
-
+import OrgInfo from '../views/salary/orgInfo.vue'
 Vue.use(VueRouter)
 
 //收费管理的路由
@@ -194,6 +194,11 @@ const salary = [{
         path: 'salary/salaryDetail/:id',
         name: 'salaryDetail',
         component: SalaryDetail
+    },
+    {
+        path: 'salary/orgInfo',
+        name: 'orgInfo',
+        component: OrgInfo
     },
 ];
 const assets = [{

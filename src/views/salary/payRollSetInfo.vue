@@ -2,7 +2,7 @@
   <div class="payRollSetInfo">
     <my-pageheader titleContent="职工工资配置"></my-pageheader>
     <div>
-      <searchForm :formOptions="formOptions" btnItems="search,export"></searchForm>
+      <searchForm :formOptions="formOptions" btnItems="search"></searchForm>
     </div>
     <el-table cell-class-name="centerAlign" :data="tableData" stripe style="width: 100%">
       <el-table-column align="center" prop="name" label="姓名"></el-table-column>

@@ -46,8 +46,8 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="所属部门" label-width="90px" prop="org">
-              <el-select class="length" clearable v-model="staffForm.org" placeholder="请选择所属部门">
+            <el-form-item label="所属部门" label-width="90px" prop="orgId">
+              <el-select class="length" clearable v-model="staffForm.orgId" placeholder="请选择所属部门">
                 <el-option
                   v-for="item in orgList"
                   :key="item.id"
@@ -58,42 +58,20 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <!-- <el-form-item label="职工分类" prop="staffType">
-              <el-select
-                class="length"
-                clearable
-                placeholder="请选择职工分类"
-                v-model="staffForm.staffType"
-              >
+            <el-form-item label="所属岗位" label-width="90px" prop="stationInfoId">
+              <el-select class="length" clearable v-model="staffForm.stationInfoId" placeholder="请选择所属岗位">
                 <el-option
-                  v-for="item in staffkind"
+                  v-for="item in station"
                   :key="item.id"
                   :label="item.name"
                   :value="item.id"
                 ></el-option>
               </el-select>
-            </el-form-item>-->
-            <el-form-item label="所属岗位" label-width="90px" prop="station">
-              <el-cascader
-                placeholder="请选择所属岗位"
-                :options="station"
-                filterable
-                clearable
-                class="length"
-                v-model="staffForm.station"
-              ></el-cascader>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="职称" label-width="90px" prop="postTitle">
-              <el-cascader
-                placeholder="请选择职称"
-                :options="station"
-                filterable
-                clearable
-                class="length"
-                v-model="staffForm.postTitle"
-              ></el-cascader>
+              <el-input class="length" v-model="staffForm.postTitle"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -124,10 +102,10 @@
         </el-row>
       </el-form>
     </my-collapse>
-    <my-collapse title="工资单信息" class="leftAlign" v-if="staffForm.station">
+    <my-collapse title="工资单信息" class="leftAlign">
       <el-form
         ref="payStubForm"
-        :rules="rules"
+        :rules="payStubRules"
         :model="payStubForm"
         label-width="80px"
         :status-icon="true"
@@ -135,11 +113,11 @@
       >
         <el-row>
           <el-col :span="8">
-            <el-form-item label="工资单" label-width="90px" prop="payStubId">
+            <el-form-item label="工资单" label-width="90px" prop="payStubInfoId">
               <el-select
                 class="length"
                 clearable
-                v-model="payStubForm.payStubId"
+                v-model="payStubForm.payStubInfoId"
                 @change="checkedPayStub"
                 placeholder="请选择工资单"
               >
@@ -152,19 +130,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="基础工资计算公式" label-width="90px" prop="postWageFormula">
-              <el-input class="length" readonly v-model="payStubForm.postWageFormula"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="浮动工资计算公式" label-width="90px" prop="postWageFormula">
-              <el-input class="length" readonly v-model="payStubForm.postWageFormula"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="8">
+         <el-col :span="8">
             <el-form-item label="岗位等级" label-width="90px" prop="stationLv">
               <el-select
                 class="length"
@@ -210,15 +176,12 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="基础工资速算" label-width="90px" prop="postWageAmount">
-              <el-input class="length" readonly v-model="payStubForm.postWageAmount"></el-input>
-            </el-form-item>
-          </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            
+            <el-form-item label="基础工资速算" label-width="90px" prop="postWageAmount">
+              <el-input class="length" readonly  v-model="payStubForm.postWageAmount"></el-input>
+            </el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -230,45 +193,33 @@
         </el-col>
       </el-row>
       <el-form ref="bank" :model="staffForm" label-width="80px" :status-icon="true" size="small">
-        <div v-for="(bank,index) in staffForm.bankList" :key="bank.id">
+        <div v-for="(bank,index) in staffForm.bankInfoList" :key="bank.id">
           <el-row>
             <el-col :span="8">
               <el-form-item
                 label="账户类型"
-                :prop="'bankList.' + index + '.accountType'"
-                :rules="bankRules.accountType"
+                :prop="'bankInfoList.' + index + '.accounttype'"
+                :rules="bankRules.accounttype"
               >
-                <el-select
-                  class="length"
-                  clearable
-                  placeholder="请选择账户类型"
-                  v-model="bank.accountType"
-                >
-                  <el-option
-                    v-for="item in staffkind"
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id"
-                  ></el-option>
-                </el-select>
+                <el-input class="length" v-model="bank.accounttype"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item
                 label="开户银行"
-                :prop="'bankList.' + index + '.bankName'"
-                :rules="bankRules.bankName"
+                :prop="'bankInfoList.' + index + '.name'"
+                :rules="bankRules.name"
               >
-                <el-input class="length" v-model="bank.bankName"></el-input>
+                <el-input class="length" v-model="bank.name"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item
                 label="分行名"
-                :prop="'bankList.' + index + '.subbranch'"
-                :rules="bankRules.subbranch"
+                :prop="'bankInfoList.' + index + '.subBranch'"
+                :rules="bankRules.subBranch"
               >
-                <el-input class="length" v-model="bank.subbranch"></el-input>
+                <el-input class="length" v-model="bank.subBranch"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -276,16 +227,16 @@
             <el-col :span="8">
               <el-form-item
                 label="户名"
-                :prop="'bankList.' + index + '.accountName'"
-                :rules="bankRules.accountName"
+                :prop="'bankInfoList.' + index + '.accountname'"
+                :rules="bankRules.accountname"
               >
-                <el-input class="length" v-model="bank.accountName"></el-input>
+                <el-input class="length" v-model="bank.accountname"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item
                 label="银行账号"
-                :prop="'bankList.' + index + '.accountNumber'"
+                :prop="'bankInfoList.' + index + '.accountNumber'"
                 :rules="bankRules.accountNumber"
               >
                 <el-input class="length" v-model="bank.accountNumber"></el-input>
@@ -300,7 +251,6 @@
       </el-form>
     </my-collapse>
     <div class="rightAlign">
-      <el-button type="primary" @click="save()">暂存</el-button>
       <el-button type="primary" @click="commit('staffForm')">提交</el-button>
     </div>
   </div>
@@ -319,92 +269,27 @@ export default {
       staffForm: {
         staffNumber: "",
         name: "", //姓名
-        sex: "", //性别
         degree: "", //学历
         cardNumber: "", //证件号码
         entryDate: "", //入职日期
-        bankList: [
+        bankInfoList: [
           {
-            bankName: "",
+            name: "",
             accountNumber: "",
-            subbranch: "",
-            accountName: "",
-            accountType: ""
+            subBranch: "",
+            accountname: "",
+            accounttype: ""
           }
         ], //银行信息维护
-        org: "", //部门信息
-        staffType: "", //职工分类
-        station: "", //岗位
+        orgId: "", //部门信息
+        stationInfoId: "", //岗位
         postTitle: "", //职称
         mobile: "",
         mail: "",
         userName: "" //用户名
       },
-      //职工分类
-      staffkind: [
-        {
-          id: "1",
-          name: "高级管理类"
-        },
-        {
-          id: "2",
-          name: "教师类"
-        },
-        {
-          id: "3",
-          name: "职能管理类"
-        },
-        {
-          id: "4",
-          name: "其它类"
-        }
-      ],
-      orgList: [
-        { id: "1", name: "仲恺农业工程学院" },
-        { id: "3", name: "物业管理处" },
-        { id: "4", name: "人事处" },
-        { id: "5", name: "财务管理处" },
-        { id: "6", name: "校长办公室" }
-      ],
-      station: [
-        {
-          label: "高级管理类",
-          value: "1",
-          children: [
-            { value: "1", label: "校长" },
-            { value: "2", label: "副校长" },
-            {
-              value: "3",
-              label: "名誉校长"
-            }
-          ]
-        },
-        {
-          label: "教师类",
-          value: "2",
-          children: [
-            { value: "4", label: "教授" },
-            { value: "5", label: "信息与计算科学老师" }
-          ]
-        },
-        {
-          label: "职能管理类",
-          value: "3",
-          children: [
-            { value: "6", label: "教务员" },
-            { value: "7", label: "财务管理员" }
-          ]
-        },
-        {
-          label: "其它类",
-          value: "4",
-          children: [
-            { value: "8", label: "校车司机" },
-            { value: "9", label: "食堂大妈" },
-            { value: "10", label: "保安" }
-          ]
-        }
-      ],
+      orgList: [],
+      station: [],
       pickerOptions: tools.pickerOptionsDay,
       rules: {
         name: [
@@ -419,11 +304,10 @@ export default {
         mail: [
           { required: true, message: "请输入电子邮箱", trigger: "change" }
         ],
-        org: [{ required: true, message: "请选择所属部门", trigger: "change" }],
-        staffType: [
-          { required: true, message: "请选择职工分类", trigger: "change" }
+        orgId: [
+          { required: true, message: "请选择所属部门", trigger: "change" }
         ],
-        station: [
+        stationInfoId: [
           { required: true, message: "请选择所属岗位", trigger: "change" }
         ],
         entryDate: [
@@ -431,16 +315,16 @@ export default {
         ]
       },
       bankRules: {
-        accountType: [
+        accounttype: [
           { required: true, message: "请选择账户类型", trigger: "change" }
         ],
-        bankName: [
+        name: [
           { required: true, message: "请输入开户银行", trigger: "change" }
         ],
-        subbranch: [
+        subBranch: [
           { required: true, message: "请输入分行名", trigger: "change" }
         ],
-        accountName: [
+        accountname: [
           { required: true, message: "请输入户名", trigger: "change" }
         ],
         accountNumber: [
@@ -448,121 +332,90 @@ export default {
         ]
       },
       payStubForm: {
-        payStubId: "",
-        postWageFormula: "",
-        floatWageFormula: "",
+        payStubInfoId: "",
         stationLv: "",
         scaleLv: "",
         postWageAmount: ""
       },
-      payStubList: [
-        {
-          id: 1,
-          scope: "教师类", //适用范围
-          name: "教师类工资单",
-          postWageFormula: "住房补贴+餐费补贴",
-          floatWageFormula: "住房补贴+餐费补贴",
-          amount: 220
-        },
-        {
-          id: 2,
-          scope: "高级管理类",
-          postWageFormula: "住房补贴+餐费补贴+交通补贴",
-          floatWageFormula: "住房补贴+餐费补贴+交通补贴",
-          name: "高级管理类工资单",
-          amount: 220
-        },
-        {
-          id: 3,
-          scope: "职能管理类",
-          postWageFormula: "住房补贴+餐费补贴+交通补贴",
-          floatWageFormula: "住房补贴+餐费补贴+交通补贴",
-          name: "职能管理类工资单",
-          amount: 220
-        },
-        {
-          id: 4,
-          scope: "其他类",
-          postWageFormula: "住房补贴+餐费补贴+交通补贴",
-          floatWageFormula: "住房补贴+餐费补贴+交通补贴",
-          name: "其他类工资单",
-          amount: 220
-        }
-      ],
-      postWageList: [
-        {
-          id: "1",
-          type: "教师类",
-          stationAmount: 1000, //岗位工资标准
-          stationStage: 10, //岗位工资级数
-          stationGrad: 200, //岗位工资级差
-          scaleAmount: 220, //薪级工资标准
-          scaleStage: 10, //薪级工资级数
-          scaleGrad: 200 //薪级工资级差
-        },
-        {
-          id: "2",
-          type: "高级管理类",
-          stationAmount: 1000, //岗位工资标准
-          stationStage: 10, //岗位工资级数
-          stationGrad: 200, //岗位工资级差
-          scaleAmount: 220, //薪级工资标准
-          scaleStage: 10, //薪级工资级数
-          scaleGrad: 200 //薪级工资级差
-        },
-        {
-          id: "3",
-          type: "职能管理类",
-          stationAmount: 1000, //岗位工资标准
-          stationStage: 10, //岗位工资级数
-          stationGrad: 200, //岗位工资级差
-          scaleAmount: 220, //薪级工资标准
-          scaleStage: 10, //薪级工资级数
-          scaleGrad: 200 //薪级工资级差
-        },
-        {
-          id: "4",
-          type: "其他类",
-          stationAmount: 1000, //岗位工资标准
-          stationStage: 10, //岗位工资级数
-          stationGrad: 200, //岗位工资级差
-          scaleAmount: 220, //薪级工资标准
-          scaleStage: 10, //薪级工资级数
-          scaleGrad: 200 //薪级工资级差
-        }
-      ],
+      payStubList: [],
+      postWageList: [],
       stationWageOptions: [],
       scaleWageOptions: [],
       scaleAmount: 0,
-      stationAmount: 0
+      stationAmount: 0,
+      payStubRules:{
+        payStubInfoId: [
+          { required: true, message: "请选择工资单", trigger: "change" }
+        ],
+        stationLv: [
+          { required: true, message: "请选择岗位等级", trigger: "change" }
+        ],
+        scaleLv: [
+          { required: true, message: "请选择薪级等级", trigger: "change" }
+        ]     
+      },
     };
   },
   watch: {},
   computed: {},
   methods: {
-    save(formName) {
-      var formRefs = [this.$refs["staffForm"], this.$refs["bank"]];
+    arrangeData(){
+      var data = {};
+      data = this.Utils.copyObj(this.staffForm);
+      data.entryDate = this.Utils.timestampToDate(data.entryDate);
+      data.stationLv = this.payStubForm.stationLv;
+      data.scaleLv = this.payStubForm.scaleLv;
+      data.payStubInfoId = this.payStubForm.payStubInfoId;
+      data.postWageAmount = this.payStubForm.postWageAmount;
+      return data;
+    },
+    commit(formName) {
+      var formRefs = [this.$refs["staffForm"], this.$refs["bank"], this.$refs["payStubForm"]];
       this.Utils.checkForm(formRefs).then(res => {
         if (res) {
-          alert("submit");
-        } else {
-          alert("error");
+          var data = this.arrangeData();
+          if(this.$route.params.id != undefined){
+              this.axios.put("/salary/staffInfo", data).then(res => {
+              if (res.success) {
+                this.$message({
+                  type: "success",
+                  message: res.msg,
+                  center: true
+                });
+                this.$router.push({
+                  path: "/finance/salary/staffInfo"
+                });
+              }
+            });
+          }else{
+            this.axios.post("/salary/staffInfo", data).then(res => {
+              if (res.success) {
+                this.$message({
+                  type: "success",
+                  message: res.msg,
+                  center: true
+                });
+                this.$router.push({
+                  path: "/finance/salary/staffInfo"
+                });
+              }
+            });
+          }          
         }
       });
     },
-    commit(formName) {},
     addBank() {
       var bank = {
-        bankName: "",
+        name: "",
         accountNumber: "",
-        subbranch: "",
-        accountName: "",
-        accountType: ""
+        subBranch: "",
+        accountname: "",
+        accounttype: ""
       };
-      this.staffForm.bankList.push(bank);
+      this.staffForm.bankInfoList.push(bank);
     },
     deleteBank(index) {
-      this.staffForm.bankList.splice(index, 1);
+      this.staffForm.bankInfoList.splice(index, 1);
     },
     arrangeVal(stage, grad, amount) {
       var options = [];
@@ -582,12 +435,10 @@ export default {
         this.scaleWageOptions = [];
       } else {
         var payStub = this.Utils.findObj(this.payStubList, "id", val);
-        this.payStubForm.postWageFormula = payStub.postWageFormula;
-        this.payStubForm.floatWageFormula = payStub.floatWageFormula;
         var postWage = this.Utils.findObj(
           this.postWageList,
           "type",
-          payStub.scope
+          payStub.scopeName
         );
         this.stationWageOptions = this.arrangeVal(
           postWage.stationStage,
@@ -601,37 +452,88 @@ export default {
         );
       }
     },
-    checkedScaleLv(val){
-      if(this.payStubForm.postWageAmount != 0 || !val){
+    checkedScaleLv(val) {
+      if (this.payStubForm.postWageAmount != 0 || !val) {
         this.payStubForm.postWageAmount -= this.scaleAmount;
-        if(!val){
+        if (!val) {
           this.scaleAmount = 0;
         }
       }
-      if(val){
-      var scaleWage = this.Utils.findObj(this.scaleWageOptions,'level',val);
-      this.scaleAmount = scaleWage.amount;
-      this.payStubForm.postWageAmount += scaleWage.amount;
+      if (val) {
+        var scaleWage = this.Utils.findObj(this.scaleWageOptions, "level", val);
+        this.scaleAmount = scaleWage.amount;
+        this.payStubForm.postWageAmount += scaleWage.amount;
       }
     },
-    checkedStationLv(val){
-      if(this.payStubForm.postWageAmount != 0 || !val){
+    checkedStationLv(val) {
+      if (this.payStubForm.postWageAmount != 0 || !val) {
         this.payStubForm.postWageAmount -= this.stationAmount;
-        if(!val){
+        if (!val) {
           this.stationAmount = 0;
         }
       }
-      if(val){
-      var stationWage = this.Utils.findObj(this.stationWageOptions,'level',val);
-      this.stationAmount = stationWage.amount;
-      this.payStubForm.postWageAmount += stationWage.amount;
+      if (val) {
+        var stationWage = this.Utils.findObj(
+          this.stationWageOptions,
+          "level",
+          val
+        );
+        this.stationAmount = stationWage.amount;
+        this.payStubForm.postWageAmount += stationWage.amount;
       }
-     
+    },
+    findOrgList() {
+      var url = "/salary/orgInfos";
+      this.axios.get(url).then(res => {
+        if (res.success) {
+          this.orgList = res.obj;
+        }
+      });
+    },
+    findStation() {
+      var url = "/salary/stationInfos";
+      this.axios.get(url).then(res => {
+        if (res.success) {
+          this.station = res.obj;
+        }
+      });
+    },
+    findPostWageList() {
+      var url = "/salary/scaleAndStationList";
+      this.axios.get(url).then(res => {
+        if (res.success) {
+          this.postWageList = res.obj;
+        }
+      });
+    },
+    findPayStubList() {
+      var url = "/salary/payStubInfos";
+      this.axios.get(url).then(res => {
+        if (res.success) {
+          this.payStubList = res.obj;
+        }
+      });
     }
   },
   created() {
+    this.findOrgList();
+    this.findStation();
+    this.findPostWageList();
+    this.findPayStubList();
     if (this.$route.params.id != undefined) {
       this.title = "编辑职工";
+      var url = "/salary/staffInfo/"+this.$route.params.id;
+      this.axios.get(url).then(res => {
+        if (res.success) {
+          var temp = {};
+          temp = this.Utils.copyObj(res.obj)
+          this.staffForm = temp;
+          this.payStubForm.payStubInfoId = temp.payStubInfoId;
+          this.payStubForm.scaleLv = temp.scaleLv;
+          this.payStubForm.stationLv = temp.stationLv;
+          this.payStubForm.postWageAmount = temp.postWageAmount;
+        }
+      });
     } else {
       this.title = "添加职工";
     }

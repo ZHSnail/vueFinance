@@ -40,48 +40,7 @@ export default {
   props: {},
   data() {
     return {
-      tableData: [
-        {
-          id: "1",
-          type: "教师类",
-          stationAmount: 1000, //岗位工资标准
-          stationStage: 10, //岗位工资级数
-          stationGrad: 200, //岗位工资级差
-          scaleAmount: 220, //薪级工资标准
-          scaleStage: 10, //薪级工资级数
-          scaleGrad: 200, //薪级工资级差
-        },
-        {
-          id: "2",
-          type: "高级管理类",
-          stationAmount: 1000, //岗位工资标准
-          stationStage: 10, //岗位工资级数
-          stationGrad: 200, //岗位工资级差
-          scaleAmount: 220, //薪级工资标准
-          scaleStage: 10, //薪级工资级数
-          scaleGrad: 200, //薪级工资级差
-        },
-        {
-          id: "3",
-          type: "职能管理类",
-          stationAmount: 1000, //岗位工资标准
-          stationStage: 10, //岗位工资级数
-          stationGrad: 200, //岗位工资级差
-          scaleAmount: 220, //薪级工资标准
-          scaleStage: 10, //薪级工资级数
-          scaleGrad: 200, //薪级工资级差
-        },
-        {
-          id: "4",
-          type: "其他类",
-          stationAmount: 1000, //岗位工资标准
-          stationStage: 10, //岗位工资级数
-          stationGrad: 200, //岗位工资级差
-          scaleAmount: 220, //薪级工资标准
-          scaleStage: 10, //薪级工资级数
-          scaleGrad: 200, //薪级工资级差
-        }
-      ]
+      tableData: []
     };
   },
   watch: {},
@@ -89,9 +48,19 @@ export default {
   methods: {
     handleEdit(index, row) {
       this.$router.push({ name: "postWageAdd",params:{obj:row,id:row.id} });
+    },
+    initData(){
+      var url = "/salary/scaleAndStationList";
+      this.axios.get(url).then(res => {
+        if (res.success) {
+          this.tableData = res.obj;
+        }
+      });
     }
   },
-  created() {},
+  created() {
+    this.initData();
+  },
   mounted() {}
 };
 </script>

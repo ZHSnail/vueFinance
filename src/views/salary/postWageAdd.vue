@@ -84,7 +84,7 @@
         ></el-pagination>
     </my-collapse>
     <div class="rightAlign">
-      <el-button type="primary" @click="save()">预览工资标准表</el-button>
+      <el-button type="primary" @click="view()">预览工资标准表</el-button>
       <el-button type="primary" @click="commit('postWageForm')">提交</el-button>
     </div>
   </div>
@@ -147,7 +147,7 @@ export default {
   watch: {},
   computed: {},
   methods: {
-    save() {
+    view() {
       var formRefs = [this.$refs["postWageForm"]];
       this.Utils.checkForm(formRefs).then(res => {
         if (res) {
@@ -182,6 +182,55 @@ export default {
         }
       });
     },
+    arrangeData(){
+      var data = {
+        scaleSalary:{
+          scaleAmount:"",
+          scaleGrad:"",
+          scaleStage:"",
+          id:"",
+          type:""
+        },
+        stationSalary:{
+          stationAmount:"",
+          stationGrad:"",
+          stationStage:"",
+          id:"",
+          type:""
+        },
+      };
+      data.scaleSalary.scaleAmount = this.postWageForm.scaleAmount;
+      data.scaleSalary.scaleGrad = this.postWageForm.scaleGrad;
+      data.scaleSalary.scaleStage = this.postWageForm.scaleStage;
+      data.scaleSalary.id = this.postWageForm.id;
+      data.scaleSalary.type = this.postWageForm.type;
+      data.stationSalary.stationAmount = this.postWageForm.stationAmount;
+      data.stationSalary.stationGrad = this.postWageForm.stationGrad;
+      data.stationSalary.stationStage = this.postWageForm.stationStage;
+      data.stationSalary.id = this.postWageForm.id;
+      data.stationSalary.type = this.postWageForm.type;
+      return data;
+    },
+    commit(){
+      var formRefs = [this.$refs["postWageForm"]];
+      this.Utils.checkForm(formRefs).then(res => {
+        if (res) {
+          var data = this.arrangeData();
+          this.axios.put("/salary/scaleAndStation", data).then(res => {
+              if (res.success) {
+                this.$message({
+                  type: "success",
+                  message: res.msg,
+                  center: true
+                });
+                this.$router.push({
+                  path: "/finance/salary/salaryInfo"
+                });
+              }
+            });
+        }
+      })
+    },
     handleStationChange(page){
       var pageSize = this.pageSize;
       var start = (page-1)*pageSize;
@@ -197,7 +246,7 @@ export default {
   },
   created() {
     this.titleContent = this.$route.params.obj.type + "岗位工资管理";
-    this.postWageForm = this.$route.params.obj;
+    this.postWageForm = this.$route.params.obj;   
   },
   mounted() {}
 };
