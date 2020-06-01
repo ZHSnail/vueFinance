@@ -2,11 +2,7 @@
   <div class="settleAccount">
     <my-pageheader titleContent="出纳扎帐"></my-pageheader>
     <div>
-      <searchForm
-        :formOptions="formOptions"
-        @onSearch="search"
-        btnItems="search"
-      ></searchForm>
+      <searchForm :formOptions="formOptions" @onSearch="search" btnItems="search"></searchForm>
     </div>
     <el-button type="danger" @click="posting()" style="margin-bottom:25px" size="medium">扎帐</el-button>
     <el-table
@@ -73,16 +69,16 @@ export default {
           prop: "accountPeriod", // 字段名
           element: "el-date-picker", // 指定elementui组件
           placeholder: "请选择会计期间", // elementui组件属性
-          type:"month"
+          type: "month"
         }
       ],
       tableData: [],
       pageSize: 10,
       total: 0,
-      pageNum:1,
-      searchVal:{
+      pageNum: 1,
+      searchVal: {
         code: "",
-        accountPeriod: "",
+        accountPeriod: ""
       },
       multipleSelection: []
     };
@@ -90,10 +86,10 @@ export default {
   watch: {},
   computed: {},
   methods: {
-   search(val) {
+    search(val) {
       var url = "/voucher/cashierTickVoucher";
       var data = val ? JSON.stringify(val) : "";
-      if(val){
+      if (val) {
         this.searchVal = this.Utils.copyObj(val);
       }
       this.axios.get(url, { params: { params: data } }).then(res => {
@@ -110,13 +106,32 @@ export default {
       data.pageNum = val;
       this.search(data);
     },
-    posting() {},
+    posting() {
+      if (this.multipleSelection.length > 0) {
+        var data = {
+          ids: []
+        };
+        this.multipleSelection.forEach(item => {
+          data.ids.push(item.id);
+        });
+        this.axios.post("/voucher/postVoucher", data).then(res => {
+          if (res.success) {
+            this.$message({
+              type: "success",
+              message: res.msg,
+              center: true
+            });
+            this.search();
+          }
+        });
+      }
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
     }
   },
   created() {
-     this.search();
+    this.search();
   },
   mounted() {}
 };

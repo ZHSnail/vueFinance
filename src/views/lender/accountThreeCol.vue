@@ -2,7 +2,7 @@
   <div class="accountThreeCol">
     <my-pageheader titleContent="会计科目明细账"></my-pageheader>
     <div>
-      <searchForm
+       <searchForm
         :formOptions="formOptions"
         @onSearch="search"
         @onExport="exportData"
@@ -11,12 +11,12 @@
     </div>
     <el-table cell-class-name="centerAlign" :data="tableData" stripe style="width: 100%">
       <el-table-column align="center" prop="accountPeriod" label="会计期间"></el-table-column>
-      <el-table-column align="center" prop="accountName" label="科目名称"></el-table-column>
-      <el-table-column align="center" prop="accountCode" label="科目编码"></el-table-column>
-      <el-table-column align="center" prop="postingDate" label="过账日期"></el-table-column>
-      <el-table-column align="center" prop="voucherCode" label="凭证号"></el-table-column>
-      <el-table-column align="center" prop="originator" label="制单人"></el-table-column>
-      <el-table-column align="center" prop="memo" label="摘要"></el-table-column>
+      <el-table-column align="center" prop="accountBalance.account.accountName" label="科目名称"></el-table-column>
+      <el-table-column align="center" prop="accountBalance.account.code" label="科目编码"></el-table-column>
+      <el-table-column align="center" prop="voucher.postingDate" label="过账日期"></el-table-column>
+      <el-table-column align="center" prop="voucher.code" label="凭证号"></el-table-column>
+      <el-table-column align="center" prop="voucher.originator" label="制单人"></el-table-column>
+      <el-table-column align="center" prop="voucher.memo" label="摘要"></el-table-column>
       <el-table-column align="center" prop="debitAmount" label="借方金额"></el-table-column>
       <el-table-column align="center" prop="creditAmount" label="贷方金额"></el-table-column>
     </el-table>
@@ -59,7 +59,7 @@ export default {
         }
       ],
       pageSize: 10,
-      total: 200
+      total: 0
     };
   },
   watch: {},
@@ -68,21 +68,21 @@ export default {
     search(val) {
       var url = "/lender/accDetailCondition";
       var data = val ? JSON.stringify(val) : "";
-      //   this.axios.get(url, { params: { params: data } }).then(res => {
-      //     if (res.success) {
-      //       this.tableData = res.obj.list;
-      //       this.total = res.obj.total;
-      //     }
-      //   });
+      this.axios.get(url, { params: { params: data } }).then(res => {
+        if (res.success) {
+          this.tableData = res.obj.list;
+          this.total = res.obj.total;
+        }
+      });
     },
     exportData(val) {
-      var url = "/lender/accBalanceExport";
+      var url = "/lender/accDetailExport";
       var data = JSON.stringify(val) ? JSON.stringify(val) : "";
-      //   this.Utils.downloadFile(url, { data: data });
+      this.Utils.downloadFile(url, { data: data });
     },
     handleCurrentChange(val) {
       var data = { pageNum: val };
-      //   this.search(data);
+      this.search(data);
     }
   },
   created() {

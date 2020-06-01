@@ -71,6 +71,7 @@ import AssetsChgQuery from '../views/assets/assetsChgQuery.vue'
 import AssetsChgReview from '../views/assets/assetsChgReview.vue'
 import AssetsChgApprove from '../views/assets/assetsChgApprove.vue'
 import OrgInfo from '../views/salary/orgInfo.vue'
+import RoleUserInfo from '../views/system/roleUserInfo.vue'
 Vue.use(VueRouter)
 
 //收费管理的路由
@@ -393,6 +394,11 @@ const system = [{
         path: 'system/accountInit',
         name: 'accountInit',
         component: AccountInit
+    },
+    {
+        path: 'system/roleUserInfo',
+        name: 'roleUserInfo',
+        component: RoleUserInfo
     },
 ];
 const activity = [{

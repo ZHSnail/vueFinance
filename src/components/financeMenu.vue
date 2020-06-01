@@ -137,14 +137,6 @@
               </template>
             </el-menu-item>
           </router-link>
-          <!-- <router-link to="/finance/salary/payRollSetInfo" tag="div">
-            <el-menu-item index="2-7">
-              <template slot="title">
-                <i class="el-icon-fin-office-supplies-fill"></i>
-                <span slot="title">职工工资配置</span>
-              </template>
-            </el-menu-item>
-          </router-link> -->
           <router-link to="/finance/salary/orgInfo" tag="div">
             <el-menu-item index="2-8">
               <template slot="title">
@@ -417,12 +409,14 @@
               </template>
             </el-menu-item>
           </router-link>
+          <router-link to="/finance/system/roleUserInfo" tag="div">
           <el-menu-item index="8-3">
             <template slot="title">
               <i class="el-icon-data-line"></i>
-              <span slot="title">系统监控</span>
+              <span slot="title">用户角色管理</span>
             </template>
           </el-menu-item>
+          </router-link>
           <el-menu-item index="8-4">
             <template slot="title">
               <i class="el-icon-set-up"></i>

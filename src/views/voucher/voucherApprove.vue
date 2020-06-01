@@ -23,10 +23,10 @@
       </el-row>
     </my-collapse>
     <my-collapse title="分录信息" class="leftAlign">
-      <el-row v-for="item in voucherForm.accountTempList" v-bind:key="item.id">
+      <el-row v-for="item in voucherForm.accountTempVoList" v-bind:key="item.id">
         <el-col :span="12">
-          <div v-if="item.debitAmt">借方科目：{{item.account.code }} {{item.account.accountName}}</div>
-          <div v-if="item.creditAmt">贷方科目：{{item.account.code }} {{item.account.accountName}}</div>
+          <div v-if="item.debitAmt">借方科目：{{item.account.code }} {{item.acconutName}}</div>
+          <div v-if="item.creditAmt">贷方科目：{{item.account.code }} {{item.acconutName}}</div>
         </el-col>
         <el-col :span="12">
           <div v-if="item.debitAmt">借方金额：{{item.debitAmt}}</div>

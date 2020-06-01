@@ -43,7 +43,6 @@
         </template>
       </el-table-column>
       <el-table-column align="center" label="所属部门" prop="orgInfo.name"></el-table-column>
-      <el-table-column align="center" label="职工分类" prop="stationInfo.type"></el-table-column>
       <el-table-column align="center" label="岗位" prop="stationInfo.name"></el-table-column>
       <el-table-column align="center" label="职称" prop="postTitle"></el-table-column>
       <el-table-column align="center" label="操作" prop="state">

@@ -117,7 +117,26 @@ export default {
       data.pageNum = val;
       this.search(data);
     },
-    posting() {},
+    posting() {
+      if(this.multipleSelection.length>0){
+        var data={
+          ids:[]
+        }
+        this.multipleSelection.forEach(item=>{
+          data.ids.push(item.id)
+        })
+        this.axios.post("/voucher/postVoucher", data).then(res => {
+        if (res.success) {
+          this.$message({
+            type: "success",
+            message: res.msg,
+            center: true
+          });
+          this.search();
+        }
+      });
+      }
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
     }
